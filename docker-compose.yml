@@ -1,0 +1,35 @@
+services:
+  aws-global:
+    image: node:20-slim
+    command: >
+      npx -y supergateway
+        --stdio "uvx awslabs.aws-api-mcp-server@latest"
+        --port 8000 --ssePath /sse
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_GLOBAL_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_GLOBAL_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_GLOBAL_REGION}
+    ports: ["8001:8000"]
+
+  aws-cn:
+    image: node:20-slim
+    command: >
+      npx -y supergateway
+        --stdio "uvx awslabs.aws-api-mcp-server@latest"
+        --port 8000 --ssePath /sse
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_CN_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_CN_SECRET_ACCESS_KEY}
+      AWS_DEFAULT_REGION: ${AWS_CN_REGION}
+    ports: ["8002:8000"]
+
+  aliyun:
+    image: node:20-slim
+    command: >
+      npx -y supergateway
+        --stdio "uvx alibaba-cloud-ops-mcp-server@latest"
+        --port 8000 --ssePath /sse
+    environment:
+      ALIBABA_CLOUD_ACCESS_KEY_ID: ${ALIBABA_CLOUD_ACCESS_KEY_ID}
+      ALIBABA_CLOUD_ACCESS_KEY_SECRET: ${ALIBABA_CLOUD_ACCESS_KEY_SECRET}
+    ports: ["8003:8000"]

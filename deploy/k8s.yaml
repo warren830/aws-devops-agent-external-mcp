@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: Namespace
+metadata: { name: mcp }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: aws-global, namespace: mcp }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: aws-global } }
+  template:
+    metadata: { labels: { app: aws-global } }
+    spec:
+      containers:
+        - name: mcp
+          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent:latest
+          command: ["supergateway"]
+          args:
+            - "--stdio"
+            - "uvx awslabs.aws-api-mcp-server@latest"
+            - "--port"
+            - "8000"
+            - "--outputTransport"
+            - "streamableHttp"
+            - "--streamableHttpPath"
+            - "/aws-global/mcp"
+            - "--healthEndpoint"
+            - "/healthz"
+          env:
+            - { name: AWS_DEFAULT_REGION, value: "us-east-1" }
+            - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_GLOBAL_AK } } }
+            - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_GLOBAL_SK } } }
+          ports: [{ containerPort: 8000 }]
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: aws-cn, namespace: mcp }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: aws-cn } }
+  template:
+    metadata: { labels: { app: aws-cn } }
+    spec:
+      containers:
+        - name: mcp
+          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent:latest
+          command: ["supergateway"]
+          args:
+            - "--stdio"
+            - "uvx awslabs.aws-api-mcp-server@latest"
+            - "--port"
+            - "8000"
+            - "--outputTransport"
+            - "streamableHttp"
+            - "--streamableHttpPath"
+            - "/aws-cn/mcp"
+            - "--healthEndpoint"
+            - "/healthz"
+          env:
+            - { name: AWS_DEFAULT_REGION, value: "cn-north-1" }
+            - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_AK } } }
+            - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_SK } } }
+          ports: [{ containerPort: 8000 }]
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata: { name: aws-global, namespace: mcp }
+spec:
+  selector: { app: aws-global }
+  ports: [{ port: 8000, targetPort: 8000 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: aws-cn, namespace: mcp }
+spec:
+  selector: { app: aws-cn }
+  ports: [{ port: 8000, targetPort: 8000 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp
+  namespace: mcp
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: <CERTIFICATE_ARN>
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /aws-global
+            pathType: Prefix
+            backend: { service: { name: aws-global, port: { number: 8000 } } }
+          - path: /aws-cn
+            pathType: Prefix
+            backend: { service: { name: aws-cn, port: { number: 8000 } } }
