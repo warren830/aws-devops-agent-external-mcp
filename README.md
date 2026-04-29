@@ -294,20 +294,3 @@ List my S3 buckets in cn-north-1             → 走 aws-cn
 
 阿里云国际站用户需加参数 `--env international`。
 
-## 销毁
-
-```bash
-kubectl delete -f deploy/k8s.yaml
-cd terraform && terraform destroy -auto-approve
-```
-
-## 费用估算
-
-| 资源 | 费用 |
-|---|---|
-| EKS 控制平面 | $0.10/h |
-| 1× t3.medium 节点 | $0.04/h |
-| 内部 ALB | $0.02/h |
-| **合计** | **~$0.16/h ≈ $115/月** |
-
-测完记得销毁。
