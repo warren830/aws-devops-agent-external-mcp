@@ -1,4 +1,4 @@
-# aws-devops-agent
+# aws-devops-agent-external-mcp
 
 用 **AWS DevOps Agent** 统一管理 AWS 全球区、AWS 中国区、阿里云。
 
