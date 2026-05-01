@@ -2,74 +2,161 @@ apiVersion: v1
 kind: Namespace
 metadata: { name: mcp }
 ---
+# =========================================================================
+# AWS Global Region
+# =========================================================================
 apiVersion: apps/v1
 kind: Deployment
 metadata: { name: aws-global, namespace: mcp }
 spec:
-  replicas: 1
+  replicas: 2
   selector: { matchLabels: { app: aws-global } }
   template:
     metadata: { labels: { app: aws-global } }
     spec:
       containers:
         - name: mcp
-          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent:latest
-          command: ["supergateway"]
-          args:
-            - "--stdio"
-            - "uvx awslabs.aws-api-mcp-server@latest"
-            - "--port"
-            - "8000"
-            - "--outputTransport"
-            - "streamableHttp"
-            - "--streamableHttpPath"
-            - "/aws-global/mcp"
-            - "--healthEndpoint"
-            - "/healthz"
+          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp:latest
+          command: ["python", "-m", "awslabs.aws_api_mcp_server.server"]
           env:
-            - { name: AWS_DEFAULT_REGION, value: "us-east-1" }
+            - { name: AWS_API_MCP_TRANSPORT, value: "streamable-http" }
+            - { name: AWS_API_MCP_HOST,      value: "0.0.0.0" }
+            - { name: AWS_API_MCP_PORT,      value: "8000" }
+            - { name: AUTH_TYPE,             value: "no-auth" }
+            # Security: restrict Host/Origin headers to our public FQDN.
+            - { name: AWS_API_MCP_ALLOWED_HOSTS,   value: "aws-global.mcp.internal" }
+            - { name: AWS_API_MCP_ALLOWED_ORIGINS, value: "aws-global.mcp.internal" }
+            - { name: AWS_DEFAULT_REGION,    value: "us-east-1" }
             - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_GLOBAL_AK } } }
             - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_GLOBAL_SK } } }
           ports: [{ containerPort: 8000 }]
           readinessProbe:
-            httpGet: { path: /healthz, port: 8000 }
-            initialDelaySeconds: 30
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 10
             periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
 ---
+# =========================================================================
+# AWS China Region
+# =========================================================================
 apiVersion: apps/v1
 kind: Deployment
 metadata: { name: aws-cn, namespace: mcp }
 spec:
-  replicas: 1
+  replicas: 2
   selector: { matchLabels: { app: aws-cn } }
   template:
     metadata: { labels: { app: aws-cn } }
     spec:
       containers:
         - name: mcp
-          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent:latest
-          command: ["supergateway"]
-          args:
-            - "--stdio"
-            - "uvx awslabs.aws-api-mcp-server@latest"
-            - "--port"
-            - "8000"
-            - "--outputTransport"
-            - "streamableHttp"
-            - "--streamableHttpPath"
-            - "/aws-cn/mcp"
-            - "--healthEndpoint"
-            - "/healthz"
+          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp:latest
+          command: ["python", "-m", "awslabs.aws_api_mcp_server.server"]
           env:
-            - { name: AWS_DEFAULT_REGION, value: "cn-north-1" }
+            - { name: AWS_API_MCP_TRANSPORT, value: "streamable-http" }
+            - { name: AWS_API_MCP_HOST,      value: "0.0.0.0" }
+            - { name: AWS_API_MCP_PORT,      value: "8000" }
+            - { name: AUTH_TYPE,             value: "no-auth" }
+            - { name: AWS_API_MCP_ALLOWED_HOSTS,   value: "aws-cn.mcp.internal" }
+            - { name: AWS_API_MCP_ALLOWED_ORIGINS, value: "aws-cn.mcp.internal" }
+            - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }
             - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_AK } } }
             - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_SK } } }
           ports: [{ containerPort: 8000 }]
           readinessProbe:
-            httpGet: { path: /healthz, port: 8000 }
-            initialDelaySeconds: 30
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 10
             periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
 ---
+# =========================================================================
+# Alibaba Cloud
+# =========================================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: aliyun, namespace: mcp }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: aliyun } }
+  template:
+    metadata: { labels: { app: aliyun } }
+    spec:
+      containers:
+        - name: mcp
+          image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp:latest
+          command:
+            - python
+            - -m
+            - alibaba_cloud_ops_mcp_server
+            - --transport
+            - streamable-http
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8000"
+            # Switch to "international" if using Alibaba Cloud International (e.g. .com endpoints).
+            - --env
+            - domestic
+          env:
+            - { name: ALIBABA_CLOUD_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: ALIYUN_AK } } }
+            - { name: ALIBABA_CLOUD_ACCESS_KEY_SECRET, valueFrom: { secretKeyRef: { name: mcp-creds, key: ALIYUN_SK } } }
+          ports: [{ containerPort: 8000 }]
+          readinessProbe:
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+---
+# =========================================================================
+# Google Cloud (Cloud Run only — see README for scope limitations)
+# =========================================================================
+# Uses the official Google image — not our Python image.
+# Scope limited to Cloud Run / registry / build / secrets / billing / storage
+# because no general-purpose GCP MCP server exists yet.
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: gcp, namespace: mcp }
+spec:
+  replicas: 2
+  selector: { matchLabels: { app: gcp } }
+  template:
+    metadata: { labels: { app: gcp } }
+    spec:
+      containers:
+        - name: mcp
+          image: us-docker.pkg.dev/cloudrun/container/mcp:latest
+          env:
+            - { name: PORT,                    value: "8000" }
+            - { name: ENABLE_HOST_VALIDATION,  value: "true" }
+            - { name: ALLOWED_HOSTS,           value: "gcp.mcp.internal" }
+            - { name: GOOGLE_CLOUD_PROJECT,    valueFrom: { secretKeyRef: { name: mcp-creds, key: GCP_PROJECT_ID } } }
+            - { name: GOOGLE_CLOUD_REGION,    value: "us-central1" }
+            # ADC via mounted service account key
+            - { name: GOOGLE_APPLICATION_CREDENTIALS, value: "/var/secrets/gcp/key.json" }
+          volumeMounts:
+            - { name: gcp-sa, mountPath: /var/secrets/gcp, readOnly: true }
+          ports: [{ containerPort: 8000 }]
+          readinessProbe:
+            tcpSocket: { port: 8000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits:   { cpu: "500m", memory: "512Mi" }
+      volumes:
+        - name: gcp-sa
+          secret:
+            secretName: gcp-sa-key   # kubectl create secret generic gcp-sa-key --from-file=key.json=./sa.json
+---
+# =========================================================================
+# Services
+# =========================================================================
 apiVersion: v1
 kind: Service
 metadata: { name: aws-global, namespace: mcp }
@@ -84,6 +171,23 @@ spec:
   selector: { app: aws-cn }
   ports: [{ port: 8000, targetPort: 8000 }]
 ---
+apiVersion: v1
+kind: Service
+metadata: { name: aliyun, namespace: mcp }
+spec:
+  selector: { app: aliyun }
+  ports: [{ port: 8000, targetPort: 8000 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: gcp, namespace: mcp }
+spec:
+  selector: { app: gcp }
+  ports: [{ port: 8000, targetPort: 8000 }]
+---
+# =========================================================================
+# Ingress — host-based routing, shared internal ALB
+# =========================================================================
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -95,18 +199,35 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: <CERTIFICATE_ARN>
-    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/healthcheck-port: "traffic-port"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
     alb.ingress.kubernetes.io/healthy-threshold-count: "2"
     alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
     alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
 spec:
   rules:
-    - http:
+    - host: aws-global.mcp.internal
+      http:
         paths:
-          - path: /aws-global
+          - path: /
             pathType: Prefix
             backend: { service: { name: aws-global, port: { number: 8000 } } }
-          - path: /aws-cn
+    - host: aws-cn.mcp.internal
+      http:
+        paths:
+          - path: /
             pathType: Prefix
             backend: { service: { name: aws-cn, port: { number: 8000 } } }
+    - host: aliyun.mcp.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: aliyun, port: { number: 8000 } } }
+    - host: gcp.mcp.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: gcp, port: { number: 8000 } } }

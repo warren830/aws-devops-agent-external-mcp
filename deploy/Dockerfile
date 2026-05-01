@@ -1,9 +1,15 @@
-FROM node:20-slim
-RUN apt-get update && apt-get install -y --no-install-recommends python3 pipx curl \
-    && pipx ensurepath && pipx install uv \
-    && npm install -g supergateway \
-    && rm -rf /var/lib/apt/lists/*
-ENV PATH="/root/.local/bin:${PATH}"
-ENV MCP_CMD=""
+FROM python:3.12-slim
+
+# Pin versions — do NOT use @latest in production. Bump via PR.
+ARG AWS_MCP_VERSION=1.3.33
+ARG ALIYUN_MCP_VERSION=0.9.27
+
+RUN pip install --no-cache-dir \
+      "awslabs.aws-api-mcp-server==${AWS_MCP_VERSION}" \
+      "alibaba-cloud-ops-mcp-server==${ALIYUN_MCP_VERSION}"
+
+RUN useradd --create-home --shell /bin/bash app
+USER app
+WORKDIR /home/app
+
 EXPOSE 8000
-CMD supergateway --stdio "$MCP_CMD" --port 8000 --ssePath /sse --healthEndpoint /healthz
