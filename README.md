@@ -126,13 +126,28 @@ bash scripts/smoke.sh        # 对 4 个端口发 MCP initialize 握手
 
 #### 2a. 创建基础设施
 
+**网络拓扑（Level 2：私有 subnet + NAT Gateway）**
+
+```
+VPC 10.42.0.0/16
+├─ public  10.42.0.0/20, 10.42.16.0/20
+│    └─ NAT Gateway（单个，跨 AZ 共享 —— 省 $32/月但是 SPOF）
+└─ private 10.42.128.0/20, 10.42.144.0/20
+     ├─ EKS worker nodes（无公网 IP）
+     ├─ internal ALB（host-based 路由 4 个子域名）
+     └─ DevOps Agent Private Connection 注入 ENI 的目标 subnet
+```
+
 ```bash
 cd terraform
-terraform init && terraform apply -auto-approve
-# 输出: cluster_name, vpc_id, public_subnets, lb_controller_role_arn
+terraform init && terraform plan     # 先看要动什么，确认后再 apply
+terraform apply -auto-approve
+# 输出: cluster_name, vpc_id, public_subnets, private_subnets, lb_controller_role_arn
 
 $(terraform output -raw kubeconfig_cmd)
 ```
+
+成本粗估（us-east-1，单 NAT）：EKS $73/月 + t3.medium $30 + NAT $32 + ALB $16 ≈ **$150/月**（不含流量处理费）。升 per-AZ NAT 再 +$32。
 
 #### 2b. 安装 AWS Load Balancer Controller
 
@@ -239,10 +254,12 @@ done
 |---|---|
 | Host address | ALB 内部 DNS（`internal-k8s-mcp-*.us-east-1.elb.amazonaws.com`） |
 | VPC | EKS 所在 VPC |
-| Subnets | 至少 2 个（不同 AZ） |
+| Subnets | **选 private subnets**（`terraform output -raw private_subnets`），各 AZ 各一个 |
 | TCP port | 443 |
 
 等状态变 `Completed`（约 10 分钟）。**一条 Private Connection 供所有 4 个 MCP Server 共用。**
+
+> 为什么用 private subnets：DevOps Agent 会在这些 subnet 里注入 ENI，端到端流量路径 DevOps Agent → 注入 ENI → internal ALB → node → pod 全部在私网内完成，不经过公网。
 
 #### 3b. 注册 4 个 MCP Server
 
@@ -285,7 +302,7 @@ List my Cloud Run services                    → 走 gcp
 | **API Key 鉴权尚未落地** | ALB 不强制 header 校验，Private Connection 是唯一防线 | 加 ALB Lambda authorizer 或启用 AWS MCP Server 自带的 OAuth（`AUTH_TYPE=oauth` + `AUTH_ISSUER` + `AUTH_JWKS_URI`） |
 | **GCP 覆盖范围窄** | 只有 Cloud Run 相关 | 等 Google 发布通用 gcloud MCP；或评估社区 `google-cloud-mcp` |
 | **自签证书 365 天过期** | 无续期自动化 | 生产换成 ACM Private CA 或内部 CA 签发 |
-| **Node 在公有子网、无 NAT** | terraform 里明确为省 EIP | 生产加 NAT + 改私有子网 |
+| ~~**Node 在公有子网、无 NAT**~~ | ✅ 已改：节点在私有 subnet + 单 NAT Gateway | 如需 HA 把 `single_nat_gateway` 设为 `false` |
 
 ## 升级 MCP Server 版本
 
