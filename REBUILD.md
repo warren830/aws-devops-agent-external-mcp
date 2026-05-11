@@ -11,6 +11,7 @@
 - ✅ **保留** ACM 通配符证书 `*.yingchu.cloud`（ARN 在 CLAUDE.md 里）
 - ✅ **保留** ECR 仓库 `aws-devops-agent-external-mcp` 和 `mcp-aliyun`（如果有）
 - ✅ **直接 Mode B**（ESO + Secrets Manager）
+- ✅ **先跑通 aws-cn，再补 aws-global**（中国区是独立 partition，上次踩坑最多，优先验证这条链路；全球区确定性更高，作为第二批快速复制）
 
 ## 预计耗时
 
@@ -246,26 +247,31 @@ kubectl get clustersecretstore aws-secrets-manager
 
 ### Step 2.5 把 AK/SK 推进 Secrets Manager
 
-```bash
-# 准备凭证 —— 自己准备好这 4 个值
-AWS_GLOBAL_AK="AKIA..."
-AWS_GLOBAL_SK="..."
-AWS_CN_AK="AKIA..."
-AWS_CN_SK="..."
+**测试优先级：先 aws-cn（中国区 partition 独立认证，上次踩坑多，先验证这条链路）。全球区作为第二批。**
 
-aws secretsmanager create-secret --region us-east-1 \
-  --name /mcp/aws-global \
-  --secret-string "{\"AK\":\"$AWS_GLOBAL_AK\",\"SK\":\"$AWS_GLOBAL_SK\"}"
+```bash
+# ⚠️ 先把 shell history 关了，别让 AK/SK 落到磁盘
+export HISTFILE=/dev/null
+
+# --- 中国区（优先） ---
+AWS_CN_AK="AKIA..."     # 从 amazonaws.cn 账号里拿（独立 partition）
+AWS_CN_SK="..."
 
 aws secretsmanager create-secret --region us-east-1 \
   --name /mcp/aws-cn \
   --secret-string "{\"AK\":\"$AWS_CN_AK\",\"SK\":\"$AWS_CN_SK\"}"
 
 # 验证能读到
-aws secretsmanager get-secret-value --region us-east-1 --secret-id /mcp/aws-global --query SecretString --output text | python3 -m json.tool
-```
+aws secretsmanager get-secret-value --region us-east-1 --secret-id /mcp/aws-cn \
+  --query SecretString --output text | python3 -m json.tool
 
-⚠️ **别用 shell history 保存 AK/SK**。跑完 `history -c` 或 `export HISTFILE=/dev/null` 先。
+# --- 全球区（第二批，跑通中国区后再来） ---
+# AWS_GLOBAL_AK="AKIA..."
+# AWS_GLOBAL_SK="..."
+# aws secretsmanager create-secret --region us-east-1 \
+#   --name /mcp/aws-global \
+#   --secret-string "{\"AK\":\"$AWS_GLOBAL_AK\",\"SK\":\"$AWS_GLOBAL_SK\"}"
+```
 
 ### Step 2.6 Route53 私有 zone
 
@@ -282,54 +288,58 @@ ZONE_ID=$(echo "$ZONE_RESP" | python3 -c "import json,sys; print(json.loads(sys.
 echo "ZONE_ID=$ZONE_ID    # 记下，下面要用"
 ```
 
-### Step 2.7 切换 chart 到 Mode B + Helm install
+### Step 2.7 切换 chart 到 Mode B + Helm install（先装 aws-cn）
 
-编辑 `chart/values-aws-global.yaml` 和 `chart/values-aws-cn.yaml`，改成 Mode B：
+编辑 `chart/values-aws-cn.yaml`（第一批只改这个，aws-global 待 cn 验证通过后再处理）：
 
 ```yaml
-# values.yaml override 或者在每个 values-*.yaml 里加这段
+# 加到 values-aws-cn.yaml 末尾（或在 --set 里传）
 externalSecrets:
   enabled: true
   secretStoreName: aws-secrets-manager
 
-# 保留 account.secretsManagerKey，删掉或忽略 existingSecret/secretKeys（Mode A 用的）
+# 确保 account.secretsManagerKey=/mcp/aws-cn 已填（values-aws-cn.yaml 默认就有）
+# existingSecret/secretKeys 在 Mode B 下被忽略，不用删
 ```
 
 ```bash
-# 部署两个 release
-helm upgrade --install aws-global ./chart -f chart/values-aws-global.yaml --wait
-helm upgrade --install aws-cn     ./chart -f chart/values-aws-cn.yaml     --wait
+# 只部署中国区这一个 release
+helm upgrade --install aws-cn ./chart -f chart/values-aws-cn.yaml --wait
 
 # 验证 ESO 同步工作
 kubectl -n mcp get externalsecret
 # STATUS 应该是 SecretSynced
 
-kubectl -n mcp get secret
-# 应该看到 mcp-aws-global 和 mcp-aws-cn（由 ESO 创建）
+kubectl -n mcp get secret mcp-aws-cn
+# 应该存在，由 ESO 创建
 
 # pod 状态
 kubectl -n mcp get pods
-# 2 副本 × 2 账号 = 4 个 Running pod，0 restarts
+# 2 副本 Running，0 restarts
 ```
 
-### Step 2.8 添 DNS CNAME
+⚠️ 如果 ExternalSecret `STATUS=ERROR`：
+- `kubectl -n mcp describe externalsecret mcp-aws-cn` 看 events
+- 常见：IRSA annotation 没生效（回 Step 2.3）/ Secrets Manager key 拼写错 / JSON 格式错（必须是 `{"AK":"...","SK":"..."}`）
+
+### Step 2.8 添 DNS CNAME（先 aws-cn）
 
 ```bash
-ALB=$(kubectl -n mcp get ingress mcp-aws-global -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+ALB=$(kubectl -n mcp get ingress mcp-aws-cn -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 echo "NEW ALB: $ALB"
 
 # 确认公网能查到 ALB（重要！Private Connection Host address 要求公网可解析）
 dig +short @8.8.8.8 $ALB
+# 期望：返回私有 IP（10.42.x.x）
 
-for host in aws-global aws-cn; do
-  aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
-    \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
-      \"Name\":\"${host}.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
-      \"ResourceRecords\":[{\"Value\":\"$ALB\"}]}}]}"
-done
+# 只加 aws-cn 的 CNAME（第一批）
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
+  \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
+    \"Name\":\"aws-cn.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
+    \"ResourceRecords\":[{\"Value\":\"$ALB\"}]}}]}"
 ```
 
-### Step 2.9 端到端验证（集群内）
+### Step 2.9 端到端验证 aws-cn（集群内）
 
 ```bash
 # 等 ~1 分钟让 ALB 反映新 Ingress 规则
@@ -342,17 +352,17 @@ for tg in $(aws elbv2 describe-target-groups --region us-east-1 --query "TargetG
 done
 # 期望全部 healthy
 
-# 从 pod 里 curl endpoint
+# 从 pod 里 curl aws-cn endpoint
 kubectl -n mcp run curl-verify --rm -i --image=curlimages/curl --restart=Never -q -- sh -c \
 'curl -sS -m 10 -X POST https://aws-cn.yingchu.cloud/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \
   -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"v\",\"version\":\"0\"}}}" \
   -w "\nHTTP:%{http_code} / cert_verify=%{ssl_verify_result}\n"'
-# 期望：HTTP:200 / cert_verify=0
+# 期望：HTTP:200 / cert_verify=0，且 serverInfo 出现在响应里
 ```
 
-### Step 2.10 DevOps Agent 配置
+### Step 2.10 DevOps Agent 配置（先配 aws-cn）
 
 Console 手工：
 
@@ -360,34 +370,68 @@ Console 手工：
    - Name: `mcp-alb`
    - VPC: 新 VPC ID（terraform output 里的）
    - Subnets: 两个 private subnet（terraform output 里的）
-   - Security groups: ALB 的 SG（`kubectl -n mcp get ingress mcp-aws-global -o yaml | grep -A2 securityGroups` 或 AWS Console 查 ALB）
-   - **Host address**: `$ALB`（Step 2.8 那个值，ALB 的 AWS DNS 名）
+   - Security groups: ALB 的 SG（AWS Console 查新 ALB，或 `kubectl -n mcp get ingress mcp-aws-cn -o yaml | grep -A2 securityGroups`）
+   - **Host address**: `$ALB`（Step 2.8 那个值，ALB 的 AWS DNS 名，**不是 yingchu.cloud 域名**）
    - **Certificate public key**: **留空**（ACM 公共证书，默认信任）
    - 点 Create，等 ~10 分钟 `Completed`
 
-2. **MCP Server → Register** × 2：
-   - `aws-global-mcp` / URL `https://aws-global.yingchu.cloud/mcp` / Private connection `mcp-alb` / API Key dummy
-   - `aws-cn-mcp` / URL `https://aws-cn.yingchu.cloud/mcp` / 同上
+2. **MCP Server → Register**（第一批只注册 aws-cn）：
+   - Name: `aws-cn-mcp`
+   - Endpoint URL: `https://aws-cn.yingchu.cloud/mcp`
+   - Private connection: `mcp-alb`
+   - Authorization: API Key + dummy 值
 
 3. **Agent Space → Capabilities → MCP Servers → Add**
-   - 勾选两个 → Allow all tools → Save
+   - 勾选 `aws-cn-mcp` → Allow all tools → Save
 
-### Step 2.11 最终验证
+### Step 2.11 最终验证 aws-cn
 
 Agent Space 聊天：
+```
+List EC2 instances in cn-north-1
+```
+
+期望：
+- 工具名带 MCP 前缀（类似 `aws-cn-mcp___use_aws`，**不是**光秃秃的 `use_aws`）
+- `kubectl -n mcp logs deploy/mcp-aws-cn -f | grep -v "GET /mcp"` 出现 `POST /mcp HTTP/1.1" 200`
+- 返回值里的 EC2 列表对应你 `AWS_CN_AK` 的账号 —— **注意中国区账号 ID 跟全球区完全不同的那种** `cn-*` 或独立的 12 位数字
+- 不是全球区的 `034362076319`（如果是说明 DevOps Agent 又 fallback 到内置 `use_aws` 了）
+
+✅ 中国区跑通了说明整条链路成功。这一轮最"不确定"的部分已经验证。
+
+### Step 2.12 再把 aws-global 补上（第二批）
+
+中国区验证通过后，复制相同流程给全球区：
+
+```bash
+# 1. Secrets Manager
+aws secretsmanager create-secret --region us-east-1 \
+  --name /mcp/aws-global \
+  --secret-string "{\"AK\":\"$AWS_GLOBAL_AK\",\"SK\":\"$AWS_GLOBAL_SK\"}"
+
+# 2. 切 Mode B（编辑 values-aws-global.yaml 加 externalSecrets.enabled=true）
+helm upgrade --install aws-global ./chart -f chart/values-aws-global.yaml --wait
+
+# 3. 加 Route53 CNAME
+aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
+  \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
+    \"Name\":\"aws-global.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
+    \"ResourceRecords\":[{\"Value\":\"$ALB\"}]}}]}"
+
+# 4. pod 日志观察
+kubectl -n mcp logs deploy/mcp-aws-global -f | grep -v "GET /mcp"
+```
+
+DevOps Agent Console：
+- MCP Server → Register `aws-global-mcp` / URL `https://aws-global.yingchu.cloud/mcp` / **复用 `mcp-alb`**
+- Agent Space → Capabilities → MCP Servers → Add `aws-global-mcp`
+
+验证：
 ```
 List EC2 instances in us-east-1
 ```
 
-期望：
-- 工具名带 MCP 前缀（不是光秃秃的 `use_aws`）
-- `kubectl -n mcp logs deploy/mcp-aws-global -f | grep -v "GET /mcp"` 出现 `POST /mcp HTTP/1.1" 200`
-- 返回值里的 EC2 列表对应你 `AWS_GLOBAL_AK` 的账号
-
-再试 cn：
-```
-List EC2 instances in cn-north-1
-```
+期望返回 `AWS_GLOBAL_AK` 对应账号的实例。
 
 ---
 
