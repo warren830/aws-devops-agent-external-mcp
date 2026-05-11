@@ -101,12 +101,67 @@ module "lb_controller_irsa" {
   }
 }
 
+# -----------------------------------------------------------------------------
+# External Secrets Operator IRSA (Phase 2)
+#
+# ESO runs as a Deployment in `external-secrets` namespace with a ServiceAccount
+# named `external-secrets`. That SA needs an IAM role that can read specific
+# Secrets Manager entries (prefix /mcp/*). IRSA binds the K8s SA to this IAM
+# role via the cluster's OIDC provider, so ESO's pod assumes the role at
+# runtime without any long-lived credentials.
+#
+# Activation (after terraform apply):
+#   helm install external-secrets external-secrets/external-secrets \
+#     -n external-secrets --create-namespace --set installCRDs=true
+#   kubectl -n external-secrets annotate sa external-secrets \
+#     eks.amazonaws.com/role-arn=$(terraform output -raw eso_irsa_role_arn)
+#   kubectl -n external-secrets rollout restart deploy external-secrets
+#
+# See MULTI-ACCOUNT.md "Phase 2" section for full runbook.
+# -----------------------------------------------------------------------------
+resource "aws_iam_policy" "eso_secrets" {
+  name = "${local.name}-eso-secrets"
+  description = "Allow External Secrets Operator to read /mcp/* entries in Secrets Manager"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Sid      = "ReadMcpSecrets"
+      Effect   = "Allow"
+      Action   = [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret",
+      ]
+      # Scoped to /mcp/* path only. Other secrets in the account stay unreadable.
+      Resource = "arn:aws:secretsmanager:us-east-1:${data.aws_caller_identity.current.account_id}:secret:/mcp/*"
+    }]
+  })
+}
+
+data "aws_caller_identity" "current" {}
+
+module "eso_irsa" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.0"
+
+  role_name = "${local.name}-eso"
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["external-secrets:external-secrets"]
+    }
+  }
+  role_policy_arns = {
+    secrets = aws_iam_policy.eso_secrets.arn
+  }
+}
+
 output "cluster_name"           { value = module.eks.cluster_name }
 output "region"                 { value = "us-east-1" }
 output "vpc_id"                 { value = module.vpc.vpc_id }
 output "public_subnets"         { value = module.vpc.public_subnets }
 output "private_subnets"        { value = module.vpc.private_subnets }
 output "lb_controller_role_arn" { value = module.lb_controller_irsa.iam_role_arn }
+output "eso_irsa_role_arn"      { value = module.eso_irsa.iam_role_arn }
 output "kubeconfig_cmd" {
   value = "aws eks update-kubeconfig --region us-east-1 --name ${module.eks.cluster_name}"
 }
