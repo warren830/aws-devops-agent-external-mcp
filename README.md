@@ -48,15 +48,23 @@
 ├── MULTI-ACCOUNT.md             ← 多账号扩展运维（加新账号的 5 步 checklist + ESO 启用）
 ├── docker-compose.yml           ← 本地 4 服务冒烟测试（aws-global/aws-cn/aliyun/gcp）
 ├── .env.example                 ← 凭证模板
-├── chart/                       ← ⭐ Helm chart（每账号一个 release）
+├── chart/                       ← ⭐ AWS MCP chart（每账号一个 release）
 │   ├── Chart.yaml
 │   ├── values.yaml              ← 全局默认
 │   ├── values-aws-global.yaml   ← 账号级覆盖
 │   ├── values-aws-cn.yaml
 │   ├── templates/               ← Deployment / Service / Ingress / ExternalSecret
 │   └── README.md                ← chart 用法速查
+├── chart-aliyun/                ← ⭐ 阿里云 MCP chart（独立因为 fastmcp 依赖冲突）
+│   ├── Chart.yaml
+│   ├── values.yaml
+│   ├── values-aliyun-prod.yaml
+│   ├── templates/
+│   └── README.md
 ├── deploy/
-│   ├── Dockerfile               ← public.ecr.aws/docker/library/python + aws-api-mcp-server
+│   ├── Dockerfile               ← AWS 镜像（aws-api-mcp-server）
+│   ├── Dockerfile.aliyun        ← 阿里云镜像（alibaba-cloud-ops-mcp-server）
+│   ├── cluster-secret-store.yaml ← ESO 配置（Phase 2 用）
 │   ├── k8s-2svc.yaml            ← 当前运行版（aws-global + aws-cn 硬编码）
 │   ├── k8s.yaml                 ← 参考：完整 4 服务版（含 aliyun/gcp，未 apply）
 │   └── README.md                ← deploy 目录的补充说明

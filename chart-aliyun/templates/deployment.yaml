@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mcp.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels: {{- include "mcp.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels: {{- include "mcp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{- include "mcp.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: mcp
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # alibaba-cloud-ops-mcp-server uses CLI flags (not env vars) for
+          # transport config. Domestic vs international picks the API endpoint.
+          command:
+            - python
+            - -m
+            - alibaba_cloud_ops_mcp_server
+            - --transport
+            - streamable-http
+            - --host
+            - "0.0.0.0"
+            - --port
+            - {{ .Values.mcpServer.port | quote }}
+            - --env
+            - {{ .Values.mcpServer.aliyunEnv | quote }}
+          env:
+            - name: ALIBABA_CLOUD_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mcp.secretName" . }}
+                  key: {{ include "mcp.akSecretKey" . }}
+            - name: ALIBABA_CLOUD_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "mcp.secretName" . }}
+                  key: {{ include "mcp.skSecretKey" . }}
+            {{- with .Values.account.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          ports:
+            - containerPort: {{ .Values.mcpServer.port }}
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.mcpServer.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

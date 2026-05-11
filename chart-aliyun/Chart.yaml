@@ -1,0 +1,12 @@
+apiVersion: v2
+name: mcp-aliyun-server
+description: A single Alibaba Cloud MCP Server instance (one account) for DevOps Agent
+type: application
+version: 0.1.0
+appVersion: "0.9.27"
+keywords:
+  - mcp
+  - aws-devops-agent
+  - alibaba-cloud
+  - model-context-protocol
+maintainers: []
