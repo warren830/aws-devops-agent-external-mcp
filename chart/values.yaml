@@ -4,6 +4,10 @@
 # ============================================================================
 
 namespace: mcp
+# Render the Namespace object? Default false because multiple releases usually
+# share one namespace and Helm's ownership metadata conflicts. See
+# templates/namespace.yaml for details. Enable for FIRST release only.
+createNamespace: false
 
 image:
   repository: 034362076319.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp

@@ -4,6 +4,9 @@
 # ============================================================================
 
 namespace: mcp
+# See chart/values.yaml for rationale. Default false; enable only for
+# the FIRST release if helm-managed namespace creation is desired.
+createNamespace: false
 
 image:
   # Separate repo from AWS MCP image because of fastmcp dependency conflict

@@ -1,0 +1,15 @@
+{{/*
+See chart/templates/namespace.yaml for rationale. Default OFF to allow
+multiple releases (AWS + Aliyun) to share the same namespace without
+Helm ownership conflicts.
+*/}}
+{{- if .Values.createNamespace -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app.kubernetes.io/part-of: aws-devops-agent-external-mcp
+{{- end }}
