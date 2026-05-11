@@ -6,6 +6,7 @@
 
 > 📖 **完整部署步骤（含踩坑避雷）**：[SETUP.md](./SETUP.md)
 > 🐛 **踩坑故事版博客（7 个层面的故障定位）**：[BLOG.md](./BLOG.md)
+> 🏗️ **多账号扩展运维指南**（Helm chart + ESO）：[MULTI-ACCOUNT.md](./MULTI-ACCOUNT.md)
 
 ---
 
@@ -44,11 +45,19 @@
 ├── README.md                    ← 你在这
 ├── SETUP.md                     ← 完整配置指南（含所有坑的排查表）
 ├── BLOG.md                      ← 故事版，按遇到问题的时间顺序讲 7 个大坑
+├── MULTI-ACCOUNT.md             ← 多账号扩展运维（加新账号的 5 步 checklist + ESO 启用）
 ├── docker-compose.yml           ← 本地 4 服务冒烟测试（aws-global/aws-cn/aliyun/gcp）
 ├── .env.example                 ← 凭证模板
+├── chart/                       ← ⭐ Helm chart（每账号一个 release）
+│   ├── Chart.yaml
+│   ├── values.yaml              ← 全局默认
+│   ├── values-aws-global.yaml   ← 账号级覆盖
+│   ├── values-aws-cn.yaml
+│   ├── templates/               ← Deployment / Service / Ingress / ExternalSecret
+│   └── README.md                ← chart 用法速查
 ├── deploy/
 │   ├── Dockerfile               ← public.ecr.aws/docker/library/python + aws-api-mcp-server
-│   ├── k8s-2svc.yaml            ← ⭐ 生产验证版：aws-global + aws-cn
+│   ├── k8s-2svc.yaml            ← 当前运行版（aws-global + aws-cn 硬编码）
 │   ├── k8s.yaml                 ← 参考：完整 4 服务版（含 aliyun/gcp，未 apply）
 │   └── README.md                ← deploy 目录的补充说明
 ├── terraform/

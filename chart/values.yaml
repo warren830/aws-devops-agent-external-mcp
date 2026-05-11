@@ -1,0 +1,80 @@
+# ============================================================================
+# Global defaults — shared by all accounts. Override per-account in
+# values-<account>.yaml.
+# ============================================================================
+
+namespace: mcp
+
+image:
+  repository: 034362076319.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp
+  tag: latest
+  pullPolicy: IfNotPresent
+
+replicaCount: 2
+
+resources:
+  requests: { cpu: 100m, memory: 256Mi }
+  limits:   { cpu: 500m, memory: 512Mi }
+
+ingress:
+  enabled: true
+  # Every account's Ingress uses the same group name → ALB Controller merges
+  # them into ONE ALB with multiple host-based rules.
+  groupName: mcp
+  scheme: internal       # internal | internet-facing
+  certificateArn: arn:aws:acm:us-east-1:034362076319:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
+
+mcpServer:
+  # aws-api-mcp-server defaults. For non-AWS flavors (e.g. aliyun) override
+  # command/env in values-<account>.yaml.
+  command: ["python", "-m", "awslabs.aws_api_mcp_server.server"]
+  port: 8000
+  # Stateless HTTP: each request carries full context; enables multi-replica HA.
+  # Without this, session state split across pods causes "Session not found".
+  statelessHttp: true
+  authType: no-auth
+
+# ----------------------------------------------------------------------------
+# External Secrets Operator integration (Phase 2)
+# ----------------------------------------------------------------------------
+# When enabled=true, chart renders an ExternalSecret that ESO reconciles into
+# a K8s Secret. When enabled=false, chart expects account.existingSecret to
+# already exist (managed manually).
+externalSecrets:
+  enabled: false
+  secretStoreName: aws-secrets-manager     # ClusterSecretStore name
+  refreshInterval: 1h
+
+# ----------------------------------------------------------------------------
+# Per-account — MUST be set in values-<account>.yaml
+# ----------------------------------------------------------------------------
+account:
+  # Short identifier, used in resource names. Lowercase, alphanumeric+dash.
+  name: ""                  # e.g. "aws-global", "aws-cn", "aws-cn-prod"
+
+  # AWS region the MCP Server will default to.
+  awsRegion: ""             # e.g. "us-east-1", "cn-north-1"
+
+  # External hostname. Ingress matches on this; MCP Server restricts Host/Origin.
+  host: ""                  # e.g. "aws-global.yingchu.cloud"
+
+  # Mode A (externalSecrets.enabled=false): name of pre-existing K8s Secret.
+  existingSecret: ""        # e.g. "mcp-creds"
+
+  # Mode A: which keys inside the existing secret hold the credentials.
+  secretKeys:
+    AWS_ACCESS_KEY_ID: ""       # e.g. "AWS_GLOBAL_AK"
+    AWS_SECRET_ACCESS_KEY: ""   # e.g. "AWS_GLOBAL_SK"
+
+  # Mode B (externalSecrets.enabled=true): Secrets Manager key path. ESO will
+  # fetch this secret and create a K8s Secret. Expected JSON structure:
+  #   { "AK": "AKIA...", "SK": "..." }
+  secretsManagerKey: ""     # e.g. "/mcp/aws-global"
+
+  # Extra environment variables (non-credential). Useful for aliyun flavors or
+  # other tweaks.
+  extraEnv: []
+  # Example:
+  # extraEnv:
+  #   - name: SOME_VAR
+  #     value: "foo"
