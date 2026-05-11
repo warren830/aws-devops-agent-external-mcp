@@ -113,43 +113,24 @@ kubectl -n mcp logs deploy/mcp-aws-cn-prod -f | grep -v "GET /mcp"
 
 **什么时候启用**：账号数 ≥ 5，或有审计/合规要求（凭证轮换、集中管理、审计日志）。
 
-### 1. 改 Terraform 加 ESO IRSA role
+### 1. Apply ESO IRSA（代码已经在 terraform/main.tf）
 
-在 `terraform/main.tf` 末尾加：
+`module.eso_irsa` 和 `aws_iam_policy.eso_secrets` 已经在 `terraform/main.tf` 末尾定义好。直接 apply：
 
-```hcl
-module "eso_irsa" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
-  version = "~> 5.0"
-
-  role_name = "${local.name}-eso"
-  oidc_providers = {
-    main = {
-      provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["external-secrets:external-secrets"]
-    }
-  }
-  role_policy_arns = {
-    secrets = aws_iam_policy.eso_secrets.arn
-  }
-}
-
-resource "aws_iam_policy" "eso_secrets" {
-  name = "${local.name}-eso-secrets"
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect   = "Allow"
-      Action   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
-      Resource = "arn:aws:secretsmanager:us-east-1:034362076319:secret:/mcp/*"
-    }]
-  })
-}
-
-output "eso_irsa_role_arn" { value = module.eso_irsa.iam_role_arn }
+```bash
+cd terraform
+terraform init    # 首次添加 module 后必须 init
+terraform apply
+terraform output -raw eso_irsa_role_arn
 ```
 
-`terraform apply`，记下 `eso_irsa_role_arn`。
+> ⚠️ **关于 `terraform plan` 看到的其它变更**：仓库里之前有个 commit 把 EKS 迁到私有 subnet + NAT Gateway，但从来没 apply 过。所以当前 plan 会看到 subnet tag 变化、node group 重建等"历史遗留"的变更。如果你只想 apply ESO 部分不碰其它，用 `-target`：
+>
+> ```bash
+> terraform apply -target=aws_iam_policy.eso_secrets -target=module.eso_irsa
+> ```
+>
+> 但 `-target` 只是逃生通道，不是长期方案。建议真正动 terraform 之前先清理那次漂移（要么 apply 完整计划迁到私有 subnet，要么 revert 那次 commit）。
 
 ### 2. 安装 ESO
 
@@ -189,26 +170,14 @@ aws secretsmanager create-secret --region us-east-1 \
   --name /mcp/aws-cn --secret-string '{"AK":"...","SK":"..."}'
 ```
 
-### 4. 创 ClusterSecretStore
+### 4. 创 ClusterSecretStore（YAML 已在 deploy/）
 
 ```bash
-cat <<'EOF' | kubectl apply -f -
-apiVersion: external-secrets.io/v1beta1
-kind: ClusterSecretStore
-metadata:
-  name: aws-secrets-manager
-spec:
-  provider:
-    aws:
-      service: SecretsManager
-      region: us-east-1
-      auth:
-        jwt:
-          serviceAccountRef:
-            name: external-secrets
-            namespace: external-secrets
-EOF
+kubectl apply -f deploy/cluster-secret-store.yaml
+kubectl get clustersecretstore aws-secrets-manager   # STATUS 应该是 Valid
 ```
+
+如果 STATUS 不是 Valid，最常见原因是 IRSA 没挂好 —— 回头检查第 2 步的 `kubectl annotate` 和 `rollout restart`。
 
 ### 5. 切换 chart 到 ESO 模式
 
