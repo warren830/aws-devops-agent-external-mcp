@@ -7,6 +7,7 @@
 > 📖 **完整部署步骤（含踩坑避雷）**：[SETUP.md](./SETUP.md)
 > 🐛 **踩坑故事版博客（7 个层面的故障定位）**：[BLOG.md](./BLOG.md)
 > 🏗️ **多账号扩展运维指南**（Helm chart + ESO）：[MULTI-ACCOUNT.md](./MULTI-ACCOUNT.md)
+> 🔥 **从零重建 runbook**（destroy 现有 + 按最新代码 Mode B 重部）：[REBUILD.md](./REBUILD.md)
 
 ---
 
