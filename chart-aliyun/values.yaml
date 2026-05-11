@@ -1,0 +1,60 @@
+# ============================================================================
+# Global defaults for Aliyun MCP server. Override per-account in
+# values-<account>.yaml.
+# ============================================================================
+
+namespace: mcp
+
+image:
+  # Separate repo from AWS MCP image because of fastmcp dependency conflict
+  repository: 034362076319.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# ⚠️ alibaba-cloud-ops-mcp-server doesn't expose a stateless HTTP switch (as of
+# 0.9.27). Keep replicas=1 until upstream support lands, otherwise multi-replica
+# triggers "Session not found" like the AWS case did. See BLOG.md pitfall #6.
+replicaCount: 1
+
+resources:
+  requests: { cpu: 100m, memory: 256Mi }
+  limits:   { cpu: 500m, memory: 512Mi }
+
+ingress:
+  enabled: true
+  # Same group.name as AWS chart → all MCP Ingresses merge into one ALB
+  groupName: mcp
+  scheme: internal
+  certificateArn: arn:aws:acm:us-east-1:034362076319:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
+
+mcpServer:
+  port: 8000
+  # "domestic" for mainland China endpoints, "international" for .com endpoints
+  aliyunEnv: domestic
+
+# ----------------------------------------------------------------------------
+# External Secrets Operator integration (Phase 2, shared with AWS chart)
+# ----------------------------------------------------------------------------
+externalSecrets:
+  enabled: false
+  secretStoreName: aws-secrets-manager
+  refreshInterval: 1h
+
+# ----------------------------------------------------------------------------
+# Per-account — MUST be set in values-<account>.yaml
+# ----------------------------------------------------------------------------
+account:
+  name: ""                  # e.g. "aliyun-prod", "aliyun-dev"
+  host: ""                  # e.g. "aliyun-prod.yingchu.cloud"
+
+  # Mode A: pre-existing K8s Secret with AK/SK
+  existingSecret: ""
+  secretKeys:
+    ALIBABA_CLOUD_ACCESS_KEY_ID: ""       # e.g. "ALIYUN_PROD_AK"
+    ALIBABA_CLOUD_ACCESS_KEY_SECRET: ""   # e.g. "ALIYUN_PROD_SK"
+
+  # Mode B: Secrets Manager path with JSON {"AK":"...","SK":"..."}
+  secretsManagerKey: ""     # e.g. "/mcp/aliyun-prod"
+
+  # Extra environment variables (non-credential)
+  extraEnv: []
