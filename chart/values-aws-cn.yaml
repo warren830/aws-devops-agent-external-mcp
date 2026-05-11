@@ -3,14 +3,12 @@
 
 account:
   name: aws-cn
-  awsRegion: cn-north-1
+  awsRegion: cn-northwest-1
   host: aws-cn.yingchu.cloud
 
-  # Mode A
-  existingSecret: mcp-creds
-  secretKeys:
-    AWS_ACCESS_KEY_ID: AWS_CN_AK
-    AWS_SECRET_ACCESS_KEY: AWS_CN_SK
-
-  # Mode B
+  # Mode B：ESO + Secrets Manager
   secretsManagerKey: /mcp/aws-cn
+
+externalSecrets:
+  enabled: true
+  secretStoreName: aws-secrets-manager

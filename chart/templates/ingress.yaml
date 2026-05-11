@@ -14,10 +14,11 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
     alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificateArn | quote }}
-    # MCP Server returns 406 for GET /mcp (expects proper MCP headers). Whitelist
-    # 4xx so ALB doesn't mark the target as unhealthy.
+    # MCP Server returns 4xx for GET /mcp without proper MCP headers
+    # (405 Method Not Allowed / 406 Not Acceptable depending on version).
+    # Whitelist them so ALB doesn't mark the target as unhealthy.
     alb.ingress.kubernetes.io/healthcheck-path: "/mcp"
-    alb.ingress.kubernetes.io/success-codes: "200,404,406"
+    alb.ingress.kubernetes.io/success-codes: "200,404,405,406"
     alb.ingress.kubernetes.io/healthcheck-port: "traffic-port"
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"

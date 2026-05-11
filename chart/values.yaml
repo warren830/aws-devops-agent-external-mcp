@@ -10,7 +10,7 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-replicaCount: 2
+replicaCount: 1    # 低流量账号单副本即可。高流量/生产账号在 values-<acct>.yaml 覆盖为 2+
 
 resources:
   requests: { cpu: 100m, memory: 256Mi }
