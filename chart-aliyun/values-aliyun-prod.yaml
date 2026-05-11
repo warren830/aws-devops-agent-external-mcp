@@ -1,0 +1,19 @@
+# aliyun-prod: 阿里云生产账号 MCP Server（示例）
+# ⚠️ 使用前先创建 ECR 仓库 `mcp-aliyun` 并推镜像（见 chart-aliyun/README.md）
+
+account:
+  name: aliyun-prod
+  host: aliyun-prod.yingchu.cloud
+
+  # Mode A（手建 secret）
+  existingSecret: mcp-creds
+  secretKeys:
+    ALIBABA_CLOUD_ACCESS_KEY_ID: ALIYUN_PROD_AK
+    ALIBABA_CLOUD_ACCESS_KEY_SECRET: ALIYUN_PROD_SK
+
+  # Mode B（ESO 启用时用）
+  secretsManagerKey: /mcp/aliyun-prod
+
+# 默认 domestic（.aliyuncs.com）。国际版账号改成 international。
+mcpServer:
+  aliyunEnv: domestic

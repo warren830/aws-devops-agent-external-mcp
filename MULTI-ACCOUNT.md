@@ -291,11 +291,26 @@ kubectl apply -f deploy/k8s-2svc.yaml
 
 ### 阿里云怎么接？
 
-等 `alibaba-cloud-ops-mcp-server` 和 `awslabs.aws-api-mcp-server` 的 `fastmcp` 版本冲突解决，或者：
+有独立的 `chart-aliyun/` chart + `deploy/Dockerfile.aliyun`。用法：
 
-1. 建独立镜像 `deploy/Dockerfile.aliyun`，`FROM public.ecr.aws/docker/library/python:3.12-slim` + `pip install alibaba-cloud-ops-mcp-server==X.Y.Z`
-2. Chart 的 `image.repository` 和 `mcpServer.command` 做成 per-values 覆盖（已经支持，见 `account.extraEnv` 和 mcpServer 部分）
-3. 阿里云的认证走 `ALIBABA_CLOUD_ACCESS_KEY_ID` 和 `ALIBABA_CLOUD_ACCESS_KEY_SECRET`，chart 的 deployment 模板里的 env 需要改（或者把 env 全改成 `extraEnv` 驱动，不写死 AWS 前缀）
+```bash
+# 首次：构建阿里云镜像
+aws ecr create-repository --repository-name mcp-aliyun --region us-east-1
+ECR=034362076319.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
+docker build --platform linux/amd64 -t $ECR:latest -f deploy/Dockerfile.aliyun .
+docker push $ECR:latest
+
+# 部署一个阿里云账号
+helm upgrade --install aliyun-prod ./chart-aliyun -f chart-aliyun/values-aliyun-prod.yaml --wait
+```
+
+详见 [chart-aliyun/README.md](./chart-aliyun/README.md)。
+
+**关键差异**（为什么分家）：
+- 底层包不同（`alibaba-cloud-ops-mcp-server` vs `awslabs.aws-api-mcp-server`），`fastmcp` 版本冲突
+- Transport 配置走 CLI flag（`--transport streamable-http`）不是 env var
+- 阿里云 MCP 目前**没有 stateless HTTP 开关** → replicaCount 只能 1（等上游支持）
+- 凭证 env var 前缀不同（`ALIBABA_CLOUD_*`）
 
 ### ESO 同步间隔能改吗？
 
