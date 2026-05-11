@@ -1,12 +1,10 @@
-FROM python:3.12-slim
+FROM public.ecr.aws/docker/library/python:3.12-slim
 
 # Pin versions — do NOT use @latest in production. Bump via PR.
 ARG AWS_MCP_VERSION=1.3.33
-ARG ALIYUN_MCP_VERSION=0.9.27
 
 RUN pip install --no-cache-dir \
-      "awslabs.aws-api-mcp-server==${AWS_MCP_VERSION}" \
-      "alibaba-cloud-ops-mcp-server==${ALIYUN_MCP_VERSION}"
+      "awslabs.aws-api-mcp-server==${AWS_MCP_VERSION}"
 
 RUN useradd --create-home --shell /bin/bash app
 USER app
