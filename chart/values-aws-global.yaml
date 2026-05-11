@@ -1,0 +1,17 @@
+# aws-global: AWS 全球区 MCP Server
+# 凭证模式：Mode A（复用现有手建的 mcp-creds secret）
+# 迁到 ESO 后改 externalSecrets.enabled=true 并填 secretsManagerKey
+
+account:
+  name: aws-global
+  awsRegion: us-east-1
+  host: aws-global.yingchu.cloud
+
+  # Mode A: 复用现有 K8s Secret
+  existingSecret: mcp-creds
+  secretKeys:
+    AWS_ACCESS_KEY_ID: AWS_GLOBAL_AK
+    AWS_SECRET_ACCESS_KEY: AWS_GLOBAL_SK
+
+  # Mode B: ESO 启用时用这个（切换时 externalSecrets.enabled=true）
+  secretsManagerKey: /mcp/aws-global

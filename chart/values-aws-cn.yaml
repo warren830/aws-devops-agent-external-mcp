@@ -1,0 +1,16 @@
+# aws-cn: AWS 中国区 MCP Server
+# ⚠️ 中国区账号凭证跟全球区完全隔离（不同 partition），要用 amazonaws.cn 签的 AK/SK
+
+account:
+  name: aws-cn
+  awsRegion: cn-north-1
+  host: aws-cn.yingchu.cloud
+
+  # Mode A
+  existingSecret: mcp-creds
+  secretKeys:
+    AWS_ACCESS_KEY_ID: AWS_CN_AK
+    AWS_SECRET_ACCESS_KEY: AWS_CN_SK
+
+  # Mode B
+  secretsManagerKey: /mcp/aws-cn

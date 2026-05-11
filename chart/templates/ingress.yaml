@@ -1,0 +1,39 @@
+{{- if .Values.ingress.enabled -}}
+# Each account's Ingress uses the same group.name; ALB Controller merges them
+# into ONE ALB with host-based routing rules.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "mcp.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels: {{- include "mcp.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/group.name: {{ .Values.ingress.groupName | quote }}
+    alb.ingress.kubernetes.io/scheme: {{ .Values.ingress.scheme | quote }}
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificateArn | quote }}
+    # MCP Server returns 406 for GET /mcp (expects proper MCP headers). Whitelist
+    # 4xx so ALB doesn't mark the target as unhealthy.
+    alb.ingress.kubernetes.io/healthcheck-path: "/mcp"
+    alb.ingress.kubernetes.io/success-codes: "200,404,406"
+    alb.ingress.kubernetes.io/healthcheck-port: "traffic-port"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+spec:
+  rules:
+    - host: {{ .Values.account.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "mcp.fullname" . }}
+                port:
+                  number: {{ .Values.mcpServer.port }}
+{{- end }}
