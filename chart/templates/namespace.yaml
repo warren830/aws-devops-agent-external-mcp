@@ -1,0 +1,26 @@
+{{/*
+Namespace template — default OFF because multiple chart releases typically
+share the same namespace (`mcp` default), and if two releases both try to
+"own" the Namespace object, Helm refuses with `invalid ownership metadata`.
+
+Options for creating the namespace:
+  1. (Recommended) Pre-create once:  kubectl create namespace mcp
+  2. Let helm create on first install only:  helm install ... --create-namespace
+  3. Enable this template just for the FIRST release in the namespace:
+       helm install ... --set createNamespace=true
+     then leave createNamespace=false for every subsequent release.
+
+The `helm.sh/resource-policy: keep` annotation ensures `helm uninstall` of
+the owning release does NOT delete the namespace (and wipe every other
+release's resources with it).
+*/}}
+{{- if .Values.createNamespace -}}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespace }}
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app.kubernetes.io/part-of: aws-devops-agent-external-mcp
+{{- end }}
