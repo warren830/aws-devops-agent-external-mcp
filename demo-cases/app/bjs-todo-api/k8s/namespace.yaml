@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: bjs-web
+  labels:
+    app.kubernetes.io/part-of: bjs-todo-api
+    demo: china-region-10-cases

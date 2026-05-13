@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+  namespace: bjs-web
+  labels:
+    app: todo-api
+    app.kubernetes.io/name: bjs-todo-api
+    app.kubernetes.io/version: v1.2.3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: todo-api
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: todo-api
+        app.kubernetes.io/name: bjs-todo-api
+        app.kubernetes.io/version: v1.2.3
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: todo-api
+          # Substituted by `make push` / deploy script. Keep the placeholder
+          # as the literal string ${ECR_REPO_URL} so envsubst can replace it.
+          image: ${ECR_REPO_URL}:v1.2.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          env:
+            - name: LOG_LEVEL
+              value: INFO
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: bjs-todo-db-secret
+                  key: DATABASE_URL
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: bjs-todo-db-secret
+                  key: DB_PASSWORD
+          # NOTE for demo authors: the C9 case PATCHES this deployment to
+          # set cpu limit to 100m (BAD). The values below are the GOOD
+          # baseline that the demo restores after the case completes.
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]

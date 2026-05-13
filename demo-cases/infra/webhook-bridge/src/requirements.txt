@@ -1,0 +1,5 @@
+# No external dependencies required.
+# Lambda Python 3.12 runtime ships with:
+#   - boto3 / botocore (used here for SSM + CloudWatch tag lookups)
+#   - urllib3 (vendored within botocore; we import it directly)
+# Keeping this empty avoids dependency drift and shrinks cold start.

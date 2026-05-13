@@ -1,0 +1,22 @@
+{
+  "Records": [
+    {
+      "EventSource": "aws:sns",
+      "EventVersion": "1.0",
+      "EventSubscriptionArn": "arn:aws-cn:sns:cn-northwest-1:111122223333:devops-agent-alarms:00000000-0000-0000-0000-000000000000",
+      "Sns": {
+        "Type": "Notification",
+        "MessageId": "11111111-1111-1111-1111-111111111111",
+        "TopicArn": "arn:aws-cn:sns:cn-northwest-1:111122223333:devops-agent-alarms",
+        "Subject": "ALARM: \"demo-alb-5xx\" in CN (Ningxia)",
+        "Message": "{\"AlarmName\":\"demo-alb-5xx\",\"AlarmDescription\":\"Demo ALB 5xx > 1% over 5m\",\"AWSAccountId\":\"111122223333\",\"AlarmConfigurationUpdatedTimestamp\":\"2026-05-13T10:00:00.000+0000\",\"NewStateValue\":\"ALARM\",\"NewStateReason\":\"Threshold Crossed: 1 datapoint [3.5 (13/05/26 10:00:00)] was greater than the threshold (1.0).\",\"StateChangeTime\":\"2026-05-13T10:01:23.456+0000\",\"Region\":\"China (Ningxia)\",\"AlarmArn\":\"arn:aws-cn:cloudwatch:cn-northwest-1:111122223333:alarm:demo-alb-5xx\",\"OldStateValue\":\"OK\",\"OKActions\":[],\"AlarmActions\":[\"arn:aws-cn:sns:cn-northwest-1:111122223333:devops-agent-alarms\"],\"InsufficientDataActions\":[],\"Trigger\":{\"MetricName\":\"HTTPCode_ELB_5XX_Count\",\"Namespace\":\"AWS/ApplicationELB\",\"StatisticType\":\"Statistic\",\"Statistic\":\"SUM\",\"Unit\":null,\"Dimensions\":[{\"value\":\"app/demo-alb/abcdef0123456789\",\"name\":\"LoadBalancer\"}],\"Period\":300,\"EvaluationPeriods\":1,\"DatapointsToAlarm\":1,\"ComparisonOperator\":\"GreaterThanThreshold\",\"Threshold\":1.0,\"TreatMissingData\":\"missing\",\"EvaluateLowSampleCountPercentile\":\"\"},\"Resources\":[\"arn:aws-cn:elasticloadbalancing:cn-northwest-1:111122223333:loadbalancer/app/demo-alb/abcdef0123456789\"]}",
+        "Timestamp": "2026-05-13T10:01:24.000Z",
+        "SignatureVersion": "1",
+        "Signature": "EXAMPLE",
+        "SigningCertUrl": "https://sns.cn-northwest-1.amazonaws.com.cn/SimpleNotificationService-EXAMPLE.pem",
+        "UnsubscribeUrl": "https://sns.cn-northwest-1.amazonaws.com.cn/?Action=Unsubscribe&SubscriptionArn=arn:aws-cn:sns:cn-northwest-1:111122223333:devops-agent-alarms:00000000-0000-0000-0000-000000000000",
+        "MessageAttributes": {}
+      }
+    }
+  ]
+}
