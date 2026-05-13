@@ -49,7 +49,7 @@ variable "db_username" {
 variable "db_engine_version" {
   description = "PostgreSQL engine version. 16.x line, db.t3.micro compatible."
   type        = string
-  default     = "16.4"
+  default     = "16.13"
 }
 
 variable "ecr_repository_name" {

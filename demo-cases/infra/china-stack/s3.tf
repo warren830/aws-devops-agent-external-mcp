@@ -26,7 +26,7 @@ resource "aws_s3_bucket" "output" {
 
   tags = {
     Name    = "china-data-output"
-    Purpose = "etl-output (fault-target for C10 / L2)"
+    Purpose = "etl-output-fault-target-C10-L2"
   }
 }
 
@@ -74,7 +74,7 @@ resource "aws_s3_bucket" "input" {
 
   tags = {
     Name    = "china-data-input"
-    Purpose = "etl-input (private + KMS)"
+    Purpose = "etl-input-private-kms"
   }
 }
 

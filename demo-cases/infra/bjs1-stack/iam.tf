@@ -268,13 +268,17 @@ resource "aws_iam_role_policy_attachment" "alb_controller" {
 # ============================================================================
 # DELIBERATE FAULT L7 — `bjs-cross-partition-test-role`
 #
-# This role intentionally trusts an `arn:aws:` (global partition) principal
-# while living in cn-north-1, where the correct partition is `aws-cn:`.
-# Case C5 demonstrates how the native DevOps Agent gets this wrong, and how
-# our `cn-partition-arn-routing` skill corrects it.
+# Strategy: terraform creates the role with a VALID trust policy (cn partition
+# self-account principal). The fault-injection script
+# `faults/inject-L7-cross-partition-trust.sh` then MUTATES the trust policy via
+# `aws iam update-assume-role-policy` to replace `aws-cn` with `aws`, producing
+# the broken state that drives case C5.
 #
-# DO NOT FIX THIS BUG. It is the demo. The misuse of `arn:aws:iam::*:user/...`
-# below is intentional and must be preserved verbatim.
+# Why not bake the bug directly: IAM rejects `MalformedPolicyDocument` at
+# CreateRole time — it validates the principal partition matches the caller.
+# So we install the bug at demo time via update-assume-role-policy (which is
+# more permissive than CreateRole), and `lifecycle { ignore_changes }` keeps
+# subsequent `terraform plan` from undoing it.
 # ============================================================================
 resource "aws_iam_role" "cross_partition_test" {
   name = "bjs-cross-partition-test-role"
@@ -283,18 +287,22 @@ resource "aws_iam_role" "cross_partition_test" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "AllowGlobalPartitionUserToAssume"
+        Sid    = "BaselineValidTrust"
         Effect = "Allow"
         Principal = {
-          # ❌ INTENTIONAL BUG (L7): global-partition ARN inside cn-north-1.
-          # Should be `arn:aws-cn:iam::*:user/lambda-test`. C5 demo depends on
-          # this being wrong. DO NOT CHANGE.
-          AWS = "arn:aws:iam::*:user/lambda-test"
+          # Valid baseline. The L7 inject script overwrites this with the
+          # `arn:aws:` (wrong partition) variant at demo time.
+          AWS = "arn:${data.aws_partition.current.partition}:iam::${data.aws_caller_identity.current.account_id}:root"
         }
         Action = "sts:AssumeRole"
       }
     ]
   })
+
+  # The inject script mutates assume_role_policy out-of-band; do not fight it.
+  lifecycle {
+    ignore_changes = [assume_role_policy]
+  }
 
   tags = {
     Name    = "bjs-cross-partition-test-role"

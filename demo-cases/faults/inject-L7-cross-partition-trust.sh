@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
-# L7 inject: deploy a tiny Lambda that calls sts:AssumeRole on the broken
-# cross-partition role baked into terraform. The call fails (because the
-# trust policy uses 'arn:aws:' instead of 'arn:aws-cn:'), CloudTrail records
-# the AccessDenied. Drives Case C5 (agent makes wrong dx, custom skill saves).
+# L7 inject: install the cross-partition trust-policy bug on
+# `bjs-cross-partition-test-role`, then deploy a tiny Lambda that calls
+# sts:AssumeRole on it. The call fails (because the trust policy uses
+# 'arn:aws:' instead of 'arn:aws-cn:'), CloudTrail records the AccessDenied.
+# Drives Case C5 (agent makes wrong dx, custom skill saves).
 #
-# The IAM role itself is the demo artifact - it stays. We only manage the
-# trigger Lambda + a one-off invoke that produces the failed CloudTrail event.
+# Strategy note: terraform creates the role with a VALID trust policy
+# (cn-partition self-account), because IAM rejects MalformedPolicyDocument
+# at CreateRole time for cross-partition principals. This inject script
+# mutates the trust policy via update-assume-role-policy (which is more
+# permissive than CreateRole) to install the bug. Recover puts it back.
+#
+# The role's terraform definition has lifecycle.ignore_changes on
+# assume_role_policy, so subsequent terraform plans will not undo this.
 unset AWS_PROFILE AWS_REGION
 set -euo pipefail
 
@@ -33,6 +40,30 @@ log_info "Target broken role ARN: ${TARGET_ROLE_ARN}"
 
 WORKDIR=$(mktemp -d)
 trap 'rm -rf "$WORKDIR"' EXIT
+
+# 0. Install the cross-partition trust-policy bug on the broken role.
+#    Terraform creates the role with a valid trust policy; we now overwrite
+#    it with the deliberately-wrong-partition variant via
+#    update-assume-role-policy (which IAM accepts where CreateRole would not).
+log_action "Mutating ${BROKEN_ROLE} trust policy to wrong-partition (arn:aws:)"
+cat >"${WORKDIR}/broken-trust.json" <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "AllowGlobalPartitionUserToAssume",
+    "Effect": "Allow",
+    "Principal": {
+      "AWS": "arn:aws:iam::${ACCOUNT_ID}:root"
+    },
+    "Action": "sts:AssumeRole"
+  }]
+}
+EOF
+aws iam update-assume-role-policy \
+    --role-name "$BROKEN_ROLE" \
+    --policy-document "file://${WORKDIR}/broken-trust.json" \
+    --profile "$PROFILE" --no-cli-pager
+log_ok "Trust policy mutated. Principal is now arn:aws: (wrong partition)."
 
 # 1. Ensure execution role exists for the trigger Lambda.
 log_info "Ensuring Lambda execution role ${LAMBDA_ROLE_NAME} exists..."
