@@ -1,0 +1,1 @@
+这一页是 Agent 自己写的根本原因。它说："AdminCYC 在 2026-05-14T07:18:17Z 通过 AWS CLI ClaudeCode-BH 将 etl-state DynamoDB 表的计费模式从 PAY_PER_REQUEST 手动变更为 PROVISIONED 模式仅设置了 5 WCU 的写入容量。CloudTrail 记录显示该表最初由 Terraform 以按需模式创建，2026-05-13T15:07:50Z，不存在节流风险。" 注意它怎么区分了两个时间点：一个是 Terraform 的初始创建，一个是后来的手动变更。这种区分能力就是 6C 框架里 Continuous Learning 的落地——Agent 自己想到去看 user-agent 字段。

@@ -7,7 +7,7 @@
     <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
     <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">PART 2 · 多云管理原理</text>
     <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">一个 SRE 团队，三朵云 — 实际是 <tspan fill="#FF9800">6 个账号</tspan></text>
-    <text x="60" y="160" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" fill="#9AA0A6">DevOps Agent 跑在 us-east-1，剩下的全部都不是 native 可达 — 这是项目要解决的现实</text>
+    <text x="60" y="160" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" fill="#9AA0A6">同一个 Bridge 模板对接所有 spoke — 加新账号 = 加新 spoke</text>
   </g>
 
   <g id="card-aws-global">
@@ -128,6 +128,6 @@
 
   <g id="page-footer">
     <text x="60" y="690" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">来源：项目仓库 chart/ + chart-aliyun/ + deploy/k8s.yaml</text>
-    <text x="1220" y="690" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">04 / 19</text>
+    <text x="1220" y="690" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">04 / 20</text>
   </g>
 </svg>

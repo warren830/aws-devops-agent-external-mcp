@@ -1,0 +1,1 @@
+这一页是直接证据。Agent 在它的内部 thinking 字段里直接写："China accounts aren't directly in the enabled associations; instead they're accessed through the custom MCP servers"——也就是它会主动从 association 列表读到自定义 MCP，然后自己决定路由，不需要 query hint。这句话有三个含义：第一，Agent 主动识别扩展点；第二，Skill 帮它选择正确的 MCP——routing skill 告诉它 aws-cn 对应宁夏、aws-cn-2 对应北京；第三，每一次调用都被 MCP server 的 access log 完整记录下来——合规可证。

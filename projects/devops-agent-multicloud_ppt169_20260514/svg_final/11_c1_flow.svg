@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="stepGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F44336" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#FF7043" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="stepGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF9800" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#FFB74D" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="stepGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1565C0" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#42A5F5" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="stepGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#42A5F5" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#42A5F5" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="stepGrad5" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4CAF50" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#81C784" stop-opacity="0.85" />
+    </linearGradient>
+    <linearGradient id="stepGrad6" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4CAF50" stop-opacity="0.85" />
+      <stop offset="100%" stop-color="#9CCC65" stop-opacity="0.85" />
+    </linearGradient>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419" />
+  </g>
+
+  <g id="page-header">
+    <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">C1 · 端到端流程</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">90 秒自主调查 → 12 分钟出 RCA — <tspan fill="#FF9800">人没碰按钮</tspan></text>
+  </g>
+
+  <g id="step-1">
+    <polygon points="60,210 240,210 280,255 240,300 60,300" fill="url(#stepGrad1)" />
+    
+  <g transform="translate(92.0, 232.0) scale(0.9166666666666666)" fill="#FFFFFF">
+    <path d="M12 4a4 4 0 0 1 3.995 3.8l.005 .2a1 1 0 0 1 .428 .096l3.033 -1.938a1 1 0 1 1 1.078 1.684l-3.015 1.931a7.17 7.17 0 0 1 .476 2.227h3a1 1 0 0 1 0 2h-3v1a6.01 6.01 0 0 1 -.195 1.525l2.708 1.616a1 1 0 1 1 -1.026 1.718l-2.514 -1.501a6.002 6.002 0 0 1 -3.973 2.56v-5.918a1 1 0 0 0 -2 0v5.917a6.002 6.002 0 0 1 -3.973 -2.56l-2.514 1.503a1 1 0 1 1 -1.026 -1.718l2.708 -1.616a6.01 6.01 0 0 1 -.195 -1.526v-1h-3a1 1 0 0 1 0 -2h3.001v-.055a7 7 0 0 1 .474 -2.173l-3.014 -1.93a1 1 0 1 1 1.078 -1.684l3.032 1.939l.024 -.012l.068 -.027l.019 -.005l.016 -.006l.032 -.008l.04 -.013l.034 -.007l.034 -.004l.045 -.008l.015 -.001l.015 -.002l.087 -.004a4 4 0 0 1 4 -4zm0 2a2 2 0 0 0 -2 2h4a2 2 0 0 0 -2 -2z" />
+  </g>
+    <text x="120" y="250" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">① 注入</text>
+    <text x="92" y="278" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#FFFFFF" fill-opacity="0.95">L6: 错误 image tag</text>
+  </g>
+  <g id="step-2">
+    <polygon points="270,210 470,210 510,255 470,300 270,300 310,255" fill="url(#stepGrad2)" />
+    
+  <g transform="translate(318.0, 232.0) scale(0.9166666666666666)" fill="#FFFFFF">
+    <path d="M10.425 1.414a3.33 3.33 0 0 1 3.026 -.097l.19 .097l6.775 3.995l.096 .063l.092 .077l.107 .075a3.224 3.224 0 0 1 1.266 2.188l.018 .202l.005 .204v7.284c0 1.106 -.57 2.129 -1.454 2.693l-.17 .1l-6.803 4.302c-.918 .504 -2.019 .535 -3.004 .068l-.196 -.1l-6.695 -4.237a3.225 3.225 0 0 1 -1.671 -2.619l-.007 -.207v-7.285c0 -1.106 .57 -2.128 1.476 -2.705l6.95 -4.098zm1.585 13.586l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -8a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" />
+  </g>
+    <text x="346" y="250" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">② Pod 失败</text>
+    <text x="318" y="278" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#FFFFFF" fill-opacity="0.95">ImagePullBackOff</text>
+  </g>
+  <g id="step-3">
+    <polygon points="500,210 700,210 740,255 700,300 500,300 540,255" fill="url(#stepGrad3)" />
+    
+  <g transform="translate(548.0, 232.0) scale(0.9166666666666666)" fill="#FFFFFF">
+    <path d="M13 2l.018 .001l.016 .001l.083 .005l.011 .002h.011l.038 .009l.052 .008l.016 .006l.011 .001l.029 .011l.052 .014l.019 .009l.015 .004l.028 .014l.04 .017l.021 .012l.022 .01l.023 .015l.031 .017l.034 .024l.018 .011l.013 .012l.024 .017l.038 .034l.022 .017l.008 .01l.014 .012l.036 .041l.026 .027l.006 .009c.12 .147 .196 .322 .218 .513l.001 .012l.002 .041l.004 .064v6h5a1 1 0 0 1 .868 1.497l-.06 .091l-8 11c-.568 .783 -1.808 .38 -1.808 -.588v-6h-5a1 1 0 0 1 -.868 -1.497l.06 -.091l8 -11l.01 -.013l.018 -.024l.033 -.038l.018 -.022l.009 -.008l.013 -.014l.04 -.036l.028 -.026l.008 -.006a1 1 0 0 1 .402 -.199l.011 -.001l.027 -.005l.074 -.013l.011 -.001l.041 -.002z" />
+  </g>
+    <text x="576" y="250" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">③ Alarm</text>
+    <text x="548" y="278" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#FFFFFF" fill-opacity="0.95">OK → ALARM</text>
+  </g>
+  <g id="step-4">
+    <polygon points="730,210 930,210 970,255 930,300 730,300 770,255" fill="url(#stepGrad4)" />
+    
+  <g transform="translate(778.0, 232.0) scale(0.9166666666666666)" fill="#FFFFFF">
+    <path d="M18 6a3 3 0 0 1 3 3v9a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2v-2a3 3 0 0 0 -6 0v2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2v-9a3 3 0 0 1 3 -3z" />
+  </g>
+    <text x="806" y="250" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">④ Bridge</text>
+    <text x="778" y="278" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#FFFFFF" fill-opacity="0.95">SNS → Lambda → 200 OK</text>
+  </g>
+  <g id="step-5">
+    <polygon points="960,210 1160,210 1200,255 1160,300 960,300 1000,255" fill="url(#stepGrad5)" />
+    
+  <g transform="translate(1008.0, 232.0) scale(0.9166666666666666)" fill="#FFFFFF">
+    <path d="M12 4c4.29 0 7.863 2.429 10.665 7.154l.22 .379l.045 .1l.03 .083l.014 .055l.014 .082l.011 .1v.11l-.014 .111a.992 .992 0 0 1 -.026 .11l-.039 .108l-.036 .075l-.016 .03c-2.764 4.836 -6.3 7.38 -10.555 7.499l-.313 .004c-4.396 0 -8.037 -2.549 -10.868 -7.504a1 1 0 0 1 0 -.992c2.831 -4.955 6.472 -7.504 10.868 -7.504zm0 5a3 3 0 1 0 0 6a3 3 0 0 0 0 -6" />
+  </g>
+    <text x="1036" y="250" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">⑤ Agent 调查</text>
+    <text x="1008" y="278" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#FFFFFF" fill-opacity="0.95">15 步 · 自主</text>
+  </g>
+  <g id="step-6">
+    <polygon points="430,360 1100,360 1160,420 1100,480 430,480 490,420" fill="url(#stepGrad6)" />
+    
+  <g transform="translate(478.0, 395.0) scale(1.3333333333333333)" fill="#FFFFFF">
+    <path d="M20.901 14.995l-.044 -.006a.4 .4 0 0 1 -.102 -.02l-.045 -.012l-.048 -.017l-.045 -.016l-.043 -.02l-.045 -.022l-.04 -.024l-.044 -.026l-.043 -.032l-.036 -.027a1 1 0 0 1 -.073 -.066l-2.707 -2.707h-6.586a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h9a2 2 0 0 1 2 2v10a1 1 0 0 1 -.076 .383l-.02 .043l-.022 .045l-.024 .04l-.026 .044l-.032 .043l-.027 .036a1 1 0 0 1 -.578 .347l-.052 .008l-.044 .006a1 1 0 0 1 -.198 0" />
+    <path d="M7 8.999v1.001a4 4 0 0 0 4 4h4v3a2 2 0 0 1 -2 2h-6.586l-2.707 2.707c-.63 .63 -1.707 .184 -1.707 -.707v-10a2 2 0 0 1 2 -2z" />
+  </g>
+    <text x="525" y="412" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#FFFFFF">⑥ RCA + 4 阶段 Mitigation + Slack 自主投递</text>
+    <text x="525" y="446" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#FFFFFF" fill-opacity="0.95">Investigation started → Pod ImagePullBackOff → kubectl rollout undo</text>
+    <text x="525" y="466" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#FFFFFF" fill-opacity="0.85">每条命令带 rollback + approval contract，等用户单步授权</text>
+  </g>
+
+  <g id="timing-line">
+    <line x1="60" y1="540" x2="1220" y2="540" stroke="#2D3748" stroke-width="2" />
+    <text x="60" y="560" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#6B7280">T+0s</text>
+    <text x="100" y="560" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">注入故障</text>
+    <circle cx="80" cy="540" r="5" fill="#F44336" />
+
+    <text x="265" y="560" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#6B7280">T+30s</text>
+    <text x="310" y="560" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">Pod ImagePullBackOff</text>
+    <circle cx="285" cy="540" r="5" fill="#FF9800" />
+
+    <text x="510" y="560" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#6B7280">T+90s</text>
+    <text x="555" y="560" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">Alarm + Bridge</text>
+    <circle cx="530" cy="540" r="5" fill="#1565C0" />
+
+    <text x="730" y="560" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#6B7280">T+93s</text>
+    <text x="775" y="560" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">Agent 自主接管</text>
+    <circle cx="750" cy="540" r="5" fill="#42A5F5" />
+
+    <text x="1010" y="560" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#6B7280">T+12min</text>
+    <text x="1075" y="560" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#4CAF50" font-weight="700">RCA Done</text>
+    <circle cx="1030" cy="540" r="5" fill="#4CAF50" />
+  </g>
+
+  <g id="bottom-callout">
+    <path fill="#1A2332" stroke="#FF9800" stroke-width="1" d="M70,600 H1210 A10,10 0 0 1 1220,610 V664 A10,10 0 0 1 1210,674 H70 A10,10 0 0 1 60,664 V610 A10,10 0 0 1 70,600 Z" />
+    
+  <g transform="translate(80.0, 624.0)" fill="#FF9800">
+    <path d="M12 2a5 5 0 0 1 5 5v3a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3v-3a5 5 0 0 1 5 -5m0 12a2 2 0 0 0 -1.995 1.85l-.005 .15a2 2 0 1 0 2 -2m0 -10a3 3 0 0 0 -3 3v3h6v-3a3 3 0 0 0 -3 -3" />
+  </g>
+    <text x="118" y="638" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="700" fill="#FF9800">Approval Contract</text>
+    <text x="118" y="664" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Mitigation 命令 <tspan fill="#E8EAED" font-weight="700">不会自动执行</tspan> — 每步等用户输入 "approve step N" 才动；这是 Skill 的 hard rule，抗 LLM 语义漂移</text>
+  </g>
+
+  <g id="page-footer">
+    <text x="1220" y="710" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">11 / 20</text>
+  </g>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="c3Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4CAF50"/>
+      <stop offset="100%" stop-color="#81C784"/>
+    </linearGradient>
+    <radialGradient id="c3BgGlow" cx="30%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#4CAF50" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#4CAF50" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419"/>
+    <rect width="1280" height="720" fill="url(#c3BgGlow)"/>
+  </g>
+
+  <g id="bg-decoration">
+    <text x="60" y="280" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="380" font-weight="900" fill="#4CAF50" fill-opacity="0.10">C3</text>
+    <line x1="80" y1="540" x2="200" y2="540" stroke="#FF9800" stroke-width="2"/>
+    <circle cx="1120" cy="180" r="3" fill="#42A5F5" fill-opacity="0.55"/>
+    <circle cx="1180" cy="240" r="2" fill="#FF9800" fill-opacity="0.55"/>
+  </g>
+
+  <g id="case-eyebrow">
+    <use data-icon="tabler-filled/eye" x="60" y="155" width="32" height="32" fill="#4CAF50"/>
+    <text x="100" y="178" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" font-weight="600" fill="#4CAF50" letter-spacing="6">CASE 3 · MULTI-HOP TOPOLOGY RCA</text>
+  </g>
+
+  <g id="case-title">
+    <text x="60" y="320" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="80" font-weight="900" fill="#E8EAED">4 跳追溯到根因</text>
+    <text x="60" y="400" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="80" font-weight="900" fill="url(#c3Grad)">不是表层，是 manual 操作</text>
+  </g>
+
+  <g id="case-subtitle">
+    <line x1="60" y1="460" x2="160" y2="460" stroke="#4CAF50" stroke-width="3"/>
+    <text x="60" y="500" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="22" fill="#9AA0A6">DDB throttle alarm → 沿 4 跳依赖链向上溯源</text>
+    <text x="60" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="22" fill="#9AA0A6">最终锁定 CloudTrail 中 <tspan fill="#FF9800" font-weight="700">手动 ModifyTable</tspan> 操作 — 区分 Terraform vs CLI</text>
+  </g>
+
+  <g id="case-stats">
+    <g id="stat-1">
+      <rect x="60" y="580" width="240" height="80" rx="10" fill="#1A2332" stroke="#4CAF50" stroke-width="1"/>
+      <text x="80" y="618" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="32" font-weight="900" fill="#4CAF50">4</text>
+      <text x="104" y="618" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">跳依赖链</text>
+      <text x="80" y="645" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#6B7280">DDB → SQS → ECS → CloudTrail</text>
+    </g>
+    <g id="stat-2">
+      <rect x="320" y="580" width="240" height="80" rx="10" fill="#1A2332" stroke="#FF9800" stroke-width="1"/>
+      <text x="340" y="618" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="32" font-weight="900" fill="#FF9800">14</text>
+      <text x="376" y="618" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">次 cn API（C3）</text>
+      <text x="340" y="645" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#6B7280">100% 经 mcp-aws-cn pod</text>
+    </g>
+    <g id="stat-3">
+      <rect x="580" y="580" width="240" height="80" rx="10" fill="#1A2332" stroke="#42A5F5" stroke-width="1"/>
+      <text x="600" y="618" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="32" font-weight="900" fill="#42A5F5">13</text>
+      <text x="640" y="618" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">分钟收官</text>
+      <text x="600" y="645" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#6B7280">07:46 → 07:59 UTC</text>
+    </g>
+  </g>
+
+  <g id="page-footer">
+    <text x="1220" y="694" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">16 / 20</text>
+  </g>
+</svg>

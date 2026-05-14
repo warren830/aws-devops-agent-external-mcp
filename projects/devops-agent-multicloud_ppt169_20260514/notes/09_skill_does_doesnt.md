@@ -1,0 +1,1 @@
+这页给 SA 一个清晰的答疑模板——客户经常把 Webhook、MCP、Skill 这三件事混淆。Webhook 是入口，把告警拉过来变成 incident，没有它 Agent 自主调查无从触发。MCP 是能力，提供 Agent 调用外部资源的工具，没有它 Agent 看不到 native association 之外的资源。Skill 是策略，告诉 Agent 什么场景调什么、怎么组织输出、加锁审核协议，没有它调查质量大约从百分之三十降到百分之六十的差距。三件事各管各的，缺一不可。

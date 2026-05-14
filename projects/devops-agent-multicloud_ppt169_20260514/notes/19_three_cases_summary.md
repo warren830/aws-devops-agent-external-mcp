@@ -1,0 +1,1 @@
+三个 case 对照看。C1 验证 Collaboration 和 Convenience——webhook 自主，五个 sub-agent，十二分钟出 RCA。C2 验证 Context——五数据源关联加时间锚定到秒，九十八次 tool call，九分四十九秒出 RCA。C3 验证 Continuous Learning 和 Control——四跳追溯加区分变更源加主动检查兜底，十四次 tool call，十三分钟收官。三个 case 跑在不同账号、不同资源类型、不同故障类型——同一套 Bridge 加 Skill 模板，全跑通。Pattern 可移植到任何 cloud、任何客户。

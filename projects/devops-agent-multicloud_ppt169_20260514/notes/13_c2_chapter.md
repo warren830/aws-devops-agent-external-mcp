@@ -1,0 +1,1 @@
+第二个 case 验证的是 6C 里的 Context——拓扑加跨源关联。关键词是"精确到秒"——Agent 把 ALB p99 突变点锚到一个 k8s pod 的创建时间，时间戳是 05:19:19Z，跟 metric 跳变点完全吻合。同时它平行跑了五个 sub-agent 并行查 ALB、EKS、RDS、CloudTrail、Pod logs，给出三个根因加六个观察项。

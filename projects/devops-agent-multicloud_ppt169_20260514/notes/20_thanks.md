@@ -1,0 +1,1 @@
+总结一下 SA 怎么用这个项目。第一是 POC 现成素材——三个 case 截图加演讲稿加终端命令直接拿去客户面前讲，十五分钟搭起 demo 环境。第二是参考架构与代码——Bridge Pattern 的 Helm chart、九个 SKILL.md 模板、Webhook bridge Lambda 代码全部开源在 GitHub。第三是扩展场景——阿里云、腾讯云、客户内部 API、on-prem K8s、私有 SaaS，同一套 Bridge pattern 加一条 Spoke 就行。仓库地址在 GitHub warren830 那里，欢迎 issue 和 PR。谢谢大家，问题随时来。
