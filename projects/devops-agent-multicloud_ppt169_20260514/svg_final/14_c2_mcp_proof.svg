@@ -5,8 +5,8 @@
 
   <g id="page-header">
     <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
-    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">C2 · 铁证</text>
-    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED"><tspan fill="#FF9800">100%</tspan> cn-* AWS API 经 MCP Bridge — 0 次绕过</text>
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">C2 · Sub-agent 工作量分布</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED"><tspan fill="#FF9800">98 次</tspan> tool call — Agent 自己决定调什么、多少次</text>
   </g>
 
   <g id="screenshot">
@@ -17,7 +17,7 @@
   <g id="annotations">
     <path fill="#1A2332" stroke="#2D3748" stroke-width="1" d="M872,180 H1208 A12,12 0 0 1 1220,192 V618 A12,12 0 0 1 1208,630 H872 A12,12 0 0 1 860,618 V192 A12,12 0 0 1 872,180 Z" />
 
-    <text x="880" y="214" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="800" fill="#FF9800">9 类 cn API 全经 Bridge</text>
+    <text x="880" y="214" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="800" fill="#FF9800">Agent 自主调用模式</text>
     <line x1="880" y1="228" x2="1200" y2="228" stroke="#FF9800" stroke-width="1" />
 
     <g id="api-cw-metric">
@@ -48,21 +48,21 @@
 
     <line x1="880" y1="450" x2="1200" y2="450" stroke="#FF9800" stroke-width="1" />
     <text x="880" y="478" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="34" font-weight="900" fill="#FF9800">98 <tspan font-size="18" fill="#9AA0A6">次</tspan></text>
-    <text x="880" y="500" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">总计 cn-northwest-1 API 调用</text>
+    <text x="880" y="500" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">总 tool call · 一次 incident 调查</text>
 
     <path fill="#0F1419" stroke="#4CAF50" stroke-width="1" d="M886,520 H1194 A6,6 0 0 1 1200,526 V606 A6,6 0 0 1 1194,612 H886 A6,6 0 0 1 880,606 V526 A6,6 0 0 1 886,520 Z" />
     
   <g transform="translate(896.0, 536.0) scale(0.8333333333333334)" fill="#4CAF50">
-    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+    <path d="M12 4c4.29 0 7.863 2.429 10.665 7.154l.22 .379l.045 .1l.03 .083l.014 .055l.014 .082l.011 .1v.11l-.014 .111a.992 .992 0 0 1 -.026 .11l-.039 .108l-.036 .075l-.016 .03c-2.764 4.836 -6.3 7.38 -10.555 7.499l-.313 .004c-4.396 0 -8.037 -2.549 -10.868 -7.504a1 1 0 0 1 0 -.992c2.831 -4.955 6.472 -7.504 10.868 -7.504zm0 5a3 3 0 1 0 0 6a3 3 0 0 0 0 -6" />
   </g>
-    <text x="924" y="550" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#4CAF50">0 次绕过 MCP</text>
-    <text x="896" y="578" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#9AA0A6">每一次都从 mcp-aws-cn-2 pod 出去</text>
-    <text x="896" y="596" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#9AA0A6">access log 全程审计可查</text>
+    <text x="924" y="550" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#4CAF50">深度 vs 广度兼顾</text>
+    <text x="896" y="578" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#9AA0A6">同一个 metric 多时间窗反复查 ·</text>
+    <text x="896" y="596" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#9AA0A6">CloudTrail 跨 service 比对变更</text>
   </g>
 
   <g id="bottom-callout">
     <path fill="#0F1419" stroke="#FF9800" stroke-width="1" d="M66,650 H1214 A6,6 0 0 1 1220,656 V684 A6,6 0 0 1 1214,690 H66 A6,6 0 0 1 60,684 V656 A6,6 0 0 1 66,650 Z" />
-    <text x="640" y="676" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">来源：<tspan fill="#FF9800" font-family="Consolas, &quot;Courier New&quot;, monospace">kubectl logs deployment/mcp-aws-cn-2</tspan> · 时间窗 05:20-05:35 UTC · 完整 196 行日志归档于 cli-evidence/case2/10-mcp-server-c2-window-calls.log</text>
+    <text x="640" y="676" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">数据来源：<tspan fill="#FF9800" font-family="Consolas, &quot;Courier New&quot;, monospace">kubectl logs deployment/mcp-aws-cn-2</tspan> · 时间窗 05:20-05:35 UTC · 完整 196 行日志归档于 cli-evidence/case2/</text>
   </g>
 
   <g id="page-footer">

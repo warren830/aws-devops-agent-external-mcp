@@ -1,1 +1,1 @@
-第三个 case 是多跳拓扑 RCA，跑在中国区第二个账号——宁夏。这个 case 验证的是项目能扩展到第二个 cn 账号。关键词是"四跳追溯"——Agent 沿着 DDB 到 SQS 到 ECS 再到 CloudTrail 一路向上溯源到根因。
+第三个 case 验证的是 6C 里的 Continuous Learning 和 Control，跑在中国区第二个账号——宁夏。这个 case 的另一个意义是验证 pattern 在第二个账号上同样跑通。关键词是"四跳追溯"——Agent 沿着 DDB 到 SQS 到 ECS 再到 CloudTrail 一路向上溯源到根因。

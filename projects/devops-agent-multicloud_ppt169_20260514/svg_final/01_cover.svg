@@ -36,17 +36,17 @@
 
   <g id="cover-eyebrow">
     <path fill="url(#accentBar)" d="M62,170 H64 A2,2 0 0 1 66,172 V204 A2,2 0 0 1 64,206 H62 A2,2 0 0 1 60,204 V172 A2,2 0 0 1 62,170 Z" />
-    <text x="80" y="197" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="600" fill="#FF9800" letter-spacing="4">AWS DEVOPS AGENT · CHINA REGION</text>
+    <text x="80" y="197" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="600" fill="#FF9800" letter-spacing="4">AWS DEVOPS AGENT · MCP EXTENSION PATTERN</text>
   </g>
 
   <g id="cover-title-block">
-    <text x="60" y="290" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="60" font-weight="900" fill="#E8EAED">中国区跑通</text>
-    <text x="60" y="370" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="60" font-weight="900" fill="url(#titleGrad)">DevOps Agent 6C 全套能力</text>
+    <text x="60" y="290" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="60" font-weight="900" fill="#E8EAED">用 MCP + Skill 把</text>
+    <text x="60" y="370" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="60" font-weight="900" fill="url(#titleGrad)">6C 扩展到任何外部资源</text>
   </g>
 
   <g id="cover-subtitle-block">
     <line x1="60" y1="425" x2="160" y2="425" stroke="#1565C0" stroke-width="3" />
-    <text x="60" y="465" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="26" fill="#9AA0A6">用 MCP Bridge + Skills 让原生 Agent 看见中国区</text>
+    <text x="60" y="465" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="26" fill="#9AA0A6">面向 SA 的可复用资产 — 用中国区做完整 demo 验证 pattern</text>
   </g>
 
   <g id="cover-bottom-info">
