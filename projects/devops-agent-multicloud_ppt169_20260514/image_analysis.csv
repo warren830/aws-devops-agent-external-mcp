@@ -1,0 +1,18 @@
+No,Filename,Width,Height,AspectRatio,SizeKB,Category,ImageArea_SxS,TextArea_SxS
+1,case-1-01-investigation-list.png,1196,949,1.26,416.5,Standard landscape,756x600,384x600
+2,case-1-02-investigation-timeline.png,3284,4889,0.67,9116.4,Portrait,403x600,737x600
+3,case-1-03-rca-report.png,3290,1910,1.72,3133.8,Wide landscape,812x471,328x600
+4,case-1-04-mitigation-plan.png,3338,4973,0.67,7272.1,Portrait,403x600,737x600
+5,case-1-05-slack-thread.png,1364,801,1.70,170.7,Wide landscape,812x477,328x600
+6,case-1-06-cloudwatch-alarm.png,2810,1638,1.72,425.8,Wide landscape,812x473,328x600
+7,case-1-07-eks-pod-failed.png,869,219,3.97,85.3,Ultra-wide,1160x292,1160x288
+8,case-2-01-investigation-list.png,1042,802,1.30,270.1,Standard landscape,780x600,360x600
+9,case-2-02-investigation-timeline.png,3338,5342,0.62,10895.9,Portrait,375x600,765x600
+10,case-2-03-rca-time-anchor.png,1626,789,2.06,654.1,Ultra-wide,812x394,328x600
+11,case-2-04-cloudwatch-p99.png,1415,825,1.72,178.4,Wide landscape,812x473,328x600
+12,case-2-04-rca-full.png,3338,3981,0.84,6459.9,Near square,503x600,637x600
+13,case-2-05-mcp-server-log.png,664,365,1.82,106.0,Wide landscape,812x446,328x600
+14,case-3-01-investigation-list.png,1027,959,1.07,292.5,Near square,643x600,497x600
+15,case-3-02-investigation-timeline.png,3338,3422,0.98,6774.4,Near square,585x600,555x600
+16,case-3-03-rca-summary.png,963,851,1.13,372.9,Near square,679x600,461x600
+17,case-3-05-mcp-server-log.png,959,812,1.18,247.9,Near square,709x600,431x600

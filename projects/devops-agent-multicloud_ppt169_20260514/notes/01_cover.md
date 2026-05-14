@@ -1,0 +1,1 @@
+各位下午好。今天分享的题目是中国区跑通 AWS DevOps Agent 6C 全套能力。这个项目的核心是用 MCP Bridge 加上 Skills 让原生 Agent 看见中国区。我会先讲清楚原生 Agent 在中国区的盲区在哪，然后讲 MCP Bridge 怎么把这个空补上，最后用三个真实跑通的 case 给大家看证据。整个分享大概二十五到三十分钟。

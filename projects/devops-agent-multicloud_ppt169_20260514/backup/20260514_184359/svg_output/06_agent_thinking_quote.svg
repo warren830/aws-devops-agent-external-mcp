@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <radialGradient id="bgQuoteGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#1565C0" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#1565C0" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419"/>
+    <rect width="1280" height="720" fill="url(#bgQuoteGlow)"/>
+  </g>
+
+  <g id="bg-decoration">
+    <text x="120" y="280" font-family="Georgia, serif" font-size="200" font-weight="900" fill="#1565C0" fill-opacity="0.15">"</text>
+  </g>
+
+  <g id="page-eyebrow">
+    <text x="640" y="120" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="6">AGENT THINKING — DIRECT EVIDENCE</text>
+    <line x1="490" y1="135" x2="790" y2="135" stroke="#FF9800" stroke-width="1.5"/>
+  </g>
+
+  <g id="page-title">
+    <text x="640" y="180" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="28" font-weight="800" fill="#E8EAED">Agent 自己说了：China 账号只能走 MCP</text>
+  </g>
+
+  <g id="quote-block">
+    <rect x="120" y="270" width="1040" height="220" rx="16" fill="#1A2332" stroke="#42A5F5" stroke-width="1.5"/>
+    <rect x="120" y="270" width="6" height="220" fill="#42A5F5" rx="2"/>
+    <text x="170" y="328" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="22" fill="#E8EAED">"China accounts aren't directly in the enabled</text>
+    <text x="170" y="362" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="22" fill="#E8EAED">associations; instead they're accessed through</text>
+    <text x="170" y="396" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="22" font-weight="700" fill="#FF9800">the custom MCP servers, so I'll need to use the</text>
+    <text x="170" y="430" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="22" font-weight="700" fill="#FF9800">aws_cn_2_mcp tools to reach the Beijing account."</text>
+    <text x="170" y="468" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="15" fill="#9AA0A6">— DevOps Agent 内部 thinking 字段（C2 调查 journal recordId 8e7a143f）</text>
+  </g>
+
+  <g id="three-implications">
+    <g id="implication-1">
+      <rect x="60" y="540" width="380" height="100" rx="10" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
+      <text x="80" y="572" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="900" fill="#FF9800">1.</text>
+      <text x="124" y="568" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="700" fill="#E8EAED">原生关联里没有中国区</text>
+      <text x="124" y="595" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">"not directly in enabled</text>
+      <text x="124" y="615" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">associations" — 这是限制</text>
+    </g>
+    <g id="implication-2">
+      <rect x="450" y="540" width="380" height="100" rx="10" fill="#1A2332" stroke="#FF9800" stroke-width="1"/>
+      <text x="470" y="572" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="900" fill="#FF9800">2.</text>
+      <text x="514" y="568" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="700" fill="#E8EAED">"自定义 MCP" = 我们的 Bridge</text>
+      <text x="514" y="595" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">aws-cn-2.yingchu.cloud / aws-cn.yingchu.cloud</text>
+      <text x="514" y="615" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">— 项目自己部的两条路</text>
+    </g>
+    <g id="implication-3">
+      <rect x="840" y="540" width="380" height="100" rx="10" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
+      <text x="860" y="572" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="900" fill="#FF9800">3.</text>
+      <text x="904" y="568" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="700" fill="#E8EAED">每次 cn API 都被记账</text>
+      <text x="904" y="595" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">MCP pod access log = 100% 流量审计</text>
+      <text x="904" y="615" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">— 一行不漏</text>
+    </g>
+  </g>
+
+  <g id="page-footer">
+    <text x="60" y="694" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">证据保存于 blog/cli-evidence/case2/c2-journal-real.json (300 KB) · 100 records</text>
+    <text x="1220" y="694" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">06 / 19</text>
+  </g>
+</svg>

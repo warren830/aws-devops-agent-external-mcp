@@ -1,0 +1,1 @@
+这页讲 Skill 能做和不能做的边界。能做的：注入领域知识、统一 RCA 输出、规约 Mitigation 模板、加锁审核协议——所有 Mitigation 命令都要用户显式输入 approve step 几才执行，单步授权抗 LLM 语义漂移。不能做的：Skill 不替代 MCP，因为 MCP 是能力来源；不替代 Webhook 链路，因为告警进不来 Skill 也激活不了；不替代 Agent Space console 配置——OAuth、Webhook URL 生成这些。一句话总结：MCP 给能力，Skill 给策略，缺一不可。

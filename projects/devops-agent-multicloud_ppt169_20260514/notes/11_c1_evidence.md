@@ -1,0 +1,1 @@
+C1 不是手画占位——这是真 Agent 真截图。左上 kubectl 终端显示三个 Running 加一个 ImagePullBackOff。右上 CloudWatch 告警状态条从绿色翻红色。左下 RCA 报告引用了具体的 image tag。右下 Slack 频道里 Agent 自主投递了 Investigation started 通知，时间戳十二点十七分。整个链路真实跑通，不是 mock。

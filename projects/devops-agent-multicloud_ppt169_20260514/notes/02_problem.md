@@ -1,0 +1,1 @@
+我们先看问题。原生 DevOps Agent 在 us-east-1 跑得很好——6C 框架、Webhook 自主调查、Slack 通知、跨源关联，这些都是开箱即用的。但是同一个 Agent 一旦面对中国区账号，就会哑火。它访问不到 cn-* 资源，因为 IAM 和 STS 的信任链不通，CloudWatch 告警也没法直接打到它的 Webhook 上。最有意思的是，Agent 自己在 thinking 字段里写了一句话——中国区账号不在 enabled associations 里——这是它自己承认的盲区。
