@@ -61,26 +61,27 @@
 - P03: breathing
 - P04: dense
 - P05: dense
-- P06: breathing
-- P07: dense
+- P06: dense
+- P07: breathing
 - P08: dense
-- P09: breathing
-- P10: dense
+- P09: dense
+- P10: breathing
 - P11: dense
-- P12: breathing
-- P13: dense
+- P12: dense
+- P13: breathing
 - P14: dense
-- P15: breathing
-- P16: dense
+- P15: dense
+- P16: breathing
 - P17: dense
 - P18: dense
-- P19: anchor
+- P19: dense
+- P20: anchor
 
 ## page_charts
-- P05: hub_spoke
-- P07: pyramid_chart
-- P10: process_flow
-- P14: sankey_chart
+- P06: hub_spoke
+- P08: pyramid_chart
+- P11: process_flow
+- P15: sankey_chart
 
 ## forbidden
 - Mixing icon libraries

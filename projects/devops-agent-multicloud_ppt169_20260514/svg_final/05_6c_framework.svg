@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="cBadge" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1565C0" />
+      <stop offset="100%" stop-color="#42A5F5" />
+    </linearGradient>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419" />
+  </g>
+
+  <g id="page-header">
+    <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">6C FRAMEWORK · 速查</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">DevOps Agent 与普通 LLM 包装层的<tspan fill="#FF9800">六个差异点</tspan></text>
+    <text x="60" y="160" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" fill="#9AA0A6">"6 个 C" 不是营销分类，是具体的工程投入 — 后面 3 个 case 会分别映射到不同 C</text>
+  </g>
+
+  <g id="c-grid">
+    <g id="c1-context">
+      <path fill="#1A2332" stroke="#42A5F5" stroke-width="1.5" d="M72,200 H428 A12,12 0 0 1 440,212 V334 A12,12 0 0 1 428,346 H72 A12,12 0 0 1 60,334 V212 A12,12 0 0 1 72,200 Z" />
+      <circle cx="100" cy="240" r="22" fill="url(#cBadge)" />
+      <text x="100" y="248" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#FFFFFF">1</text>
+      <text x="138" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#42A5F5">Context</text>
+      <text x="138" y="254" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">上下文 / 拓扑智能</text>
+      <line x1="80" y1="280" x2="420" y2="280" stroke="#2D3748" stroke-width="1" />
+      <text x="80" y="308" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">CloudWatch + GitHub + IaC + Trace</text>
+      <text x="80" y="328" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">多源在一次调查里同时关联</text>
+    </g>
+
+    <g id="c2-control">
+      <path fill="#1A2332" stroke="#42A5F5" stroke-width="1.5" d="M462,200 H818 A12,12 0 0 1 830,212 V334 A12,12 0 0 1 818,346 H462 A12,12 0 0 1 450,334 V212 A12,12 0 0 1 462,200 Z" />
+      <circle cx="490" cy="240" r="22" fill="url(#cBadge)" />
+      <text x="490" y="248" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#FFFFFF">2</text>
+      <text x="528" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#42A5F5">Control</text>
+      <text x="528" y="254" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">治理 / 权限 / 审计</text>
+      <line x1="470" y1="280" x2="810" y2="280" stroke="#2D3748" stroke-width="1" />
+      <text x="470" y="308" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">细粒度 IAM + 不可篡改 audit log</text>
+      <text x="470" y="328" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">每步推理可追溯</text>
+    </g>
+
+    <g id="c3-convenience">
+      <path fill="#1A2332" stroke="#42A5F5" stroke-width="1.5" d="M852,200 H1208 A12,12 0 0 1 1220,212 V334 A12,12 0 0 1 1208,346 H852 A12,12 0 0 1 840,334 V212 A12,12 0 0 1 852,200 Z" />
+      <circle cx="880" cy="240" r="22" fill="url(#cBadge)" />
+      <text x="880" y="248" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#FFFFFF">3</text>
+      <text x="918" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#42A5F5">Convenience</text>
+      <text x="918" y="254" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">便利性 / 零配置上下文</text>
+      <line x1="860" y1="280" x2="1200" y2="280" stroke="#2D3748" stroke-width="1" />
+      <text x="860" y="308" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">Agent Space 一处配置全员可用</text>
+      <text x="860" y="328" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">新 SRE 上手不用接 N 个工具</text>
+    </g>
+
+    <g id="c4-collaboration">
+      <path fill="#1A2332" stroke="#FF9800" stroke-width="1.5" d="M72,366 H428 A12,12 0 0 1 440,378 V500 A12,12 0 0 1 428,512 H72 A12,12 0 0 1 60,500 V378 A12,12 0 0 1 72,366 Z" />
+      <circle cx="100" cy="406" r="22" fill="#FF9800" />
+      <text x="100" y="414" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#FFFFFF">4</text>
+      <text x="138" y="398" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#FF9800">Collaboration</text>
+      <text x="138" y="420" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">协作 / 自主调查</text>
+      <line x1="80" y1="446" x2="420" y2="446" stroke="#2D3748" stroke-width="1" />
+      <text x="80" y="474" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">告警进来 agent 直接接管</text>
+      <text x="80" y="494" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">Slack / 工单 自动协调</text>
+    </g>
+
+    <g id="c5-continuous">
+      <path fill="#1A2332" stroke="#FF9800" stroke-width="1.5" d="M462,366 H818 A12,12 0 0 1 830,378 V500 A12,12 0 0 1 818,512 H462 A12,12 0 0 1 450,500 V378 A12,12 0 0 1 462,366 Z" />
+      <circle cx="490" cy="406" r="22" fill="#FF9800" />
+      <text x="490" y="414" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#FFFFFF">5</text>
+      <text x="528" y="398" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#FF9800">Continuous Learning</text>
+      <text x="528" y="420" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">持续学习 / Skill 三层</text>
+      <line x1="470" y1="446" x2="810" y2="446" stroke="#2D3748" stroke-width="1" />
+      <text x="470" y="474" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">AWS-provided + Custom + Learned</text>
+      <text x="470" y="494" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">同类问题第二次更快</text>
+    </g>
+
+    <g id="c6-cost">
+      <path fill="#1A2332" stroke="#4CAF50" stroke-width="1.5" d="M852,366 H1208 A12,12 0 0 1 1220,378 V500 A12,12 0 0 1 1208,512 H852 A12,12 0 0 1 840,500 V378 A12,12 0 0 1 852,366 Z" />
+      <circle cx="880" cy="406" r="22" fill="#4CAF50" />
+      <text x="880" y="414" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#FFFFFF">6</text>
+      <text x="918" y="398" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="800" fill="#4CAF50">Cost Effective</text>
+      <text x="918" y="420" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">成本优势</text>
+      <line x1="860" y1="446" x2="1200" y2="446" stroke="#2D3748" stroke-width="1" />
+      <text x="860" y="474" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">按 agent-second 计费 · 闲时不算</text>
+      <text x="860" y="494" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">查询优化比 raw LLM 快 15×</text>
+    </g>
+  </g>
+
+  <g id="case-mapping">
+    <path fill="#0F1419" stroke="#FF9800" stroke-width="1" d="M74,540 H1206 A14,14 0 0 1 1220,554 V646 A14,14 0 0 1 1206,660 H74 A14,14 0 0 1 60,646 V554 A14,14 0 0 1 74,540 Z" />
+    <text x="80" y="572" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">3 个 case 怎么映射到 6C</text>
+
+    <g id="map-c1">
+      <text x="80" y="610" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="900" fill="#42A5F5">C1</text>
+      <text x="116" y="608" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">Webhook 自主</text>
+      <text x="116" y="630" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" font-weight="700" fill="#FF9800">→ Collaboration · Convenience</text>
+    </g>
+    <g id="map-c2">
+      <text x="430" y="610" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="900" fill="#FF9800">C2</text>
+      <text x="466" y="608" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">时间锚定</text>
+      <text x="466" y="630" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" font-weight="700" fill="#FF9800">→ Context (拓扑+跨源关联)</text>
+    </g>
+    <g id="map-c3">
+      <text x="780" y="610" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="900" fill="#4CAF50">C3</text>
+      <text x="816" y="608" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">多跳追溯</text>
+      <text x="816" y="630" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" font-weight="700" fill="#FF9800">→ Continuous Learning · Control</text>
+    </g>
+  </g>
+
+  <g id="page-footer">
+    <text x="60" y="690" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">出处：aws.amazon.com/blogs/devops/leverage-agentic-ai-for-autonomous-incident-response-with-aws-devops-agent · 中文译本 aws-docs/02-leverage-agentic-ai-autonomous-incident-response.md</text>
+    <text x="1220" y="690" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">05 / 20</text>
+  </g>
+</svg>

@@ -1,1 +1,1 @@
-我们先看 SA 日常会被问到的真问题。客户问"能不能用 DevOps Agent 管 X"——X 是中国区、阿里云、自建 K8s、内部 SaaS 还是 Salesforce / Jira / 自研 CMDB——所有这些都不在 native association 范围之内。这一类问题的统一解法都是 MCP 扩展点。中国区只是其中一个具体场景，今天用它做证据，但模式可以直接套到其他任何外部资源。
+我们先看 SA 日常会被问到的真问题。客户问"能不能用 DevOps Agent 管 X"——X 是中国区、阿里云、自建 K8s、内部 SaaS 还是 Salesforce / Jira / 自研 CMDB——所有这些都不在 native association 范围之内。这一类问题的统一解法都是 MCP 扩展点。中国区只是其中一个具体场景，今天用它做证据，但模式可以直接套到其他任何外部资源。顺便提一下，今天会反复提到 6C 框架——这是 AWS DevOps Blog 三月那篇 Leverage Agentic AI 的术语，下一页有个速查表给大家对一下。
