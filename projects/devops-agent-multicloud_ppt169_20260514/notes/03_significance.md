@@ -1,0 +1,1 @@
+这个项目的意义可以用一个数字说清楚。在我们 C2 那个 case 里，Agent 一次 incident 调查通过 MCP Bridge 调用了九十八次中国区 AWS API，零次绕过 Bridge。这是公开资料里第一次让 6C 能力完整落到中国区，靠的就是三件事：MCP Bridge 架构、九个自定义 Skill、三个真实 case 的端到端闭环。

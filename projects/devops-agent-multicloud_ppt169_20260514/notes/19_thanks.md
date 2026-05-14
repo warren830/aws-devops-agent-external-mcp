@@ -1,0 +1,1 @@
+总结一下。我们做的事情就是把 Agent 看不见中国区这个空白补上——MCP Bridge 是能力层，Skills 是策略层，再加上三个真实 case 闭环验证。接下来要做的有三件事：跑剩下的七个 case、写 blog 04 配现场演示 SOP、把同样的 pattern 扩展到阿里云和 GCP。仓库地址在 GitHub warren830 那里，欢迎 issue 和 PR。谢谢大家，问题随时来。

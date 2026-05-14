@@ -1,0 +1,1 @@
+这一页是直接证据。Agent 在它的内部 thinking 字段里直接写："China accounts aren't directly in the enabled associations; instead they're accessed through the custom MCP servers"——也就是中国区账号不在原生关联里，要靠自定义 MCP server 访问。这句话有三个含义：第一，原生路径确实有限制；第二，"自定义 MCP" 就是我们部署的 Bridge；第三，每一次 cn API 调用都被 MCP server 的 access log 完整记录下来，可以审计。

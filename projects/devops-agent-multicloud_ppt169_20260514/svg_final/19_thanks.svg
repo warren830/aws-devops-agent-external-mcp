@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="thanksGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1565C0" />
+      <stop offset="100%" stop-color="#FF9800" />
+    </linearGradient>
+    <radialGradient id="thanksBgGlow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#1565C0" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#1565C0" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419" />
+    <rect width="1280" height="720" fill="url(#thanksBgGlow)" />
+  </g>
+
+  <g id="bg-decoration">
+    <line x1="540" y1="220" x2="740" y2="220" stroke="#FF9800" stroke-width="2" />
+    <circle cx="180" cy="180" r="2" fill="#42A5F5" fill-opacity="0.5" />
+    <circle cx="1100" cy="200" r="2" fill="#FF9800" fill-opacity="0.5" />
+    <circle cx="200" cy="600" r="2" fill="#FF9800" fill-opacity="0.5" />
+    <circle cx="1100" cy="600" r="2" fill="#42A5F5" fill-opacity="0.5" />
+  </g>
+
+  <g id="thanks-title">
+    <text x="640" y="200" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="6">THANK YOU · QUESTIONS WELCOME</text>
+    <text x="640" y="320" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="120" font-weight="900" fill="url(#thanksGrad)">谢谢</text>
+  </g>
+
+  <g id="next-steps">
+    <path fill="#1A2332" stroke="#2D3748" stroke-width="1" d="M134,400 H1146 A14,14 0 0 1 1160,414 V586 A14,14 0 0 1 1146,600 H134 A14,14 0 0 1 120,586 V414 A14,14 0 0 1 134,400 Z" />
+
+    <text x="640" y="438" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#FF9800">接下来要做的</text>
+
+    <g id="next-1">
+      
+  <g transform="translate(160.0, 468.0) scale(0.9166666666666666)" fill="#42A5F5">
+    <path d="M19 4c.852 0 1.297 .986 .783 1.623l-.076 .084l-3.792 3.793l3.792 3.793c.603 .602 .22 1.614 -.593 1.701l-.114 .006h-13v6a1 1 0 0 1 -.883 .993l-.117 .007a1 1 0 0 1 -.993 -.883l-.007 -.117v-16a1 1 0 0 1 .883 -.993l.117 -.007h14z" />
+  </g>
+      <text x="190" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">7 个 case 待跑</text>
+      <text x="190" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">C4 跨账号 blast radius</text>
+      <text x="190" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">C5 partition skill 救场</text>
+      <text x="190" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">C6-C10 prevention / spec / cost</text>
+    </g>
+
+    <g id="next-2">
+      
+  <g transform="translate(500.0, 468.0) scale(0.9166666666666666)" fill="#FF9800">
+    <path d="M17 3.34a10 10 0 1 1 -15 8.66l.005 -.324a10 10 0 0 1 14.995 -8.336m-6.293 5.953a1 1 0 0 0 -1.414 0l-2 2a1 1 0 0 0 0 1.414l2 2a1 1 0 0 0 1.414 0l.083 -.094a1 1 0 0 0 -.083 -1.32l-1.292 -1.293l1.292 -1.293a1 1 0 0 0 0 -1.414m4 0a1 1 0 0 0 -1.414 0l-.083 .094a1 1 0 0 0 .083 1.32l1.292 1.293l-1.292 1.293a1 1 0 0 0 1.414 1.414l2 -2a1 1 0 0 0 0 -1.414z" />
+  </g>
+      <text x="530" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">Blog 04 + 现场演示 SOP</text>
+      <text x="530" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">case 4-10 完成后整合</text>
+      <text x="530" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">"10 个真实场景" 单独成篇</text>
+      <text x="530" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">现场 demo 5 步流程已备</text>
+    </g>
+
+    <g id="next-3">
+      
+  <g transform="translate(840.0, 468.0) scale(0.9166666666666666)" fill="#4CAF50">
+    <path d="M21.165 16a10 10 0 0 1 -8.434 5.973a1 1 0 0 0 .617 -.444a18 18 0 0 0 2.28 -5.528z" />
+    <path d="M8.372 16a18 18 0 0 0 2.28 5.53a1 1 0 0 0 .616 .443a10 10 0 0 1 -8.433 -5.973z" />
+    <path d="M13.57 16a16 16 0 0 1 -1.57 3.884a16 16 0 0 1 -1.57 -3.884" />
+    <path d="M8.034 10a18 18 0 0 0 0 4h-5.832a10 10 0 0 1 -.002 -4z" />
+    <path d="M13.952 10a16 16 0 0 1 0 4h-3.904a16 16 0 0 1 0 -4z" />
+    <path d="M21.8 10a10.05 10.05 0 0 1 -.002 4h-5.832c.149 -1.329 .149 -2.67 0 -4z" />
+    <path d="M11.267 2.027a1 1 0 0 0 -.615 .444a18 18 0 0 0 -2.28 5.529h-5.54a10.01 10.01 0 0 1 8.334 -5.967z" />
+    <path d="M12 4.116a16 16 0 0 1 1.57 3.885h-3.14c.34 -1.317 .85 -2.6 1.53 -3.817z" />
+    <path d="M12.733 2.026a10.01 10.01 0 0 1 8.435 5.974h-5.54a18 18 0 0 0 -2.28 -5.53a1 1 0 0 0 -.517 -.414z" />
+  </g>
+      <text x="870" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">扩展到其他 Cloud</text>
+      <text x="870" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">阿里云 MCP 已有占位</text>
+      <text x="870" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">GCP 同 pattern 可加</text>
+      <text x="870" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">同一套 Bridge 模板</text>
+    </g>
+
+    <line x1="160" y1="568" x2="1120" y2="568" stroke="#2D3748" stroke-width="1" />
+
+    
+  <g transform="translate(160.0, 582.0) scale(0.75)" fill="#42A5F5">
+    <path d="M17 3.34a10 10 0 1 1 -15 8.66l.005 -.324a10 10 0 0 1 14.995 -8.336m-6.293 5.953a1 1 0 0 0 -1.414 0l-2 2a1 1 0 0 0 0 1.414l2 2a1 1 0 0 0 1.414 0l.083 -.094a1 1 0 0 0 -.083 -1.32l-1.292 -1.293l1.292 -1.293a1 1 0 0 0 0 -1.414m4 0a1 1 0 0 0 -1.414 0l-.083 .094a1 1 0 0 0 .083 1.32l1.292 1.293l-1.292 1.293a1 1 0 0 0 1.414 1.414l2 -2a1 1 0 0 0 0 -1.414z" />
+  </g>
+    <text x="186" y="595" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#42A5F5">github.com/warren830/aws-devops-agent-external-mcp</text>
+
+    
+  <g transform="translate(700.0, 582.0) scale(0.75)" fill="#9AA0A6">
+    <path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z" />
+    <path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z" />
+  </g>
+    <text x="726" y="595" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#9AA0A6">YC Chen · ychchen@amazon.com</text>
+  </g>
+
+  <g id="page-footer">
+    <text x="640" y="690" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">本 PPT 由 ppt-master 工作流生成 · 19 / 19</text>
+  </g>
+</svg>

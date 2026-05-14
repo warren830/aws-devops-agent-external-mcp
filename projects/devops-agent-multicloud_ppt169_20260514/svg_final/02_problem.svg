@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1565C0" />
+      <stop offset="100%" stop-color="#42A5F5" />
+    </linearGradient>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419" />
+  </g>
+
+  <g id="page-header">
+    <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">问题</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">原生 DevOps Agent <tspan fill="#F44336">≠</tspan> 中国区可用</text>
+    <text x="60" y="160" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" fill="#9AA0A6">同样一个 agent，AWS 全球区开箱可用；面对 cn-* partition 直接哑火</text>
+  </g>
+
+  <g id="card-left">
+    <path fill="#1A2332" stroke="#2D3748" stroke-width="1" d="M74,200 H611 A14,14 0 0 1 625,214 V616 A14,14 0 0 1 611,630 H74 A14,14 0 0 1 60,616 V214 A14,14 0 0 1 74,200 Z" />
+    <path fill="#1565C0" fill-opacity="0.18" d="M74,200 H611 A14,14 0 0 1 625,214 V236 A14,14 0 0 1 611,250 H74 A14,14 0 0 1 60,236 V214 A14,14 0 0 1 74,200 Z" />
+    <rect x="60" y="240" width="565" height="10" fill="#1A2332" />
+    
+  <g transform="translate(80.0, 212.0) scale(1.0833333333333333)" fill="#42A5F5">
+    <path d="M10.04 4.305c2.195 -.667 4.615 -.224 6.36 1.176c1.386 1.108 2.188 2.686 2.252 4.34l.003 .212l.091 .003c2.3 .107 4.143 1.961 4.25 4.27l.004 .211c0 2.407 -1.885 4.372 -4.255 4.482l-.21 .005h-11.878l-.222 -.008c-2.94 -.11 -5.317 -2.399 -5.43 -5.263l-.005 -.216c0 -2.747 2.08 -5.01 4.784 -5.417l.114 -.016l.07 -.181c.663 -1.62 2.056 -2.906 3.829 -3.518l.244 -.08z" />
+  </g>
+    <text x="116" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#42A5F5">原生能力（在 us-east-1 全开）</text>
+
+    <g id="card-left-row1">
+      
+  <g transform="translate(84.0, 280.0) scale(0.75)" fill="#4CAF50">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+  </g>
+      <text x="112" y="295" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">6C 框架 — Context / Control / Collaboration / Continuous Learning / Convenience / Cost</text>
+    </g>
+    <g id="card-left-row2">
+      
+  <g transform="translate(84.0, 335.0) scale(0.75)" fill="#FF9800">
+    <path d="M13 2l.018 .001l.016 .001l.083 .005l.011 .002h.011l.038 .009l.052 .008l.016 .006l.011 .001l.029 .011l.052 .014l.019 .009l.015 .004l.028 .014l.04 .017l.021 .012l.022 .01l.023 .015l.031 .017l.034 .024l.018 .011l.013 .012l.024 .017l.038 .034l.022 .017l.008 .01l.014 .012l.036 .041l.026 .027l.006 .009c.12 .147 .196 .322 .218 .513l.001 .012l.002 .041l.004 .064v6h5a1 1 0 0 1 .868 1.497l-.06 .091l-8 11c-.568 .783 -1.808 .38 -1.808 -.588v-6h-5a1 1 0 0 1 -.868 -1.497l.06 -.091l8 -11l.01 -.013l.018 -.024l.033 -.038l.018 -.022l.009 -.008l.013 -.014l.04 -.036l.028 -.026l.008 -.006a1 1 0 0 1 .402 -.199l.011 -.001l.027 -.005l.074 -.013l.011 -.001l.041 -.002z" />
+  </g>
+      <text x="112" y="350" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">Webhook 自主调查 — alarm 进来 agent 直接接管</text>
+    </g>
+    <g id="card-left-row3">
+      
+  <g transform="translate(84.0, 390.0) scale(0.75)" fill="#42A5F5">
+    <path d="M20.901 14.995l-.044 -.006a.4 .4 0 0 1 -.102 -.02l-.045 -.012l-.048 -.017l-.045 -.016l-.043 -.02l-.045 -.022l-.04 -.024l-.044 -.026l-.043 -.032l-.036 -.027a1 1 0 0 1 -.073 -.066l-2.707 -2.707h-6.586a2 2 0 0 1 -2 -2v-6a2 2 0 0 1 2 -2h9a2 2 0 0 1 2 2v10a1 1 0 0 1 -.076 .383l-.02 .043l-.022 .045l-.024 .04l-.026 .044l-.032 .043l-.027 .036a1 1 0 0 1 -.578 .347l-.052 .008l-.044 .006a1 1 0 0 1 -.198 0" />
+    <path d="M7 8.999v1.001a4 4 0 0 0 4 4h4v3a2 2 0 0 1 -2 2h-6.586l-2.707 2.707c-.63 .63 -1.707 .184 -1.707 -.707v-10a2 2 0 0 1 2 -2z" />
+  </g>
+      <text x="112" y="405" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">Slack / GitHub / CloudWatch native 集成</text>
+    </g>
+    <g id="card-left-row4">
+      
+  <g transform="translate(84.0, 445.0) scale(0.75)" fill="#42A5F5">
+    <path d="M17 3.34a10 10 0 1 1 -15 8.66l.005 -.324a10 10 0 0 1 14.995 -8.336m-6.293 5.953a1 1 0 0 0 -1.414 0l-2 2a1 1 0 0 0 0 1.414l2 2a1 1 0 0 0 1.414 0l.083 -.094a1 1 0 0 0 -.083 -1.32l-1.292 -1.293l1.292 -1.293a1 1 0 0 0 0 -1.414m4 0a1 1 0 0 0 -1.414 0l-.083 .094a1 1 0 0 0 .083 1.32l1.292 1.293l-1.292 1.293a1 1 0 0 0 1.414 1.414l2 -2a1 1 0 0 0 0 -1.414z" />
+  </g>
+      <text x="112" y="460" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">Skills 三层 — AWS-provided / User-custom / Learned</text>
+    </g>
+    <g id="card-left-row5">
+      
+  <g transform="translate(84.0, 500.0) scale(0.75)" fill="#FF9800">
+    <path d="M12 4c4.29 0 7.863 2.429 10.665 7.154l.22 .379l.045 .1l.03 .083l.014 .055l.014 .082l.011 .1v.11l-.014 .111a.992 .992 0 0 1 -.026 .11l-.039 .108l-.036 .075l-.016 .03c-2.764 4.836 -6.3 7.38 -10.555 7.499l-.313 .004c-4.396 0 -8.037 -2.549 -10.868 -7.504a1 1 0 0 1 0 -.992c2.831 -4.955 6.472 -7.504 10.868 -7.504zm0 5a3 3 0 1 0 0 6a3 3 0 0 0 0 -6" />
+  </g>
+      <text x="112" y="515" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">跨源关联 — CloudTrail × Metric × Logs × Code commit</text>
+    </g>
+    <g id="card-left-row6">
+      
+  <g transform="translate(84.0, 555.0) scale(0.75)" fill="#4CAF50">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-4.98 3.66l-.163 .01l-.086 .016l-.142 .045l-.113 .054l-.07 .043l-.095 .071l-.058 .054l-4 4l-.083 .094a1 1 0 0 0 1.497 1.32l2.293 -2.293v5.586l.007 .117a1 1 0 0 0 1.993 -.117v-5.585l2.293 2.292l.094 .083a1 1 0 0 0 1.32 -1.497l-4 -4l-.082 -.073l-.089 -.064l-.113 -.062l-.081 -.034l-.113 -.034l-.112 -.02l-.098 -.006z" />
+  </g>
+      <text x="112" y="570" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">Topology 自动学习 + Ops backlog 周期建议</text>
+    </g>
+  </g>
+
+  <g id="card-right">
+    <path fill="#1A2332" stroke="#2D3748" stroke-width="1" d="M669,200 H1206 A14,14 0 0 1 1220,214 V616 A14,14 0 0 1 1206,630 H669 A14,14 0 0 1 655,616 V214 A14,14 0 0 1 669,200 Z" />
+    <path fill="#F44336" fill-opacity="0.16" d="M669,200 H1206 A14,14 0 0 1 1220,214 V236 A14,14 0 0 1 1206,250 H669 A14,14 0 0 1 655,236 V214 A14,14 0 0 1 669,200 Z" />
+    <rect x="655" y="240" width="565" height="10" fill="#1A2332" />
+    
+  <g transform="translate(675.0, 212.0) scale(1.0833333333333333)" fill="#F44336">
+    <path d="M21.165 16a10 10 0 0 1 -8.434 5.973a1 1 0 0 0 .617 -.444a18 18 0 0 0 2.28 -5.528z" />
+    <path d="M8.372 16a18 18 0 0 0 2.28 5.53a1 1 0 0 0 .616 .443a10 10 0 0 1 -8.433 -5.973z" />
+    <path d="M13.57 16a16 16 0 0 1 -1.57 3.884a16 16 0 0 1 -1.57 -3.884" />
+    <path d="M8.034 10a18 18 0 0 0 0 4h-5.832a10 10 0 0 1 -.002 -4z" />
+    <path d="M13.952 10a16 16 0 0 1 0 4h-3.904a16 16 0 0 1 0 -4z" />
+    <path d="M21.8 10a10.05 10.05 0 0 1 -.002 4h-5.832c.149 -1.329 .149 -2.67 0 -4z" />
+    <path d="M11.267 2.027a1 1 0 0 0 -.615 .444a18 18 0 0 0 -2.28 5.529h-5.54a10.01 10.01 0 0 1 8.334 -5.967z" />
+    <path d="M12 4.116a16 16 0 0 1 1.57 3.885h-3.14c.34 -1.317 .85 -2.6 1.53 -3.817z" />
+    <path d="M12.733 2.026a10.01 10.01 0 0 1 8.435 5.974h-5.54a18 18 0 0 0 -2.28 -5.53a1 1 0 0 0 -.517 -.414z" />
+  </g>
+    <text x="711" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#F44336">面对中国区的盲区</text>
+
+    <g id="card-right-row1">
+      
+  <g transform="translate(679.0, 280.0) scale(0.75)" fill="#F44336">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-6.489 5.8a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z" />
+  </g>
+      <text x="707" y="295" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">cn-north-1 / cn-northwest-1 不在 enabled associations</text>
+    </g>
+    <g id="card-right-row2">
+      
+  <g transform="translate(679.0, 335.0) scale(0.75)" fill="#F44336">
+    <path d="M12 2a5 5 0 0 1 5 5v3a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3v-3a5 5 0 0 1 5 -5m0 12a2 2 0 0 0 -1.995 1.85l-.005 .15a2 2 0 1 0 2 -2m0 -10a3 3 0 0 0 -3 3v3h6v-3a3 3 0 0 0 -3 -3" />
+  </g>
+      <text x="707" y="350" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">cn AK/SK 走不通 us-east-1 IAM / STS 信任链</text>
+    </g>
+    <g id="card-right-row3">
+      
+  <g transform="translate(679.0, 390.0) scale(0.75)" fill="#F44336">
+    <path d="M10.425 1.414a3.33 3.33 0 0 1 3.026 -.097l.19 .097l6.775 3.995l.096 .063l.092 .077l.107 .075a3.224 3.224 0 0 1 1.266 2.188l.018 .202l.005 .204v7.284c0 1.106 -.57 2.129 -1.454 2.693l-.17 .1l-6.803 4.302c-.918 .504 -2.019 .535 -3.004 .068l-.196 -.1l-6.695 -4.237a3.225 3.225 0 0 1 -1.671 -2.619l-.007 -.207v-7.285c0 -1.106 .57 -2.128 1.476 -2.705l6.95 -4.098zm1.585 13.586l-.127 .007a1 1 0 0 0 0 1.986l.117 .007l.127 -.007a1 1 0 0 0 0 -1.986l-.117 -.007zm-.01 -8a1 1 0 0 0 -.993 .883l-.007 .117v4l.007 .117a1 1 0 0 0 1.986 0l.007 -.117v-4l-.007 -.117a1 1 0 0 0 -.993 -.883z" />
+  </g>
+      <text x="707" y="405" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">原生 sub-agent 调 cn API 直接 AccessDenied</text>
+    </g>
+    <g id="card-right-row4">
+      
+  <g transform="translate(679.0, 445.0) scale(0.75)" fill="#F44336">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-6.489 5.8a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z" />
+  </g>
+      <text x="707" y="460" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">CloudWatch alarm 不能直接打 DevOps Agent webhook</text>
+    </g>
+    <g id="card-right-row5">
+      
+  <g transform="translate(679.0, 500.0) scale(0.75)" fill="#F44336">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-6.489 5.8a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z" />
+  </g>
+      <text x="707" y="515" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" fill="#E8EAED">中国区 partition ARN 不被原生流程认识</text>
+    </g>
+    <g id="card-right-row6">
+      <path fill="#0F1419" stroke="#FF9800" stroke-width="1" stroke-opacity="0.6" d="M679,548 H1196 A8,8 0 0 1 1204,556 V604 A8,8 0 0 1 1196,612 H679 A8,8 0 0 1 671,604 V556 A8,8 0 0 1 679,548 Z" />
+      <text x="685" y="572" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">// agent 自己 thinking 里说：</text>
+      <text x="685" y="595" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#E8EAED">"China accounts aren't directly in the enabled associations"</text>
+    </g>
+  </g>
+
+  <g id="page-footer">
+    <text x="60" y="690" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">来源：C2 调查 journal recordId 8e7a143f · 2026-05-14 13:24 BJ</text>
+    <text x="1220" y="690" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">02 / 19</text>
+  </g>
+</svg>

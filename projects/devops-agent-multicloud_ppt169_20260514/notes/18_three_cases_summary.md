@@ -1,0 +1,1 @@
+三个 case 对照看。C1 是 webhook 自主，调用了五个 sub-agent，十二分钟出 RCA。C2 是时间锚定，调了九十八次 cn API，九分四十九秒出 RCA。C3 是四跳追溯，调了十四次 cn API，十三分钟收官。三个加起来一百一十多次中国区 AWS API 调用——零次绕过 MCP Bridge。三个 case 用同一套 Bridge 基础设施跑通，验证了项目的可重复性。

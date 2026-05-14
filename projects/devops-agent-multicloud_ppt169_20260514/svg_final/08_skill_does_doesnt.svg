@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419" />
+  </g>
+
+  <g id="page-header">
+    <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">SKILL ≠ AGENTS.MD</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">Skill 是<tspan fill="#FF9800">选择性激活</tspan>的策略库 — 不是大而全的指令集</text>
+    <text x="60" y="160" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" fill="#9AA0A6">Description 是 picker 选 skill 的依据 · 200-1024 字符 · 中英触发词全覆盖</text>
+  </g>
+
+  <g id="card-does">
+    <path fill="#1A2332" stroke="#4CAF50" stroke-width="1.5" d="M74,200 H611 A14,14 0 0 1 625,214 V616 A14,14 0 0 1 611,630 H74 A14,14 0 0 1 60,616 V214 A14,14 0 0 1 74,200 Z" />
+    <path fill="#4CAF50" fill-opacity="0.18" d="M74,200 H611 A14,14 0 0 1 625,214 V236 A14,14 0 0 1 611,250 H74 A14,14 0 0 1 60,236 V214 A14,14 0 0 1 74,200 Z" />
+    <rect x="60" y="240" width="565" height="10" fill="#1A2332" />
+    
+  <g transform="translate(80.0, 212.0) scale(1.0833333333333333)" fill="#4CAF50">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-1.293 5.953a1 1 0 0 0 -1.32 -.083l-.094 .083l-3.293 3.292l-1.293 -1.292l-.094 -.083a1 1 0 0 0 -1.403 1.403l.083 .094l2 2l.094 .083a1 1 0 0 0 1.226 0l.094 -.083l4 -4l.083 -.094a1 1 0 0 0 -.083 -1.32z" />
+  </g>
+    <text x="116" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#4CAF50">Skill 能做什么</text>
+
+    <g id="does-1">
+      <text x="86" y="290" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#4CAF50">①</text>
+      <text x="120" y="290" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">注入领域知识</text>
+      <text x="120" y="316" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">cn-partition ARN / aws-cn 与 aws-cn-2 区分 / 中国区独有</text>
+      <text x="120" y="335" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">的 fault pattern</text>
+    </g>
+    <g id="does-2">
+      <text x="86" y="378" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#4CAF50">②</text>
+      <text x="120" y="378" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">统一 RCA 输出格式</text>
+      <text x="120" y="404" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Triage Card → RCA Report → Mitigation Plan，每一级都</text>
+      <text x="120" y="423" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">是结构化输出，可被下一级解析</text>
+    </g>
+    <g id="does-3">
+      <text x="86" y="466" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#4CAF50">③</text>
+      <text x="120" y="466" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">规约 Mitigation 4-field 模板</text>
+      <text x="120" y="492" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Command · What it does · Rollback · Approval — 每一</text>
+      <text x="120" y="511" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">条都要带回滚命令和审核 prompt</text>
+    </g>
+    <g id="does-4">
+      <text x="86" y="554" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#4CAF50">④</text>
+      <text x="120" y="554" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">加锁 Approval Contract</text>
+      <text x="120" y="580" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">每条 prod 写操作要求显式 "approve step N"，单步</text>
+      <text x="120" y="599" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">授权 — 抗 LLM "嗯/yes" 的语义漂移</text>
+    </g>
+  </g>
+
+  <g id="card-doesnt">
+    <path fill="#1A2332" stroke="#F44336" stroke-width="1.5" d="M669,200 H1206 A14,14 0 0 1 1220,214 V616 A14,14 0 0 1 1206,630 H669 A14,14 0 0 1 655,616 V214 A14,14 0 0 1 669,200 Z" />
+    <path fill="#F44336" fill-opacity="0.16" d="M669,200 H1206 A14,14 0 0 1 1220,214 V236 A14,14 0 0 1 1206,250 H669 A14,14 0 0 1 655,236 V214 A14,14 0 0 1 669,200 Z" />
+    <rect x="655" y="240" width="565" height="10" fill="#1A2332" />
+    
+  <g transform="translate(675.0, 212.0) scale(1.0833333333333333)" fill="#F44336">
+    <path d="M17 3.34a10 10 0 1 1 -14.995 8.984l-.005 -.324l.005 -.324a10 10 0 0 1 14.995 -8.336zm-6.489 5.8a1 1 0 0 0 -1.218 1.567l1.292 1.293l-1.292 1.293l-.083 .094a1 1 0 0 0 1.497 1.32l1.293 -1.292l1.293 1.292l.094 .083a1 1 0 0 0 1.32 -1.497l-1.292 -1.293l1.292 -1.293l.083 -.094a1 1 0 0 0 -1.497 -1.32l-1.293 1.292l-1.293 -1.292l-.094 -.083z" />
+  </g>
+    <text x="711" y="232" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#F44336">Skill 不替代什么</text>
+
+    <g id="doesnt-1">
+      <text x="681" y="290" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#F44336">①</text>
+      <text x="715" y="290" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">不替代 MCP（能力来源）</text>
+      <text x="715" y="316" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Skill 是策略，不是工具。Skill 写得再好，没有 MCP</text>
+      <text x="715" y="335" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">就调不到 cn API。能力 vs 策略，缺一不可</text>
+    </g>
+    <g id="doesnt-2">
+      <text x="681" y="378" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#F44336">②</text>
+      <text x="715" y="378" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">不替代 Webhook 链路</text>
+      <text x="715" y="404" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">没有 SNS → bridge Lambda → webhook 这条</text>
+      <text x="715" y="423" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">基础设施，agent 看不到中国区告警</text>
+    </g>
+    <g id="doesnt-3">
+      <text x="681" y="466" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#F44336">③</text>
+      <text x="715" y="466" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">不替代 Console 配置</text>
+      <text x="715" y="492" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Slack OAuth / GitHub OAuth / Webhook URL 生成</text>
+      <text x="715" y="511" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">这些 Agent Space console UI 步骤，skill 上传也是</text>
+    </g>
+    <g id="doesnt-4">
+      <text x="681" y="554" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="900" fill="#F44336">④</text>
+      <text x="715" y="554" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">不能强迫 agent 做某事</text>
+      <text x="715" y="580" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Skill 是 picker 看 description 决定加载，加载后</text>
+      <text x="715" y="599" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">agent 仍可自主决策 — 不是脚本，是建议</text>
+    </g>
+  </g>
+
+  <g id="bottom-quote">
+    <path fill="#0F1419" stroke="#FF9800" stroke-width="1" d="M66,650 H1214 A6,6 0 0 1 1220,656 V684 A6,6 0 0 1 1214,690 H66 A6,6 0 0 1 60,684 V656 A6,6 0 0 1 66,650 Z" />
+    <text x="640" y="676" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#FF9800">"MCP 给的是<tspan fill="#E8EAED">能力</tspan>（tools），Skill 给的是<tspan fill="#E8EAED">策略</tspan>（什么场景调什么、怎么调、调完怎么组织输出）"</text>
+  </g>
+
+  <g id="page-footer">
+    <text x="1220" y="710" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">08 / 19</text>
+  </g>
+</svg>

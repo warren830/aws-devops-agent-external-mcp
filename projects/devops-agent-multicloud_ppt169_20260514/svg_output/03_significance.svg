@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <linearGradient id="numberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF9800"/>
+      <stop offset="100%" stop-color="#FFB74D"/>
+    </linearGradient>
+    <radialGradient id="bgGlowCenter" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#1565C0" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#1565C0" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="numberGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#FF9800" flood-opacity="0.45"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419"/>
+    <rect width="1280" height="720" fill="url(#bgGlowCenter)"/>
+  </g>
+
+  <g id="bg-decoration">
+    <circle cx="180" cy="180" r="2" fill="#42A5F5" fill-opacity="0.5"/>
+    <circle cx="1100" cy="200" r="2" fill="#FF9800" fill-opacity="0.4"/>
+    <circle cx="220" cy="600" r="1.5" fill="#FF9800" fill-opacity="0.5"/>
+    <circle cx="1120" cy="580" r="1.5" fill="#42A5F5" fill-opacity="0.4"/>
+  </g>
+
+  <g id="page-eyebrow">
+    <text x="640" y="120" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="6">项目意义</text>
+    <line x1="600" y1="135" x2="680" y2="135" stroke="#FF9800" stroke-width="2"/>
+  </g>
+
+  <g id="page-title">
+    <text x="640" y="200" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">公开资料里第一次让 6C 落到中国区</text>
+  </g>
+
+  <g id="hero-number">
+    <text x="640" y="380" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="160" font-weight="900" fill="url(#numberGrad)" filter="url(#numberGlow)">98</text>
+    <text x="640" y="430" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="22" fill="#9AA0A6">单次 incident 调查中，agent 经 MCP Bridge 调用 cn-* AWS API 的次数</text>
+    <text x="640" y="466" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">0 次绕过 Bridge · 100% 透明可达</text>
+  </g>
+
+  <g id="three-pillars">
+    <g id="pillar-1">
+      <rect x="120" y="525" width="320" height="110" rx="10" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
+      <use data-icon="tabler-filled/building-bridge-2" x="138" y="545" width="28" height="28" fill="#1565C0"/>
+      <text x="172" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#42A5F5">MCP Bridge 架构</text>
+      <text x="138" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">us-east-1 EKS 上跑 MCP server,</text>
+      <text x="138" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">用 cn AK/SK 帮 agent 调用 cn API</text>
+    </g>
+    <g id="pillar-2">
+      <rect x="480" y="525" width="320" height="110" rx="10" fill="#1A2332" stroke="#FF9800" stroke-width="1" stroke-opacity="0.5"/>
+      <use data-icon="tabler-filled/code-circle" x="498" y="545" width="28" height="28" fill="#FF9800"/>
+      <text x="532" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">9 个自定义 Skill</text>
+      <text x="498" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">routing / inventory / cost / security /</text>
+      <text x="498" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">prevention / triage / rca / mitigation / partition</text>
+    </g>
+    <g id="pillar-3">
+      <rect x="840" y="525" width="320" height="110" rx="10" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
+      <use data-icon="tabler-filled/circle-check" x="858" y="545" width="28" height="28" fill="#4CAF50"/>
+      <text x="892" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#4CAF50">3 个真实 case 闭环</text>
+      <text x="858" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">C1 webhook 自主 / C2 时间锚定 /</text>
+      <text x="858" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">C3 多跳追溯 — 全链路真实证据</text>
+    </g>
+  </g>
+
+  <g id="page-footer">
+    <text x="60" y="690" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">数据：C2 调查窗口 05:20-05:35 UTC，mcp-aws-cn-2 pod access log</text>
+    <text x="1220" y="690" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">03 / 19</text>
+  </g>
+</svg>

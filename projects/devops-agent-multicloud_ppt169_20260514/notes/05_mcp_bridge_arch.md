@@ -1,0 +1,1 @@
+这张图是项目的核心架构。Hub 是 us-east-1 EKS 上跑的 MCP server pods，由 Agent Space 直接调用。两条 Spoke 分别接到中国区两个账号，每个 MCP pod 自己持有该 cn 账号的 AK/SK，Agent 一调它就用 cn 凭证跑 cn API。整个跨 partition 的复杂性被 MCP 这层接口屏蔽掉了——Agent 用着像调一个普通 region 的 API。
