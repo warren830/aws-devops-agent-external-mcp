@@ -1,0 +1,20 @@
+{
+    "AlarmHistoryItems": [
+        {
+            "AlarmName": "bjs-web-p99-latency-high",
+            "AlarmType": "MetricAlarm",
+            "Timestamp": "2026-05-14T13:23:53.649000+08:00",
+            "HistoryItemType": "StateUpdate",
+            "HistorySummary": "Alarm updated from OK to ALARM",
+            "HistoryData": "{\"version\":\"1.0\",\"oldState\":{\"stateValue\":\"OK\",\"stateReason\":\"Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-05-13T15:10:09.936+0000\",\"statistic\":\"p99\",\"period\":60,\"recentDatapoints\":[],\"threshold\":0.5,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-13T15:07:00.000+0000\"}]}},\"newState\":{\"stateValue\":\"ALARM\",\"stateReason\":\"Threshold Crossed: 2 datapoints [0.9620277654789098 (14/05/26 05:20:00), 0.743511552386715 (14/05/26 05:19:00)] were greater than the threshold (0.5).\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-05-14T05:23:53.645+0000\",\"startDate\":\"2026-05-14T05:19:00.000+0000\",\"statistic\":\"p99\",\"period\":60,\"recentDatapoints\":[0.743511552386715,0.9620277654789098],\"threshold\":0.5,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-14T05:20:00.000+0000\",\"sampleCount\":12846.0,\"value\":0.9620277654789098},{\"timestamp\":\"2026-05-14T05:19:00.000+0000\",\"sampleCount\":11029.0,\"value\":0.743511552386715}]}}}"
+        },
+        {
+            "AlarmName": "bjs-web-p99-latency-high",
+            "AlarmType": "MetricAlarm",
+            "Timestamp": "2026-05-13T23:10:09.939000+08:00",
+            "HistoryItemType": "StateUpdate",
+            "HistorySummary": "Alarm updated from INSUFFICIENT_DATA to OK",
+            "HistoryData": "{\"version\":\"1.0\",\"oldState\":{\"stateValue\":\"INSUFFICIENT_DATA\",\"stateReason\":\"Unchecked: Initial alarm creation\"},\"newState\":{\"stateValue\":\"OK\",\"stateReason\":\"Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-05-13T15:10:09.936+0000\",\"statistic\":\"p99\",\"period\":60,\"recentDatapoints\":[],\"threshold\":0.5,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-13T15:07:00.000+0000\"}]}}}"
+        }
+    ]
+}
