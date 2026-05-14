@@ -1,108 +1,84 @@
-# C2 截图清单（你去截）
+# C2 截图清单 — 简化版（只剩 3 张）
 
-## 当前状态
+## 已截 ✅
 
-- **Load gen 还在跑**（`c2-load-gen` pod，120 workers，最长跑 15 分钟）
-- **p99 alarm 已 ALARM**（05:23:53 UTC = 13:23:53 BJ）
-- **Agent investigation IN_PROGRESS**：taskId `9092e8f1-94d2-4854-9c90-a572f4287477`
-- **time-anchor commit**: `fa052ac` "feat(search): warn-log slow user-search lookups (>100ms)" pushed at 13:05:19 BJ
-- **预期 agent 关联**：commit 13:05 → p99 升高 13:13 → alarm 13:23（差 8-18 分钟，agent 应该能找到）
+- `case-2-01-investigation-list.png` — incident 列表，C2 task 在里面
+- `case-2-02-investigation-timeline.png` — 调查 timeline 视图
 
-## 关键时间线（北京时间，参考用）
+## 剩这 3 张
 
-| 时刻 | 事件 |
-|---|---|
-| 13:05:19 | commit `fa052ac` pushed to GitHub `warren830/aws-devops-agent-external-mcp` |
-| 13:13 ~ 13:18 | load gen 启动 + p99 开始上升 |
-| 13:21 ~ 13:23 | p99 持续 > 0.5s |
-| 13:23:53 | CloudWatch alarm `bjs-web-p99-latency-high` 翻 ALARM |
-| 13:23:53 | bridge Lambda POST webhook 200 OK |
-| 13:23:57 | DevOps Agent 创建 INVESTIGATION task `9092e8f1` |
+### ★ case-2-03-rca-summary.png — RCA 报告完整页
 
-## 截图清单
+进入 Operator Web App → Agent Space `test-external` → Backlog tasks
+→ 点 `bjs-web-p99-latency-high` task (taskId `9092e8f1-94d2-4854-9c90-a572f4287477`)
+→ 找到 **"根本原因" / "调查摘要"** 那个 tab
 
-### 1. Operator Web App — incident list 看到 C2 任务
+要看到的内容：
+- 症状 (Symptoms): bjs-web-p99-latency-high 告警触发
+- 根本原因 (Root cause): "合成负载测试流量 (~26K req/min) 超出系统容量"
+- 中间瓶颈 (Cause): "RDS bjs-todo-db CPU 持续饱和在 100%"
+- 时间锚定: "kubernetes-admin 在 05:19:19Z 创建了 c2-load-gen Pod...精确吻合"
 
-URL：DevOps Agent console → Agent Space `test-external` → Backlog tasks / Investigations
+**保存为**: `blog/screenshots/case-2-03-rca-summary.png`
 
-要截：找到这条 → 截全屏
+### ★ case-2-04-cloudwatch-p99.png — p99 曲线 OK→ALARM 跳变
 
+CloudWatch console (cn-north-1, profile ychchen-bjs1)
+URL: https://console.amazonaws.cn/cloudwatch/home?region=cn-north-1#alarmsV2:alarm/bjs-web-p99-latency-high
+
+要看到：
+- p99 时间序列从 ~330ms 跳升到 ~1.0s
+- 告警状态绿色 (OK) → 红色 (ALARM) 跳变
+- 时间窗口选 14:00-14:30 BJ（C2 那段）
+
+**保存为**: `blog/screenshots/case-2-04-cloudwatch-p99.png`
+
+### ★ case-2-05-mcp-server-log.png — 终端：MCP server 收到的 cn API 调用
+
+这张是 **本项目最强的"铁证"截图**，是 PPT 项目意义那页的关键素材。
+
+操作：
+
+```bash
+unset AWS_PROFILE AWS_REGION
+CTX="arn:aws:eks:us-east-1:034362076319:cluster/mcp-test"
+
+# 漂亮的输出格式给观众看
+kubectl --context "$CTX" -n mcp logs deployment/mcp-aws-cn-2 --since=24h | \
+    awk '/2026-05-14 05:2[0-9]|2026-05-14 05:3[0-5]/' | \
+    grep "Attempting to execute AWS CLI command" | \
+    sed 's/.*command: //; s/ \*parameters redacted\*.*//' | \
+    sort | uniq -c | sort -rn
 ```
-Title: bjs-web-p99-latency-high
-Status: IN_PROGRESS（如果完了就是 COMPLETED）
-TaskId: 9092e8f1-94d2-4854-9c90-a572f4287477
-Created: 2026-05-14 05:23:57 UTC = 13:23:57 BJ
+
+预期输出（已验证）:
+```
+  36 aws cloudwatch get-metric-statistics
+  20 aws logs start-query
+  19 aws logs get-query-results
+  11 aws cloudtrail lookup-events
+   3 aws eks describe-cluster
+   3 aws logs describe-log-groups
+   2 aws cloudwatch describe-alarms
+   1 aws logs describe-log-streams
+   1 aws elbv2 describe-target-groups
+   1 aws eks list-nodegroups
+   1 aws eks describe-nodegroup
 ```
 
-**保存**：`blog/screenshots/case-2-01-investigation-list.png` 
+**截这个终端窗口**（高清放大），保存为 `blog/screenshots/case-2-05-mcp-server-log.png`
 
-### 2. 调查 timeline — agent 跑了哪些 tool
-
-点进那个 task 看时间线视图。
-**关键看点**：agent 应该会调
-- ALB metric (TargetResponseTime p99)
-- RDS Performance Insights / slow query log（如果连了）
-- GitHub commit history → 找到 13:05 那个 commit
-- kubectl logs（slow query 日志条目）
-
-**保存**：`blog/screenshots/case-2-02-investigation-timeline.png`
-
-### 3. **★ 时间锚定证据 ★** — RCA 报告里 commit 引用 + 时间差
-
-最关键的截图。RCA 报告应该明确写出：
-- "metric 异常起点 = T"
-- "最后一次部署 / commit = T - X 分钟"
-- "commit hash: fa052ac... 引用了 main.py 里的 search_users"
-
-如果它真把 commit 时间和异常时间做了关联，截图说明里要把那段话圈出来。
-
-**保存**：`blog/screenshots/case-2-03-rca-time-anchor.png`
-
-### 4. RCA 全文页
-
-完整的 root cause 段落 + 影响 + 证据链
-
-**保存**：`blog/screenshots/case-2-04-rca-full.png`
-
-### 5. CloudWatch p99 latency 图表
-
-URL：CloudWatch console → Alarms → `bjs-web-p99-latency-high` → Graph view
-
-要截：曲线图，看到 p99 从 ~50ms 突变成 ~1000ms，然后 alarm 状态从绿到红
-
-**保存**：`blog/screenshots/case-2-05-cloudwatch-p99.png`
-
-### 6. GitHub 那次 commit 的页面
-
-URL：https://github.com/warren830/aws-devops-agent-external-mcp/commit/fa052ac
-
-要截：commit diff（让人看到改了 search 函数 + 时间戳 13:05）
-
-**保存**：`blog/screenshots/case-2-06-github-commit.png`
-
-### 7. Slack 自动通知
-
-Slack 频道里应该有第二条 "Investigation started: <bjs-web-p99-latency-high>" 通知
-
-**保存**：`blog/screenshots/case-2-07-slack-thread.png`
-
----
-
-## 我已存的 CLI 证据（在 `cli-evidence/case2/`）
-
-- `01-recent-commit.txt` — git log 显示 fa052ac 是最近改 main.py 的 commit
-- `02-commit-fa052ac-detail.txt` — git show 显示 commit 内容
-- `03-alarm-state.json` — alarm 配置
-- `04-alarm-history.json` — alarm 状态变化
-- `05-p99-datapoints.json` — p99 时间序列（看到从 0.07s 跳到 1.0s）
-- `06-bridge-lambda-logs.txt` — bridge POST webhook 的日志
-- `07-agent-investigation-task.json` — agent 任务元数据
+讲解词:
+> 我们在 us-east-1 EKS 上部署的 MCP server (`mcp-aws-cn-2` pod)，
+> 在 9 分钟的 incident 调查窗口里，**真实接到 98 次** AWS API 调用，
+> 全部目标是 `arn:aws-cn:` 的中国区资源。
+> agent 自己在 thinking 里写："China accounts aren't directly in
+> the enabled associations"——它只能通过这条 MCP 路径访问中国区。
+> **这就是项目存在的全部意义**。
 
 ---
 
 ## 截完图后告诉我
 
-完成后说一声，我会：
-1. 写 C2 PPT-NOTES.md
-2. 删 load gen pod（避免一直跑）
-3. 进 C3
+这 3 张截完，C2 完整证据链就齐了：截图 + CLI 证据 + journal + MCP server log。
+我会直接进 C3 (多跳拓扑 RCA)。
