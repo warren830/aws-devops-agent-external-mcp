@@ -9,6 +9,11 @@ variable "aws_region" {
   type        = string
 }
 
+variable "aws_profile" {
+  description = "AWS named profile to use. Required because both China accounts have the same default region pattern."
+  type        = string
+}
+
 variable "sns_topic_arns" {
   description = "List of SNS topic ARNs to subscribe the Lambda to. One per case category (e.g. one per alarm type)."
   type        = list(string)
