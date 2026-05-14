@@ -132,15 +132,16 @@ async def search_users(
         email,
     )
     elapsed_ms = (time.perf_counter() - started) * 1000
-    logger.info(
-        "user search",
-        extra={
-            "event": "users.search",
-            "email": email,
-            "matches": len(rows),
-            "duration_ms": round(elapsed_ms, 2),
-        },
-    )
+    log_payload = {
+        "event": "users.search",
+        "email": email,
+        "matches": len(rows),
+        "duration_ms": round(elapsed_ms, 2),
+    }
+    if elapsed_ms > 100:
+        logger.warning("user search slow", extra={**log_payload, "slow": True})
+    else:
+        logger.info("user search", extra=log_payload)
     return [UserOut(**dict(r)) for r in rows]
 
 
