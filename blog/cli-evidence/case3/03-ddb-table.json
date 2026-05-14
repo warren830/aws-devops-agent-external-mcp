@@ -1,0 +1,38 @@
+{
+    "Table": {
+        "AttributeDefinitions": [
+            {
+                "AttributeName": "job_id",
+                "AttributeType": "S"
+            }
+        ],
+        "TableName": "etl-state",
+        "KeySchema": [
+            {
+                "AttributeName": "job_id",
+                "KeyType": "HASH"
+            }
+        ],
+        "TableStatus": "ACTIVE",
+        "CreationDateTime": "2026-05-13T23:07:50.523000+08:00",
+        "ProvisionedThroughput": {
+            "NumberOfDecreasesToday": 0,
+            "ReadCapacityUnits": 5,
+            "WriteCapacityUnits": 5
+        },
+        "TableSizeBytes": 16780,
+        "ItemCount": 200,
+        "TableArn": "arn:aws-cn:dynamodb:cn-northwest-1:284567523170:table/etl-state",
+        "TableId": "38084921-1c0d-4318-9eab-f6669a365836",
+        "BillingModeSummary": {
+            "BillingMode": "PROVISIONED",
+            "LastUpdateToPayPerRequestDateTime": "2026-05-13T23:07:50.523000+08:00"
+        },
+        "DeletionProtectionEnabled": false,
+        "WarmThroughput": {
+            "ReadUnitsPerSecond": 12000,
+            "WriteUnitsPerSecond": 4000,
+            "Status": "ACTIVE"
+        }
+    }
+}

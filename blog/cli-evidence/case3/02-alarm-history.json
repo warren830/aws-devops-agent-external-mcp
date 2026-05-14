@@ -1,0 +1,20 @@
+{
+    "AlarmHistoryItems": [
+        {
+            "AlarmName": "dynamodb-etl-state-throttle",
+            "AlarmType": "MetricAlarm",
+            "Timestamp": "2026-05-14T15:45:45.481000+08:00",
+            "HistoryItemType": "StateUpdate",
+            "HistorySummary": "Alarm updated from OK to ALARM",
+            "HistoryData": "{\"version\":\"1.0\",\"oldState\":{\"stateValue\":\"OK\",\"stateReason\":\"Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-05-13T15:08:43.139+0000\",\"statistic\":\"Sum\",\"period\":60,\"recentDatapoints\":[],\"threshold\":0.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-13T15:05:00.000+0000\"}]}},\"newState\":{\"stateValue\":\"ALARM\",\"stateReason\":\"Threshold Crossed: 1 datapoint [191.0 (14/05/26 07:42:00)] was greater than or equal to the threshold (1.0).\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-05-14T07:45:45.479+0000\",\"startDate\":\"2026-05-14T07:42:00.000+0000\",\"statistic\":\"Sum\",\"period\":60,\"recentDatapoints\":[191.0],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-14T07:42:00.000+0000\",\"sampleCount\":191.0,\"value\":191.0}]}}}"
+        },
+        {
+            "AlarmName": "dynamodb-etl-state-throttle",
+            "AlarmType": "MetricAlarm",
+            "Timestamp": "2026-05-13T23:08:43.140000+08:00",
+            "HistoryItemType": "StateUpdate",
+            "HistorySummary": "Alarm updated from INSUFFICIENT_DATA to OK",
+            "HistoryData": "{\"version\":\"1.0\",\"oldState\":{\"stateValue\":\"INSUFFICIENT_DATA\",\"stateReason\":\"Unchecked: Initial alarm creation\"},\"newState\":{\"stateValue\":\"OK\",\"stateReason\":\"Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].\",\"stateReasonData\":{\"version\":\"1.0\",\"queryDate\":\"2026-05-13T15:08:43.139+0000\",\"statistic\":\"Sum\",\"period\":60,\"recentDatapoints\":[],\"threshold\":0.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-13T15:05:00.000+0000\"}]}}}"
+        }
+    ]
+}
