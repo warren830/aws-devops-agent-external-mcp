@@ -43,7 +43,7 @@ Created: 2026-05-14 07:46:07 UTC = 15:46:07 BJ
 CloudWatch console (cn-northwest-1, profile ychchen-china) → Alarms
 → `dynamodb-etl-state-throttle`
 
-要看到 WriteThrottleEvents 曲线 + 告警状态翻转
+要看到 WriteThrottleEvents 曲线 + 告警状态翻转 这个就不要了吧
 
 ### 5. case-3-05-mcp-server-log.png — MCP server 收到的 cn API 调用
 
