@@ -1,0 +1,34 @@
+================================================================================
+ C2 调查窗口期间，MCP bridge 真实接到的中国区 AWS API 调用
+ (us-east-1 EKS · namespace=mcp · pod=mcp-aws-cn-2)
+ 时间窗: 2026-05-14 05:20 ~ 05:35 UTC (= 13:20 ~ 13:35 北京)
+================================================================================
+
+每一行都是 DevOps Agent 通过 MCP 转发到 cn-north-1 的真实 API 调用：
+
+  36 aws cloudwatch get-metric-statistics
+  20 aws logs start-query
+  19 aws logs get-query-results
+  11 aws cloudtrail lookup-events
+   3 aws logs describe-log-groups
+   3 aws eks describe-cluster
+   2 aws cloudwatch describe-alarms
+   1 aws logs describe-log-streams
+   1 aws elbv2 describe-target-groups
+   1 aws eks list-nodegroups
+   1 aws eks describe-nodegroup
+
+--------------------------------------------------------------------------------
+ 总计: 98 次 cn-north-1 AWS API 调用，全部经 MCP bridge 转发
+ 0 次绕过 MCP 直连 cn EKS
+--------------------------------------------------------------------------------
+
+Agent 自己 thinking 里说：
+   "The China accounts aren't directly in the enabled associations;
+    instead they're accessed through the custom MCP servers,
+    so I'll need to use the aws_cn_2_mcp tools to reach the Beijing account."
+
+中文：中国区账号没有直接加入 enabled associations，
+      它们是通过自定义 MCP server 访问的，
+      所以我需要用 aws_cn_2_mcp 工具来访问北京账号。
+================================================================================
