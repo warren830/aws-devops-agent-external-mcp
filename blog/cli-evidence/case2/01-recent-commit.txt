@@ -1,0 +1,14 @@
+commit fa052ac44553bdeb616c7789aded7d671114a3a8
+Author: warren <warren.chen830@gmail.com>
+Date:   Thu May 14 13:05:19 2026 +0800
+
+    feat(search): warn-log slow user-search lookups (>100ms)
+    
+    Add a warn-level log when /api/users/search exceeds 100ms so we can
+    spot regressions in CloudWatch Logs Insights faster. Plain INFO
+    otherwise. No behavior change.
+    
+    Tracking: TODO-1234
+
+ demo-cases/app/bjs-todo-api/app/main.py | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)

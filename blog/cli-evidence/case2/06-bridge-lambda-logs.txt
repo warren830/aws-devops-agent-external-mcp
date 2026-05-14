@@ -1,0 +1,6 @@
+2026-05-14T05:23:53 INIT_START Runtime Version: python:3.12.v132	Runtime Version ARN: arn:aws-cn:lambda:cn-north-1::runtime:8f50974108119e7633f6cc4e99381d9097d290f91a0809cd0f05230dc1063241
+2026-05-14T05:23:54 [INFO]	2026-05-14T05:23:54.261Z		Found credentials in environment variables.
+2026-05-14T05:23:54 START RequestId: 12a0f969-4de6-4c24-98e3-55b2d680041a Version: $LATEST
+2026-05-14T05:23:55 [INFO]	2026-05-14T05:23:55.711Z	12a0f969-4de6-4c24-98e3-55b2d680041a	{"level": "info", "event": "webhook_post_result", "status": 200, "ok": true, "incident_id": "bjs-web-p99-latency-high-2026-05-14T052353649+0000", "action": "created", "priority": "HIGH", "service": "ALB", "response_excerpt": null}
+2026-05-14T05:23:55 END RequestId: 12a0f969-4de6-4c24-98e3-55b2d680041a
+2026-05-14T05:23:55 REPORT RequestId: 12a0f969-4de6-4c24-98e3-55b2d680041a	Duration: 1258.08 ms	Billed Duration: 1749 ms	Memory Size: 256 MB	Max Memory Used: 92 MB	Init Duration: 490.18 ms
