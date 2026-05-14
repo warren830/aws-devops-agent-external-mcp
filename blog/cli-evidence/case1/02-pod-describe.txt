@@ -1,0 +1,80 @@
+Name:             todo-api-69c55967bb-9rsn8
+Namespace:        bjs-web
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-19-55.cn-north-1.compute.internal/172.31.19.55
+Start Time:       Wed, 13 May 2026 23:40:22 +0800
+Labels:           app=todo-api
+                  app.kubernetes.io/name=bjs-todo-api
+                  app.kubernetes.io/version=v1.2.3
+                  pod-template-hash=69c55967bb
+Annotations:      kubectl.kubernetes.io/restartedAt: 2026-05-13T23:40:12+08:00
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               172.31.31.235
+IPs:
+  IP:           172.31.31.235
+Controlled By:  ReplicaSet/todo-api-69c55967bb
+Containers:
+  todo-api:
+    Container ID:   containerd://07bf2840fe8a0181780520f1368a7d85887109de265d9c9eee4c1e544c10918a
+    Image:          107422471498.dkr.ecr.cn-north-1.amazonaws.com.cn/bjs-todo-api:v1.2.3
+    Image ID:       107422471498.dkr.ecr.cn-north-1.amazonaws.com.cn/bjs-todo-api@sha256:cef79322e1d17a0e4be7059a9ae6fe28ecc63d20f91ea7b334721b861a8aba28
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Wed, 13 May 2026 23:40:23 +0800
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+      cpu:      100m
+      memory:   256Mi
+    Liveness:   http-get http://:http/healthz delay=10s timeout=2s period=10s #success=1 #failure=3
+    Readiness:  http-get http://:http/readyz delay=5s timeout=2s period=5s #success=1 #failure=3
+    Environment:
+      LOG_LEVEL:     INFO
+      DATABASE_URL:  <set to the key 'DATABASE_URL' in secret 'bjs-todo-db-secret'>  Optional: false
+      DB_PASSWORD:   <set to the key 'DB_PASSWORD' in secret 'bjs-todo-db-secret'>   Optional: false
+    Mounts:          <none>
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:                      <none>
+QoS Class:                    Burstable
+Node-Selectors:               <none>
+Tolerations:                  node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                              node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+Events:                       <none>
+
+
+Name:             todo-api-69c55967bb-h26xs
+Namespace:        bjs-web
+Priority:         0
+Service Account:  default
+Node:             ip-172-31-19-55.cn-north-1.compute.internal/172.31.19.55
+Start Time:       Wed, 13 May 2026 23:40:17 +0800
+Labels:           app=todo-api
+                  app.kubernetes.io/name=bjs-todo-api
+                  app.kubernetes.io/version=v1.2.3
+                  pod-template-hash=69c55967bb
+Annotations:      kubectl.kubernetes.io/restartedAt: 2026-05-13T23:40:12+08:00
+Status:           Running
+SeccompProfile:   RuntimeDefault
+IP:               172.31.26.16
+IPs:
+  IP:           172.31.26.16
+Controlled By:  ReplicaSet/todo-api-69c55967bb
+Containers:
+  todo-api:
+    Container ID:   containerd://a59a9d1efd0a8127e8192710f6e97e6a5f05cf8e9a12870a77e858750d58925f
+    Image:          107422471498.dkr.ecr.cn-north-1.amazonaws.com.cn/bjs-todo-api:v1.2.3
+    Image ID:       107422471498.dkr.ecr.cn-north-1.amazonaws.com.cn/bjs-todo-api@sha256:cef79322e1d17a0e4be7059a9ae6fe28ecc63d20f91ea7b334721b861a8aba28
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
