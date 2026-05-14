@@ -1,0 +1,23 @@
+{
+    "task": {
+        "agentSpaceId": "a68c0cba-9a71-46f6-8228-88e8fc733990",
+        "taskId": "d93e984e-836b-4f46-a761-6bc550979fe5",
+        "executionId": "exe-ops1-4e71f31b-469a-4224-925e-c468f76b672a",
+        "title": "dynamodb-etl-state-throttle",
+        "description": "Alarm when etl-state DDB write throttle events > 0 (drives Case C3)",
+        "reference": {
+            "system": "Event Channel",
+            "title": "EventChannel-dynamodb-etl-state-throttle-2026-05-14T074545481+0000",
+            "referenceId": "dynamodb-etl-state-throttle-2026-05-14T074545481+0000",
+            "referenceUrl": "",
+            "associationId": "56ec3ace-a4c6-4817-8e6b-6eb2ae12945a"
+        },
+        "taskType": "INVESTIGATION",
+        "priority": "HIGH",
+        "status": "COMPLETED",
+        "createdAt": "2026-05-14T07:46:07.860000+00:00",
+        "updatedAt": "2026-05-14T07:49:20.112000+00:00",
+        "version": 4,
+        "hasLinkedTasks": false
+    }
+}

@@ -1,0 +1,145 @@
+{
+    "Label": "WriteThrottleEvents",
+    "Datapoints": [
+        {
+            "Timestamp": "2026-05-14T15:47:00+08:00",
+            "Sum": 201.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:29:00+08:00",
+            "Sum": 198.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:45:00+08:00",
+            "Sum": 195.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:46:00+08:00",
+            "Sum": 237.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:28:00+08:00",
+            "Sum": 199.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:44:00+08:00",
+            "Sum": 217.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:27:00+08:00",
+            "Sum": 167.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:43:00+08:00",
+            "Sum": 207.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:26:00+08:00",
+            "Sum": 173.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:51:00+08:00",
+            "Sum": 209.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:33:00+08:00",
+            "Sum": 198.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:32:00+08:00",
+            "Sum": 198.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:50:00+08:00",
+            "Sum": 234.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:31:00+08:00",
+            "Sum": 230.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:49:00+08:00",
+            "Sum": 176.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:30:00+08:00",
+            "Sum": 181.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:48:00+08:00",
+            "Sum": 233.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:38:00+08:00",
+            "Sum": 172.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:37:00+08:00",
+            "Sum": 204.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:53:00+08:00",
+            "Sum": 191.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:36:00+08:00",
+            "Sum": 183.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:52:00+08:00",
+            "Sum": 186.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:34:00+08:00",
+            "Sum": 168.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:35:00+08:00",
+            "Sum": 222.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:42:00+08:00",
+            "Sum": 191.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:41:00+08:00",
+            "Sum": 173.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:40:00+08:00",
+            "Sum": 215.0,
+            "Unit": "Count"
+        },
+        {
+            "Timestamp": "2026-05-14T15:39:00+08:00",
+            "Sum": 220.0,
+            "Unit": "Count"
+        }
+    ]
+}
