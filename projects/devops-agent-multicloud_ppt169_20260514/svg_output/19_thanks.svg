@@ -31,30 +31,30 @@
   <g id="next-steps">
     <rect x="120" y="400" width="1040" height="200" rx="14" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
 
-    <text x="640" y="438" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#FF9800">接下来要做的</text>
+    <text x="640" y="438" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="20" font-weight="700" fill="#FF9800">SA 怎么用这个</text>
 
     <g id="next-1">
       <use data-icon="tabler-filled/flag-3" x="160" y="468" width="22" height="22" fill="#42A5F5"/>
-      <text x="190" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">7 个 case 待跑</text>
-      <text x="190" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">C4 跨账号 blast radius</text>
-      <text x="190" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">C5 partition skill 救场</text>
-      <text x="190" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">C6-C10 prevention / spec / cost</text>
+      <text x="190" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">客户 POC 现成素材</text>
+      <text x="190" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">3 个 case 截图 + 演讲稿 + 终端</text>
+      <text x="190" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">命令直接拿去客户面前讲</text>
+      <text x="190" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">15 分钟搭起 demo 环境</text>
     </g>
 
     <g id="next-2">
       <use data-icon="tabler-filled/code-circle" x="500" y="468" width="22" height="22" fill="#FF9800"/>
-      <text x="530" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">Blog 04 + 现场演示 SOP</text>
-      <text x="530" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">case 4-10 完成后整合</text>
-      <text x="530" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">"10 个真实场景" 单独成篇</text>
-      <text x="530" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">现场 demo 5 步流程已备</text>
+      <text x="530" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">参考架构与代码</text>
+      <text x="530" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">Bridge Pattern Helm chart</text>
+      <text x="530" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">9 个 SKILL.md 模板</text>
+      <text x="530" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">Webhook bridge Lambda 代码</text>
     </g>
 
     <g id="next-3">
       <use data-icon="tabler-filled/world" x="840" y="468" width="22" height="22" fill="#4CAF50"/>
-      <text x="870" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">扩展到其他 Cloud</text>
-      <text x="870" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">阿里云 MCP 已有占位</text>
-      <text x="870" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">GCP 同 pattern 可加</text>
-      <text x="870" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">同一套 Bridge 模板</text>
+      <text x="870" y="485" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#E8EAED">扩展场景</text>
+      <text x="870" y="508" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">阿里云 / 腾讯云 / 客户内部 API</text>
+      <text x="870" y="528" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">on-prem K8s / 私有 SaaS</text>
+      <text x="870" y="548" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">同 Bridge pattern 加 spoke</text>
     </g>
 
     <line x1="160" y1="568" x2="1120" y2="568" stroke="#2D3748" stroke-width="1"/>

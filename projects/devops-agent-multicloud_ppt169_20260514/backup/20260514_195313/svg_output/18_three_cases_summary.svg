@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <g id="bg-base">
+    <rect width="1280" height="720" fill="#0F1419"/>
+  </g>
+
+  <g id="page-header">
+    <rect x="60" y="50" width="6" height="36" fill="#FF9800" rx="2"/>
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">三个 CASE 对照</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">同一套 Bridge — 三种 6C 能力都跑通了</text>
+    <text x="60" y="160" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="16" fill="#9AA0A6">不同 cloud 资源类型 / 不同账号 / 不同 6C 能力 — 验证 pattern 可重复</text>
+  </g>
+
+  <g id="case-c1">
+    <rect x="60" y="200" width="380" height="430" rx="14" fill="#1A2332" stroke="#1565C0" stroke-width="1.5"/>
+    <rect x="60" y="200" width="380" height="6" rx="14" fill="#1565C0"/>
+    <rect x="60" y="203" width="380" height="3" fill="#1565C0"/>
+
+    <text x="80" y="244" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="800" fill="#42A5F5">C1</text>
+    <text x="120" y="244" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8EAED">Webhook 自主调查</text>
+    <text x="80" y="270" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="12" fill="#42A5F5">EKS pod failure · cn-north-1</text>
+
+    <line x1="80" y1="290" x2="420" y2="290" stroke="#2D3748" stroke-width="1"/>
+
+    <text x="80" y="318" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">验证哪个 6C 能力</text>
+    <text x="80" y="338" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#42A5F5">Collaboration · Convenience</text>
+
+    <text x="80" y="372" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">触发</text>
+    <text x="80" y="392" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">CloudWatch alarm 自动 webhook</text>
+
+    <text x="80" y="426" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">输出</text>
+    <text x="80" y="446" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">RCA + 4 阶段 Mitigation Plan</text>
+    <text x="80" y="466" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">+ Slack 自主投递</text>
+
+    <text x="80" y="500" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">证据强度</text>
+    <text x="80" y="520" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">人 0 操作 → agent 全程接管</text>
+
+    <line x1="80" y1="548" x2="420" y2="548" stroke="#2D3748" stroke-width="1"/>
+
+    <text x="80" y="582" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="32" font-weight="900" fill="#42A5F5">5</text>
+    <text x="120" y="582" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">个 sub-agent 并行</text>
+    <text x="80" y="612" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">12 分钟</text>
+    <text x="160" y="612" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">完整 RCA</text>
+  </g>
+
+  <g id="case-c2">
+    <rect x="450" y="200" width="380" height="430" rx="14" fill="#1A2332" stroke="#FF9800" stroke-width="1.5"/>
+    <rect x="450" y="200" width="380" height="6" rx="14" fill="#FF9800"/>
+    <rect x="450" y="203" width="380" height="3" fill="#FF9800"/>
+
+    <text x="470" y="244" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="800" fill="#FF9800">C2</text>
+    <text x="510" y="244" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8EAED">时间锚定 RCA</text>
+    <text x="470" y="270" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="12" fill="#FF9800">RDS perf · cn-north-1</text>
+
+    <line x1="470" y1="290" x2="810" y2="290" stroke="#2D3748" stroke-width="1"/>
+
+    <text x="470" y="318" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">验证哪个 6C 能力</text>
+    <text x="470" y="338" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#FF9800">Context (拓扑 + 跨源关联)</text>
+
+    <text x="470" y="372" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">触发</text>
+    <text x="470" y="392" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">L4 unindexed query → p99 飙升</text>
+
+    <text x="470" y="426" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">输出</text>
+    <text x="470" y="446" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">3 cause + 6+ 观察</text>
+    <text x="470" y="466" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">"05:19:19Z 精确吻合"</text>
+
+    <text x="470" y="500" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">证据强度</text>
+    <text x="470" y="520" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">5 数据源 + 时间锚定到秒</text>
+
+    <line x1="470" y1="548" x2="810" y2="548" stroke="#2D3748" stroke-width="1"/>
+
+    <text x="470" y="582" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="32" font-weight="900" fill="#FF9800">98</text>
+    <text x="525" y="582" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">次 tool call</text>
+    <text x="470" y="612" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">9 分 49 秒</text>
+    <text x="568" y="612" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">完整 RCA</text>
+  </g>
+
+  <g id="case-c3">
+    <rect x="840" y="200" width="380" height="430" rx="14" fill="#1A2332" stroke="#4CAF50" stroke-width="1.5"/>
+    <rect x="840" y="200" width="380" height="6" rx="14" fill="#4CAF50"/>
+    <rect x="840" y="203" width="380" height="3" fill="#4CAF50"/>
+
+    <text x="860" y="244" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="22" font-weight="800" fill="#4CAF50">C3</text>
+    <text x="900" y="244" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#E8EAED">多跳拓扑 RCA</text>
+    <text x="860" y="270" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="12" fill="#4CAF50">DDB throttle · cn-northwest-1</text>
+
+    <line x1="860" y1="290" x2="1200" y2="290" stroke="#2D3748" stroke-width="1"/>
+
+    <text x="860" y="318" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">验证哪个 6C 能力</text>
+    <text x="860" y="338" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#4CAF50">Continuous Learning · Control</text>
+
+    <text x="860" y="372" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">触发</text>
+    <text x="860" y="392" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">L5 DDB throttle + ECS overscale</text>
+
+    <text x="860" y="426" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">输出</text>
+    <text x="860" y="446" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">区分 Terraform vs Manual CLI</text>
+    <text x="860" y="466" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">+ 主动检查 AutoScaling 兜底</text>
+
+    <text x="860" y="500" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#6B7280">证据强度</text>
+    <text x="860" y="520" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#E8EAED">第 2 个账号 → 同模式跑通</text>
+
+    <line x1="860" y1="548" x2="1200" y2="548" stroke="#2D3748" stroke-width="1"/>
+
+    <text x="860" y="582" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="32" font-weight="900" fill="#4CAF50">14</text>
+    <text x="908" y="582" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">次 tool call</text>
+    <text x="860" y="612" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">13 分钟</text>
+    <text x="940" y="612" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#9AA0A6">完整 RCA</text>
+  </g>
+
+  <g id="bottom-summary">
+    <rect x="60" y="650" width="1160" height="40" rx="6" fill="#0F1419" stroke="#FF9800" stroke-width="1"/>
+    <text x="640" y="676" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#FF9800">结论：MCP + Skill 三层架构对 6C 全部 6 个能力都给出可观测证据 — pattern 可移植到任何 cloud / 任何客户</text>
+  </g>
+
+  <g id="page-footer">
+    <text x="1220" y="710" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">18 / 19</text>
+  </g>
+</svg>

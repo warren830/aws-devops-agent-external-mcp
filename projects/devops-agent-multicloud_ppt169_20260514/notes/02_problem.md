@@ -1,1 +1,1 @@
-我们先看问题。原生 DevOps Agent 在 us-east-1 跑得很好——6C 框架、Webhook 自主调查、Slack 通知、跨源关联，这些都是开箱即用的。但是同一个 Agent 一旦面对中国区账号，就会哑火。它访问不到 cn-* 资源，因为 IAM 和 STS 的信任链不通，CloudWatch 告警也没法直接打到它的 Webhook 上。最有意思的是，Agent 自己在 thinking 字段里写了一句话——中国区账号不在 enabled associations 里——这是它自己承认的盲区。
+我们先看 SA 日常会被问到的真问题。客户问"能不能用 DevOps Agent 管 X"——X 是中国区、阿里云、自建 K8s、内部 SaaS 还是 Salesforce / Jira / 自研 CMDB——所有这些都不在 native association 范围之内。这一类问题的统一解法都是 MCP 扩展点。中国区只是其中一个具体场景，今天用它做证据，但模式可以直接套到其他任何外部资源。

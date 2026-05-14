@@ -1,1 +1,1 @@
-Part 4 进入三个真实 case。第一个是 Webhook 自主调查。这个 case 的关键词是"人没碰按钮"——alarm 触发后九十秒内 Agent 全程接管，给出 RCA 和 Mitigation Plan，并在 Slack 自动投递。整个过程零人工 query。
+Part 4 进入三个真实 case。第一个 case 验证的是 6C 里的 Collaboration 和 Convenience——webhook 触发后九十秒内 Agent 全程接管，给出 RCA 和 Mitigation Plan，并在 Slack 自动投递。整个过程零人工 query。

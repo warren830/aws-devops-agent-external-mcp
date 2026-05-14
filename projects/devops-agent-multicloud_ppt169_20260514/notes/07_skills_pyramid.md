@@ -1,1 +1,1 @@
-讲完 Bridge 是能力层，再来看 Skill 是策略层。一共九个 Skill，分三层。底下 Foundation 层是路由表——告诉 Agent aws-cn 是宁夏、aws-cn-2 是北京——所有上层 Skill 都隐式依赖它。中间分析层和 Pipeline 层，分析层在用户主动 query 时激活，Pipeline 层 webhook 触发时按 triage→rca→mitigation 顺序串起来。最上面那个 cn-partition-arn-routing 是补 Agent 的领域知识——Agent 经常踩 partition 的坑，这个 Skill 帮它纠正。
+讲完 Bridge 是能力层，再来看 Skill 是策略层。一共九个 Skill，分三层。底下 Foundation 层是路由表——告诉 Agent 哪个账号对应哪个 MCP——所有上层 Skill 都隐式依赖它。中间分析层和 Pipeline 层，分析层在用户主动 query 时激活，Pipeline 层 webhook 触发时按 triage 到 rca 到 mitigation 顺序串起来。最上面那个 cn-partition-arn-routing 是补 Agent 在 partition 上的领域盲点。

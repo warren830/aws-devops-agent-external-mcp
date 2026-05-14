@@ -23,8 +23,8 @@
 
   <g id="page-header">
     <path fill="#FF9800" d="M62,50 H64 A2,2 0 0 1 66,52 V84 A2,2 0 0 1 64,86 H62 A2,2 0 0 1 60,84 V52 A2,2 0 0 1 62,50 Z" />
-    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">MCP BRIDGE 架构</text>
-    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">一条路接进所有中国区资源 — Hub &amp; Spoke</text>
+    <text x="80" y="78" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="3">MCP 扩展点用法</text>
+    <text x="60" y="128" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">Hub &amp; Spoke — 一套架构对接所有外部资源</text>
   </g>
 
   <g id="bg-orbits">
@@ -48,7 +48,7 @@
     <path d="M18 6a3 3 0 0 1 3 3v9a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2v-2a3 3 0 0 0 -6 0v2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2v-9a3 3 0 0 1 3 -3z" />
   </g>
     <text x="640" y="465" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="900" fill="#FFFFFF" letter-spacing="2">MCP BRIDGE</text>
-    <text x="640" y="488" text-anchor="middle" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#FFFFFF" fill-opacity="0.85" letter-spacing="1">us-east-1 EKS</text>
+    <text x="640" y="488" text-anchor="middle" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#FFFFFF" fill-opacity="0.85" letter-spacing="1">EKS · streamable-http</text>
   </g>
 
   <g id="hub-label-top">
@@ -57,9 +57,9 @@
   <g transform="translate(520.0, 234.0) scale(0.9166666666666666)" fill="#42A5F5">
     <path d="M10.04 4.305c2.195 -.667 4.615 -.224 6.36 1.176c1.386 1.108 2.188 2.686 2.252 4.34l.003 .212l.091 .003c2.3 .107 4.143 1.961 4.25 4.27l.004 .211c0 2.407 -1.885 4.372 -4.255 4.482l-.21 .005h-11.878l-.222 -.008c-2.94 -.11 -5.317 -2.399 -5.43 -5.263l-.005 -.216c0 -2.747 2.08 -5.01 4.784 -5.417l.114 -.016l.07 -.181c.663 -1.62 2.056 -2.906 3.829 -3.518l.244 -.08z" />
   </g>
-    <text x="552" y="252" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="700" fill="#42A5F5">Agent Space (主账号)</text>
-    <text x="520" y="280" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#E8EAED">034362076319 · us-east-1</text>
-    <text x="520" y="296" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#9AA0A6">原生 DevOps Agent + Webhook + Slack</text>
+    <text x="552" y="252" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="16" font-weight="700" fill="#42A5F5">DevOps Agent (Agent Space)</text>
+    <text x="520" y="280" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="12" fill="#E8EAED">VPC Lattice Private Connection</text>
+    <text x="520" y="296" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#9AA0A6">用 MCP 工具像调普通 service 一样调外部资源</text>
   </g>
 
   <line x1="640" y1="302" x2="640" y2="338" stroke="#42A5F5" stroke-width="2" stroke-dasharray="4 4" />
@@ -79,11 +79,11 @@
     <path d="M12 4.116a16 16 0 0 1 1.57 3.885h-3.14c.34 -1.317 .85 -2.6 1.53 -3.817z" />
     <path d="M12.733 2.026a10.01 10.01 0 0 1 8.435 5.974h-5.54a18 18 0 0 0 -2.28 -5.53a1 1 0 0 0 -.517 -.414z" />
   </g>
-    <text x="116" y="395" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">aws-cn (北京)</text>
-    <text x="84" y="424" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">cn-north-1</text>
-    <text x="84" y="446" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#9AA0A6">107422471498</text>
+    <text x="116" y="395" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">Spoke A — AWS 中国区</text>
+    <text x="84" y="424" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">aws-cn (cn-north-1)</text>
+    <text x="84" y="446" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#9AA0A6">awslabs.aws-api-mcp-server</text>
     <line x1="84" y1="460" x2="316" y2="460" stroke="#2D3748" stroke-width="1" />
-    <text x="84" y="482" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">EKS web app + RDS · MCP: aws-cn-2</text>
+    <text x="84" y="482" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">cn AK/SK · 跨 partition 隔离</text>
   </g>
 
   <g id="spoke-china">
@@ -101,11 +101,11 @@
     <path d="M12 4.116a16 16 0 0 1 1.57 3.885h-3.14c.34 -1.317 .85 -2.6 1.53 -3.817z" />
     <path d="M12.733 2.026a10.01 10.01 0 0 1 8.435 5.974h-5.54a18 18 0 0 0 -2.28 -5.53a1 1 0 0 0 -.517 -.414z" />
   </g>
-    <text x="996" y="395" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">aws-cn-2 (宁夏)</text>
-    <text x="964" y="424" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">cn-northwest-1</text>
-    <text x="964" y="446" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#9AA0A6">284567523170</text>
+    <text x="996" y="395" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="17" font-weight="700" fill="#E8EAED">Spoke B — AWS 中国区</text>
+    <text x="964" y="424" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#FF9800">aws-cn-2 (cn-northwest-1)</text>
+    <text x="964" y="446" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="13" fill="#9AA0A6">awslabs.aws-api-mcp-server</text>
     <line x1="964" y1="460" x2="1196" y2="460" stroke="#2D3748" stroke-width="1" />
-    <text x="964" y="482" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">ECS Fargate ETL · MCP: aws-cn</text>
+    <text x="964" y="482" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="13" fill="#E8EAED">独立账号 · 同模式扩展</text>
   </g>
 
   <g id="spoke-other">
@@ -114,8 +114,8 @@
   <g transform="translate(520.0, 578.0) scale(0.9166666666666666)" fill="#6B7280">
     <path d="M9 20a2 2 0 0 1 -2 2h-4a1 1 0 0 1 0 -2h4v-2.997l-.343 .001a1 1 0 0 1 -.117 -.007l-.105 -.001c-2.94 -.11 -5.317 -2.399 -5.43 -5.263l-.005 -.216c0 -2.747 2.08 -5.01 4.784 -5.417l.114 -.016l.07 -.181c.663 -1.62 2.056 -2.906 3.829 -3.518l.244 -.08c2.194 -.667 4.614 -.224 6.36 1.176c1.385 1.108 2.187 2.686 2.25 4.34l.004 .212l.091 .003c2.3 .107 4.143 1.961 4.25 4.27l.004 .211c0 2.478 -1.997 4.487 -4.465 4.487h-1.535v2.996h4a1 1 0 0 1 0 2h-4a2 2 0 0 1 -2 -2v-2.997h-2v3.997a1 1 0 0 1 -2 0v-3.997h-2z" />
   </g>
-    <text x="552" y="596" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#9AA0A6">阿里云 / GCP（同模式可扩）</text>
-    <text x="520" y="622" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#6B7280">chart-aliyun + deploy/k8s.yaml 已占位</text>
+    <text x="552" y="596" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="15" font-weight="700" fill="#9AA0A6">阿里云 / 自建 K8s / 客户内部 API</text>
+    <text x="520" y="622" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="12" fill="#6B7280">同 Bridge pattern 加 spoke — 客户复用即可</text>
   </g>
 
   <g id="key-fact">
@@ -124,11 +124,11 @@
   <g transform="translate(76.0, 632.0) scale(0.8333333333333334)" fill="#FF9800">
     <path d="M12 2a5 5 0 0 1 5 5v3a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-10a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3v-3a5 5 0 0 1 5 -5m0 12a2 2 0 0 0 -1.995 1.85l-.005 .15a2 2 0 1 0 2 -2m0 -10a3 3 0 0 0 -3 3v3h6v-3a3 3 0 0 0 -3 -3" />
   </g>
-    <text x="104" y="649" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#FF9800">MCP server 自持 cn AK/SK，cross-partition 安全跨域</text>
+    <text x="104" y="649" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="700" fill="#FF9800">每个 spoke 独立凭证 — 安全边界与 Agent 解耦</text>
   </g>
 
   <g id="page-footer">
-    <text x="60" y="694" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">参考：blog/01-single-account-bridge.md + blog/02-multi-account-extension.md</text>
+    <text x="60" y="694" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">参考：DevOps Agent → Capabilities → MCP Servers · 项目仓库 chart/ + chart-aliyun/ + deploy/</text>
     <text x="1220" y="694" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">05 / 19</text>
   </g>
 </svg>

@@ -1,1 +1,1 @@
-这个项目的意义可以用一个数字说清楚。在我们 C2 那个 case 里，Agent 一次 incident 调查通过 MCP Bridge 调用了九十八次中国区 AWS API，零次绕过 Bridge。这是公开资料里第一次让 6C 能力完整落到中国区，靠的就是三件事：MCP Bridge 架构、九个自定义 Skill、三个真实 case 的端到端闭环。
+这个项目交付三件可复用的资产。第一是参考架构——基于 EKS 的 MCP Bridge 加 VPC Lattice Private Connection，整套 Helm chart 客户可以直接用。第二是九个 Skill 模板——按 Foundation 加 Analytical 加 Pipeline 三层组织，客户加自己的领域知识只要套这个模式。第三是三个完整 case 演示——客户 POC 现成素材。中间这个九十八，是 C2 那个 case 里 Agent 一次调查通过 MCP 扩展点调到的 tool call 数——说明 6C 全能力都能走这条路。

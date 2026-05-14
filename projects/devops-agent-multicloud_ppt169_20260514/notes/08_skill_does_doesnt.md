@@ -1,1 +1,1 @@
-这页讲 Skill 能做和不能做的边界。能做的：注入领域知识、统一 RCA 输出、规约 Mitigation 模板、加锁审核协议——所有 Mitigation 命令都要用户显式输入 approve step 几才执行，单步授权抗 LLM 语义漂移。不能做的：Skill 不替代 MCP，因为 MCP 是能力来源；不替代 Webhook 链路，因为告警进不来 Skill 也激活不了；不替代 Agent Space console 配置——OAuth、Webhook URL 生成这些。一句话总结：MCP 给能力，Skill 给策略，缺一不可。
+这页给 SA 一个清晰的答疑模板——客户经常把 Webhook、MCP、Skill 这三件事混淆。Webhook 是入口，把告警拉过来变成 incident，没有它 Agent 自主调查无从触发。MCP 是能力，提供 Agent 调用外部资源的工具，没有它 Agent 看不到 native association 之外的资源。Skill 是策略，告诉 Agent 什么场景调什么、怎么组织输出、加锁审核协议，没有它调查质量大约从百分之三十降到百分之六十的差距。三件事各管各的，缺一不可。

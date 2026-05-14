@@ -29,46 +29,46 @@
   </g>
 
   <g id="page-eyebrow">
-    <text x="640" y="120" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="6">项目意义</text>
+    <text x="640" y="120" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" font-weight="600" fill="#FF9800" letter-spacing="6">交付的资产</text>
     <line x1="600" y1="135" x2="680" y2="135" stroke="#FF9800" stroke-width="2"/>
   </g>
 
   <g id="page-title">
-    <text x="640" y="200" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">公开资料里第一次让 6C 落到中国区</text>
+    <text x="640" y="200" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="36" font-weight="800" fill="#E8EAED">一套可直接复刻的 6C 扩展模板</text>
   </g>
 
   <g id="hero-number">
     <text x="640" y="380" text-anchor="middle" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="160" font-weight="900" fill="url(#numberGrad)" filter="url(#numberGlow)">98</text>
-    <text x="640" y="430" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="22" fill="#9AA0A6">单次 incident 调查中，agent 经 MCP Bridge 调用 cn-* AWS API 的次数</text>
-    <text x="640" y="466" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">0 次绕过 Bridge · 100% 透明可达</text>
+    <text x="640" y="430" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="22" fill="#9AA0A6">单次 incident 调查中，6C 全套能力经 MCP 扩展点透明触达外部资源</text>
+    <text x="640" y="466" text-anchor="middle" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">扩展模式可移植：换 cloud / 换 partition / 换工具栈，pattern 不变</text>
   </g>
 
   <g id="three-pillars">
     <g id="pillar-1">
       <rect x="120" y="525" width="320" height="110" rx="10" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
       <use data-icon="tabler-filled/building-bridge-2" x="138" y="545" width="28" height="28" fill="#1565C0"/>
-      <text x="172" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#42A5F5">MCP Bridge 架构</text>
-      <text x="138" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">us-east-1 EKS 上跑 MCP server,</text>
-      <text x="138" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">用 cn AK/SK 帮 agent 调用 cn API</text>
+      <text x="172" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#42A5F5">参考架构 — Bridge Pattern</text>
+      <text x="138" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">EKS 上跑 MCP server，VPC Lattice</text>
+      <text x="138" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Private Connection，Helm chart 复用</text>
     </g>
     <g id="pillar-2">
       <rect x="480" y="525" width="320" height="110" rx="10" fill="#1A2332" stroke="#FF9800" stroke-width="1" stroke-opacity="0.5"/>
       <use data-icon="tabler-filled/code-circle" x="498" y="545" width="28" height="28" fill="#FF9800"/>
-      <text x="532" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">9 个自定义 Skill</text>
-      <text x="498" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">routing / inventory / cost / security /</text>
-      <text x="498" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">prevention / triage / rca / mitigation / partition</text>
+      <text x="532" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#FF9800">9 个 Skill — 三层模式</text>
+      <text x="498" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Foundation + Analytical + Pipeline</text>
+      <text x="498" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">直接给客户作 SKILL.md 模板</text>
     </g>
     <g id="pillar-3">
       <rect x="840" y="525" width="320" height="110" rx="10" fill="#1A2332" stroke="#2D3748" stroke-width="1"/>
       <use data-icon="tabler-filled/circle-check" x="858" y="545" width="28" height="28" fill="#4CAF50"/>
-      <text x="892" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#4CAF50">3 个真实 case 闭环</text>
-      <text x="858" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">C1 webhook 自主 / C2 时间锚定 /</text>
-      <text x="858" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">C3 多跳追溯 — 全链路真实证据</text>
+      <text x="892" y="566" font-family="SimHei, &quot;Microsoft YaHei&quot;, Arial, sans-serif" font-size="18" font-weight="700" fill="#4CAF50">3 个完整 case 演示</text>
+      <text x="858" y="600" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">Webhook 自主 / 时间锚定 / 多跳 RCA</text>
+      <text x="858" y="620" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="14" fill="#9AA0A6">客户演示 / POC 现成素材</text>
     </g>
   </g>
 
   <g id="page-footer">
-    <text x="60" y="690" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">数据：C2 调查窗口 05:20-05:35 UTC，mcp-aws-cn-2 pod access log</text>
+    <text x="60" y="690" font-family="&quot;Microsoft YaHei&quot;, &quot;PingFang SC&quot;, Arial, sans-serif" font-size="11" fill="#6B7280">面向 SA 的可复用资产 — Bridge 架构 + Skill 模板 + 演示素材</text>
     <text x="1220" y="690" text-anchor="end" font-family="Consolas, &quot;Courier New&quot;, monospace" font-size="11" fill="#6B7280">03 / 19</text>
   </g>
 </svg>

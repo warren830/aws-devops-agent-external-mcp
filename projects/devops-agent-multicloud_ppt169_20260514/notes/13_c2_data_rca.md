@@ -1,1 +1,1 @@
-C2 的关键数据看这页。症状是 ALB p99 超阈值；时间锚定是 c2-load-gen Pod 在 05:19:19Z 创建，跟 p99 从三百三十毫秒突变到七百四十毫秒的时间点精确吻合——这个"精确吻合"是 Agent 自己写在 RCA 里的话；根因是合成负载二万六千 req/min 加 RDS db.t3.micro CPU 百分百饱和加上 users.search 走全表扫描。右边那张大图就是 Agent 写的 RCA 全文，调用了五个 sub-agent，总共九十八次 cn API。
+C2 的关键数据看这页。症状是 ALB p99 超阈值；时间锚定是 c2-load-gen Pod 在 05:19:19Z 创建，跟 p99 从三百三十毫秒突变到七百四十毫秒的时间点精确吻合——这个"精确吻合"是 Agent 自己写在 RCA 里的话；根因是合成负载二万六千 req/min 加 RDS db.t3.micro CPU 百分百饱和加上 users.search 走全表扫描。右边那张大图就是 Agent 写的 RCA 全文，调用了五个 sub-agent，总共九十八次 tool call。
