@@ -1,0 +1,6 @@
+2026-05-14T04:17:19 INIT_START Runtime Version: python:3.12.v132	Runtime Version ARN: arn:aws-cn:lambda:cn-north-1::runtime:8f50974108119e7633f6cc4e99381d9097d290f91a0809cd0f05230dc1063241
+2026-05-14T04:17:20 [INFO]	2026-05-14T04:17:20.233Z		Found credentials in environment variables.
+2026-05-14T04:17:20 START RequestId: acdcccfe-fab3-4137-aa06-7703b9f25267 Version: $LATEST
+2026-05-14T04:17:22 [INFO]	2026-05-14T04:17:22.004Z	acdcccfe-fab3-4137-aa06-7703b9f25267	{"level": "info", "event": "webhook_post_result", "status": 200, "ok": true, "incident_id": "bjs-web-pod-not-ready-2026-05-14T041719477+0000", "action": "created", "priority": "HIGH", "service": "ContainerInsights", "response_excerpt": null}
+2026-05-14T04:17:22 END RequestId: acdcccfe-fab3-4137-aa06-7703b9f25267
+2026-05-14T04:17:22 REPORT RequestId: acdcccfe-fab3-4137-aa06-7703b9f25267	Duration: 1607.59 ms	Billed Duration: 2064 ms	Memory Size: 256 MB	Max Memory Used: 92 MB	Init Duration: 455.62 ms

@@ -1,0 +1,5 @@
+NAME                        READY   STATUS             RESTARTS   AGE   IP              NODE                                          NOMINATED NODE   READINESS GATES
+todo-api-69c55967bb-9rsn8   1/1     Running            0          12h   172.31.31.235   ip-172-31-19-55.cn-north-1.compute.internal   <none>           <none>
+todo-api-69c55967bb-h26xs   1/1     Running            0          12h   172.31.26.16    ip-172-31-19-55.cn-north-1.compute.internal   <none>           <none>
+todo-api-69c55967bb-lcdgw   1/1     Running            0          12h   172.31.26.249   ip-172-31-19-55.cn-north-1.compute.internal   <none>           <none>
+todo-api-7c7975d8dc-qdz2t   0/1     ImagePullBackOff   0          24m   172.31.29.250   ip-172-31-19-55.cn-north-1.compute.internal   <none>           <none>

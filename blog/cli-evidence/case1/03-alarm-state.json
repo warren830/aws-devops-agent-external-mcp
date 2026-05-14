@@ -1,0 +1,46 @@
+{
+    "MetricAlarms": [
+        {
+            "AlarmName": "bjs-web-pod-not-ready",
+            "AlarmArn": "arn:aws-cn:cloudwatch:cn-north-1:107422471498:alarm:bjs-web-pod-not-ready",
+            "AlarmDescription": "Alarm when any todo-api pod is not running (drives Case C1)",
+            "AlarmConfigurationUpdatedTimestamp": "2026-05-14T12:16:14.082000+08:00",
+            "ActionsEnabled": true,
+            "OKActions": [
+                "arn:aws-cn:sns:cn-north-1:107422471498:bjs-web-alarms"
+            ],
+            "AlarmActions": [
+                "arn:aws-cn:sns:cn-north-1:107422471498:bjs-web-alarms"
+            ],
+            "InsufficientDataActions": [],
+            "StateValue": "ALARM",
+            "StateReason": "Threshold Crossed: 1 datapoint [1.0 (14/05/26 04:16:00)] was greater than or equal to the threshold (1.0).",
+            "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-05-14T04:17:19.475+0000\",\"startDate\":\"2026-05-14T04:16:00.000+0000\",\"statistic\":\"Maximum\",\"period\":60,\"recentDatapoints\":[1.0],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-05-14T04:16:00.000+0000\",\"sampleCount\":5.0,\"value\":1.0}]}",
+            "StateUpdatedTimestamp": "2026-05-14T12:17:19.477000+08:00",
+            "MetricName": "pod_status_pending",
+            "Namespace": "ContainerInsights",
+            "Statistic": "Maximum",
+            "Dimensions": [
+                {
+                    "Name": "ClusterName",
+                    "Value": "bjs-web"
+                },
+                {
+                    "Name": "Service",
+                    "Value": "todo-api"
+                },
+                {
+                    "Name": "Namespace",
+                    "Value": "bjs-web"
+                }
+            ],
+            "Period": 60,
+            "EvaluationPeriods": 1,
+            "Threshold": 1.0,
+            "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+            "TreatMissingData": "notBreaching",
+            "StateTransitionedTimestamp": "2026-05-14T12:17:19.477000+08:00"
+        }
+    ],
+    "CompositeAlarms": []
+}

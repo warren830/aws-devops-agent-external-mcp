@@ -1,0 +1,23 @@
+{
+    "task": {
+        "agentSpaceId": "a68c0cba-9a71-46f6-8228-88e8fc733990",
+        "taskId": "0376a356-8e62-42b8-a767-1ed30a5c80f7",
+        "executionId": "exe-ops1-b9a4b283-5cb0-4383-af64-49d783d56059",
+        "title": "bjs-web-pod-not-ready",
+        "description": "Alarm when any todo-api pod is not running (drives Case C1)",
+        "reference": {
+            "system": "Event Channel",
+            "title": "EventChannel-bjs-web-pod-not-ready-2026-05-14T041719477+0000",
+            "referenceId": "bjs-web-pod-not-ready-2026-05-14T041719477+0000",
+            "referenceUrl": "",
+            "associationId": "56ec3ace-a4c6-4817-8e6b-6eb2ae12945a"
+        },
+        "taskType": "INVESTIGATION",
+        "priority": "HIGH",
+        "status": "IN_PROGRESS",
+        "createdAt": "2026-05-14T04:17:34.686000+00:00",
+        "updatedAt": "2026-05-14T04:17:54.215000+00:00",
+        "version": 3,
+        "hasLinkedTasks": false
+    }
+}
