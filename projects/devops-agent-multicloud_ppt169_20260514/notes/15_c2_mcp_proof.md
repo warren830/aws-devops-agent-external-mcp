@@ -1,1 +1,0 @@
-这一页是 Agent 自主调度模式的可观测证据。我们抓了 mcp-aws-cn-2 这个 pod 的 access log，把 C2 调查窗口里的所有 tool call 列出来——三十六次 cloudwatch get-metric、二十次 logs start-query、十一次 cloudtrail lookup-events、三次 eks describe-cluster，等等，总共九十八次。这个分布说明 Agent 既会反复查同一个 metric 的多个时间窗，也会跨 service 比对变更——深度和广度兼顾。客户问"Agent 调查时到底干了什么"，这就是答案模板。

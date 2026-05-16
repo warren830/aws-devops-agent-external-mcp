@@ -1,1 +1,0 @@
-回到核心架构。Hub 是 us-east-1 EKS 上跑的 MCP server pods，由 Agent Space 通过 VPC Lattice Private Connection 调用。两条 Spoke 分别接到中国区两个账号，每个 MCP pod 自己持有该账号的 AK/SK，安全边界与 Agent 完全解耦。客户要加阿里云、加自建 K8s，加一条 Spoke 就行——同一个 Bridge 模板。

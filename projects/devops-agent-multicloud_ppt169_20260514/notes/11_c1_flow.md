@@ -1,1 +1,0 @@
-具体看 C1 的流程。我们注入 L6 故障——把 EKS deployment 的 image tag 改成不存在的 v1.2.4-DOES-NOT-EXIST。三十秒内 Pod 进入 ImagePullBackOff，九十秒 CloudWatch 告警跳到 ALARM，触发 SNS 推到 Bridge Lambda，Lambda HMAC 签名 POST 到 webhook，得到二百 OK。Agent 立刻接管，跑了十五步调查，给出 RCA 和四阶段 Mitigation 方案。最后一步，每条 Mitigation 命令都带 rollback 和 approval prompt，等用户单步授权才执行——这是 Skill 锁死的 Approval Contract，抗语义漂移。

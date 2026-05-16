@@ -52,3 +52,8 @@ output "kubectl_config_command" {
   description = "Convenience command to update kubeconfig"
   value       = "aws --profile ${var.aws_profile} --region ${var.region} eks update-kubeconfig --name ${aws_eks_cluster.this.name} --alias bjs1"
 }
+
+output "mcp_readonly_clusterrole" {
+  description = "Kubernetes ClusterRole name for MCP read-only access"
+  value       = kubernetes_cluster_role_v1.mcp_readonly.metadata[0].name
+}
