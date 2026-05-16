@@ -34,3 +34,24 @@ Thumbs.db
 npm-debug.log*
 docker-compose.override.yml
 gcp-sa-key.json
+.gstack/
+
+# Personal blog content and docs
+blog/
+aws-docs/
+
+# Claude Code local settings
+.claude/
+
+# PPT / presentation projects
+projects/
+
+# Skill zip packages and extracted directories
+skills/*.zip
+skills/*/
+
+# Binary office documents
+*.docx
+
+# Personal notes (Chinese-named markdown files at root)
+中国区*.md

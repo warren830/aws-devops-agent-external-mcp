@@ -40,6 +40,9 @@ spec:
 ---
 # =========================================================================
 # AWS China Region
+# call_aws (port 8000) + kubernetes-mcp-server sidecar (port 8001)
+# Both containers share AK/SK from mcp-creds and a kubeconfig emptyDir.
+# initContainer runs once on pod start to generate the EKS kubeconfig.
 # =========================================================================
 apiVersion: apps/v1
 kind: Deployment
@@ -50,6 +53,30 @@ spec:
   template:
     metadata: { labels: { app: aws-cn } }
     spec:
+      volumes:
+        - name: kubeconfig
+          emptyDir: {}
+
+      initContainers:
+        - name: gen-kubeconfig
+          image: amazon/aws-cli:latest
+          command:
+            - aws
+            - eks
+            - update-kubeconfig
+            - --region
+            - cn-north-1
+            - --name
+            - bjs-web
+            - --kubeconfig
+            - /kubeconfig/config
+          env:
+            - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }
+            - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_AK } } }
+            - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_SK } } }
+          volumeMounts:
+            - { name: kubeconfig, mountPath: /kubeconfig }
+
       containers:
         - name: mcp
           image: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp:latest
@@ -62,6 +89,8 @@ spec:
             - { name: AWS_API_MCP_ALLOWED_HOSTS,   value: "aws-cn.mcp.internal" }
             - { name: AWS_API_MCP_ALLOWED_ORIGINS, value: "aws-cn.mcp.internal" }
             - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }
+            # DEMO ONLY: replace with IRSA (serviceAccountName) or ESO-synced secret in production.
+            # See deploy/README.md "凭证方案选择" for production options.
             - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_AK } } }
             - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_SK } } }
           ports: [{ containerPort: 8000 }]
@@ -72,6 +101,25 @@ spec:
           resources:
             requests: { cpu: "100m", memory: "256Mi" }
             limits:   { cpu: "500m", memory: "512Mi" }
+
+        - name: kubectl-mcp
+          image: ghcr.io/manusa/kubernetes-mcp-server:latest
+          args: ["--port", "8001", "--transport", "sse", "--read-only"]
+          env:
+            - { name: KUBECONFIG,            value: "/kubeconfig/config" }
+            - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }
+            - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_AK } } }
+            - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_SK } } }
+          ports: [{ containerPort: 8001 }]
+          volumeMounts:
+            - { name: kubeconfig, mountPath: /kubeconfig }
+          readinessProbe:
+            tcpSocket: { port: 8001 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits:   { cpu: "300m", memory: "256Mi" }
 ---
 # =========================================================================
 # Alibaba Cloud
@@ -169,7 +217,9 @@ kind: Service
 metadata: { name: aws-cn, namespace: mcp }
 spec:
   selector: { app: aws-cn }
-  ports: [{ port: 8000, targetPort: 8000 }]
+  ports:
+    - { name: call-aws,       port: 8000, targetPort: 8000 }
+    - { name: kubectl-mcp,    port: 8001, targetPort: 8001 }
 ---
 apiVersion: v1
 kind: Service
@@ -231,3 +281,9 @@ spec:
           - path: /
             pathType: Prefix
             backend: { service: { name: gcp, port: { number: 8000 } } }
+    - host: cn-eks-kubectl.mcp.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: aws-cn, port: { number: 8001 } } }
