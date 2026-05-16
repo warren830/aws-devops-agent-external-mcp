@@ -104,7 +104,7 @@ spec:
 
         - name: kubectl-mcp
           image: ghcr.io/manusa/kubernetes-mcp-server:latest
-          args: ["--port", "8001", "--transport", "sse", "--read-only"]
+          args: ["--port", "8001", "--read-only", "--disable-multi-cluster", "--stateless"]
           env:
             - { name: KUBECONFIG,            value: "/kubeconfig/config" }
             - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }
