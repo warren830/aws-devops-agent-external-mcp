@@ -1,0 +1,49 @@
+# =============================================================================
+# One-click deployment configuration.
+#
+# Fill in this file and run:
+#   terraform init && terraform apply
+#
+# Then push images (see terraform output push_commands) and force redeploy.
+# =============================================================================
+
+region = "us-east-1"
+
+# --- VPC: leave empty to auto-create, or provide existing VPC ---
+# vpc_id             = "vpc-0123456789abcdef0"
+# public_subnet_ids  = ["subnet-aaa", "subnet-bbb"]
+# private_subnet_ids = ["subnet-ccc", "subnet-ddd"]
+
+# --- TLS certificate (must be ACM public cert, wildcard recommended) ---
+certificate_arn = "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERT_ID"
+
+# --- MCP accounts to deploy ---
+accounts = {
+  # AWS China (Ningxia)
+  aws-cn = {
+    host       = "aws-cn.example.com"
+    aws_region = "cn-northwest-1"
+    access_key = "AKIA..."
+    secret_key = "wJalrXUtnF..."
+  }
+
+  # AWS China (Beijing) with kubectl support
+  # aws-cn-2 = {
+  #   host           = "aws-cn-2.example.com"
+  #   aws_region     = "cn-north-1"
+  #   access_key     = "AKIA..."
+  #   secret_key     = "..."
+  #   use_entrypoint = true
+  #   eks_cluster    = "my-cluster"
+  #   eks_region     = "cn-north-1"
+  # }
+
+  # Aliyun (domestic)
+  # aliyun-prod = {
+  #   provider   = "aliyun"
+  #   host       = "aliyun-prod.example.com"
+  #   aliyun_env = "domestic"
+  #   access_key = "LTAI..."
+  #   secret_key = "..."
+  # }
+}

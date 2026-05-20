@@ -332,13 +332,13 @@ FastMCP 框架支持 `stateless_http=True` —— 每个请求自带完整上下
 ```
 1 tool used: use_aws
 Input: { "service_name": "ec2", "operation_name": "describe_instances", "aws_region": "cn-northwest-1" }
-Output: { "034362076319": "API call failed: ... AuthFailure ..." }
+Output: { "<ACCOUNT_ID>": "API call failed: ... AuthFailure ..." }
 ```
 
 看起来"成功了"，但仔细看两个异常信号：
 
 1. **工具名是 `use_aws`** —— 这是 DevOps Agent 内置的通用 AWS 工具，**不是**我自定义的 MCP
-2. **错误信息里的账户 ID `034362076319`** —— 这是我控制台登录态的**全球区账户**，不是我在 MCP 配置的 `AWS_CN_AK/SK` 对应账户
+2. **错误信息里的账户 ID `<ACCOUNT_ID>`** —— 这是我控制台登录态的**全球区账户**，不是我在 MCP 配置的 `AWS_CN_AK/SK` 对应账户
 
 最铁的证据：`kubectl logs deploy/aws-cn --tail=50` 里除了 ALB 健康检查的 `GET /mcp 406`，**一条 `POST /mcp` 都没有** —— 说明我的 pod 根本没收到过业务请求。
 

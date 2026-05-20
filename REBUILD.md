@@ -138,9 +138,9 @@ rm terraform.tfstate terraform.tfstate.backup
 ```bash
 # 老的自签证书（*.mcp.internal）
 aws acm delete-certificate --region us-east-1 \
-  --certificate-arn arn:aws:acm:us-east-1:034362076319:certificate/fa6453c0-f48a-4b60-b31d-aa72ed596e0e 2>/dev/null || true
+  --certificate-arn arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/fa6453c0-f48a-4b60-b31d-aa72ed596e0e 2>/dev/null || true
 aws acm delete-certificate --region us-east-1 \
-  --certificate-arn arn:aws:acm:us-east-1:034362076319:certificate/596d8627-7826-4c4f-b160-2c857688eea4 2>/dev/null || true
+  --certificate-arn arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/596d8627-7826-4c4f-b160-2c857688eea4 2>/dev/null || true
 ```
 
 ### Step 1.7 验证清场
@@ -395,7 +395,7 @@ List EC2 instances in cn-north-1
 - 工具名带 MCP 前缀（类似 `aws-cn-mcp___use_aws`，**不是**光秃秃的 `use_aws`）
 - `kubectl -n mcp logs deploy/mcp-aws-cn -f | grep -v "GET /mcp"` 出现 `POST /mcp HTTP/1.1" 200`
 - 返回值里的 EC2 列表对应你 `AWS_CN_AK` 的账号 —— **注意中国区账号 ID 跟全球区完全不同的那种** `cn-*` 或独立的 12 位数字
-- 不是全球区的 `034362076319`（如果是说明 DevOps Agent 又 fallback 到内置 `use_aws` 了）
+- 不是全球区的 `<ACCOUNT_ID>`（如果是说明 DevOps Agent 又 fallback 到内置 `use_aws` 了）
 
 ✅ 中国区跑通了说明整条链路成功。这一轮最"不确定"的部分已经验证。
 

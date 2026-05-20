@@ -10,7 +10,7 @@ createNamespace: false
 
 image:
   # Separate repo from AWS MCP image because of fastmcp dependency conflict
-  repository: 034362076319.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
+  repository: <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -28,7 +28,7 @@ ingress:
   # Same group.name as AWS chart → all MCP Ingresses merge into one ALB
   groupName: mcp
   scheme: internal
-  certificateArn: arn:aws:acm:us-east-1:034362076319:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
+  certificateArn: arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
 
 mcpServer:
   port: 8000

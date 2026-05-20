@@ -11,8 +11,8 @@ AWS chart 用的是 `aws-devops-agent-external-mcp` 镜像，阿里云用 **另�
 aws ecr create-repository --repository-name mcp-aliyun --region us-east-1
 
 # 登录 + 构建 + 推送
-ECR=034362076319.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 034362076319.dkr.ecr.us-east-1.amazonaws.com
+ECR=<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
 docker build --platform linux/amd64 -t $ECR:latest -f deploy/Dockerfile.aliyun .
 docker push $ECR:latest
 ```

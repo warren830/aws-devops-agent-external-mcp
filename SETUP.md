@@ -31,16 +31,16 @@
 
 | 资源 | 标识 |
 |---|---|
-| AWS Account | `034362076319` |
+| AWS Account | `<ACCOUNT_ID>` |
 | Region | `us-east-1` |
 | EKS Cluster | `mcp-test` |
 | VPC | `vpc-033d9e9955afde81f` |
 | Public Subnets | `subnet-0ef7eec49e08c070c` (us-east-1a), `subnet-0ae59bc0fd7d71af4` (us-east-1b) |
 | ALB DNS（公网可查，返回私有 IP） | `internal-k8s-mcp-mcp-6334395754-126597647.us-east-1.elb.amazonaws.com` |
 | ALB SG | `sg-06a4ed260d90bd259` (k8s-mcp-mcp-79298410f1) |
-| ACM 公共通配符证书 | `arn:aws:acm:us-east-1:034362076319:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a` |
+| ACM 公共通配符证书 | `arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a` |
 | Route53 私有 Zone | `Z09231282I798DJM5YYUW` (`yingchu.cloud`) |
-| ECR 仓库 | `034362076319.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp` |
+| ECR 仓库 | `<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp` |
 | MCP Endpoints | `https://aws-cn.yingchu.cloud/mcp`, `https://aws-global.yingchu.cloud/mcp` |
 
 ---
@@ -184,8 +184,8 @@ EXPOSE 8000
 aws ecr create-repository --repository-name aws-devops-agent-external-mcp --region us-east-1
 
 # 登录 ECR
-ECR=034362076319.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 034362076319.dkr.ecr.us-east-1.amazonaws.com
+ECR=<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
 
 # 构建 + 推送（注意 --platform linux/amd64 -- Mac M 系列必须，否则 EKS node 跑不起来）
 docker build --platform linux/amd64 -t $ECR:latest -f deploy/Dockerfile .
@@ -229,7 +229,7 @@ readinessProbe:
 # Ingress
 annotations:
   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-  alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:034362076319:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
+  alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
 
   # ⚠️ ALB 健康检查配置（坑点之一）
   alb.ingress.kubernetes.io/healthcheck-path: "/mcp"

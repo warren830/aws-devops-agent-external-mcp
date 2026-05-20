@@ -296,7 +296,7 @@ kubectl apply -f deploy/k8s-2svc.yaml
 ```bash
 # 首次：构建阿里云镜像
 aws ecr create-repository --repository-name mcp-aliyun --region us-east-1
-ECR=034362076319.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
+ECR=<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/mcp-aliyun
 docker build --platform linux/amd64 -t $ECR:latest -f deploy/Dockerfile.aliyun .
 docker push $ECR:latest
 
