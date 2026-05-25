@@ -40,6 +40,12 @@ Resources:
             Condition:
               StringEquals:
                 sts:ExternalId: mcp-bridge
+          - Effect: Allow
+            Principal:
+              AWS: !Ref HubRoleArn
+            Action:
+              - sts:SetSourceIdentity
+              - sts:TagSession
       ManagedPolicyArns:
         - arn:aws-cn:iam::aws:policy/ReadOnlyAccess
 

@@ -21,11 +21,22 @@ CLIENT_SUBJECT="/CN=mcp-bridge-client/O=DevOps Agent"
 
 echo "==> Generating CA key + certificate (valid ${CA_DAYS} days)..."
 openssl genrsa -out "$OUTPUT_DIR/ca.key" 4096
+
+# Roles Anywhere requires X.509 v3 with CA:TRUE
+cat > "$OUTPUT_DIR/ca-ext.cnf" <<EXTEOF
+[v3_ca]
+basicConstraints = critical, CA:TRUE
+keyUsage = critical, keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+EXTEOF
+
 openssl req -new -x509 \
   -key "$OUTPUT_DIR/ca.key" \
   -out "$OUTPUT_DIR/ca.crt" \
   -days "$CA_DAYS" \
-  -subj "$CA_SUBJECT"
+  -subj "$CA_SUBJECT" \
+  -extensions v3_ca \
+  -config <(cat /etc/ssl/openssl.cnf "$OUTPUT_DIR/ca-ext.cnf" 2>/dev/null || cat "$OUTPUT_DIR/ca-ext.cnf")
 
 echo "==> Generating client key + CSR..."
 openssl genrsa -out "$OUTPUT_DIR/client.key" 2048
@@ -35,15 +46,26 @@ openssl req -new \
   -subj "$CLIENT_SUBJECT"
 
 echo "==> Signing client cert with CA (valid ${CLIENT_DAYS} days)..."
+cat > "$OUTPUT_DIR/client-ext.cnf" <<EXTEOF
+[v3_client]
+basicConstraints = CA:FALSE
+keyUsage = critical, digitalSignature
+extendedKeyUsage = clientAuth
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+EXTEOF
+
 openssl x509 -req \
   -in "$OUTPUT_DIR/client.csr" \
   -CA "$OUTPUT_DIR/ca.crt" \
   -CAkey "$OUTPUT_DIR/ca.key" \
   -CAcreateserial \
   -out "$OUTPUT_DIR/client.crt" \
-  -days "$CLIENT_DAYS"
+  -days "$CLIENT_DAYS" \
+  -extensions v3_client \
+  -extfile "$OUTPUT_DIR/client-ext.cnf"
 
-rm -f "$OUTPUT_DIR/client.csr" "$OUTPUT_DIR/ca.srl"
+rm -f "$OUTPUT_DIR/client.csr" "$OUTPUT_DIR/ca.srl" "$OUTPUT_DIR/ca-ext.cnf" "$OUTPUT_DIR/client-ext.cnf"
 
 echo ""
 echo "=== Done ==="
