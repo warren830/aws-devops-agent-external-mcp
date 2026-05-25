@@ -5,6 +5,7 @@
 **零业务代码** —— 所有 MCP Server 用官方包（`awslabs.aws-api-mcp-server`、`alibaba-cloud-ops-mcp-server` 等），本项目只做容器化、编排、AWS 网络接线。
 
 > 🚀 **ECS Fargate 方案（推荐）**：一个 `terraform apply` 搞定全部，无需 K8s → [blog/04-ecs-fargate-lightweight.md](./blog/04-ecs-fargate-lightweight.md)
+> 🔐 **IAM Roles Anywhere（企业级）**：消灭 AK/SK，证书 + 临时凭证 + Hub-Spoke 多账号 → [DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md)
 > 📖 **EKS 方案完整部署步骤**：[SETUP.md](./SETUP.md)
 > 🐛 **踩坑故事版博客（7 个层面的故障定位）**：[BLOG.md](./BLOG.md)
 > 🏗️ **多账号扩展运维指南**（Helm chart + ESO）：[MULTI-ACCOUNT.md](./MULTI-ACCOUNT.md)
@@ -39,7 +40,9 @@
 
 ---
 
-## 两种部署方案
+## 两种部署方案 × 两种认证模式
+
+### 部署方案
 
 | | **ECS Fargate（推荐）** | **EKS** |
 |---|---|---|
@@ -51,6 +54,19 @@
 | 目录 | `terraform-ecs/` | `terraform/` + `chart/` + `chart-aliyun/` |
 | 博客 | [04-ecs-fargate-lightweight.md](./blog/04-ecs-fargate-lightweight.md) | [01](./blog/01-single-account-bridge.md) / [02](./blog/02-multi-account-extension.md) / [03](./blog/03-skills-in-action.md) |
 
+### 认证模式
+
+| | **AK/SK（默认）** | **IAM Roles Anywhere（企业级推荐）** |
+|---|---|---|
+| 凭证类型 | 长期 Access Key / Secret Key | X.509 证书 → 1h 临时凭证 |
+| 泄露影响 | 永久有效直到手动轮换 | 最多 1h，可 CRL 秒级吊销 |
+| 多账号凭证数 | N 对 AK/SK | 1 张证书（Hub AssumeRole 扇出） |
+| 加账号 | 创建 IAM User + 存 AK/SK | 部署 Spoke CFN（1 个 Role） |
+| 适合 | 快速验证、开发环境 | 生产、合规要求高的企业 |
+| 配置指南 | 下方快速开始 | [DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md) |
+
+两种认证模式可以**在同一个 `accounts` map 里混用**（`auth_mode` 字段切换）。
+
 ---
 
 ## 目录
@@ -58,23 +74,32 @@
 ```
 .
 ├── README.md                    ← 你在这
+├── DEPLOY-ROLES-ANYWHERE.md     ← 🔐 IAM Roles Anywhere 部署指南
 ├── SETUP.md                     ← EKS 方案完整配置指南
 ├── BLOG.md                      ← 故事版踩坑博客
 ├── MULTI-ACCOUNT.md             ← EKS 多账号扩展运维
-├── blog/                        ← 系列博客（01-04）
+├── blog/                        ← 系列博客（01-05）
 ├── docker-compose.yml           ← 本地冒烟测试
+├── cfn/                         ← 🔐 IAM Roles Anywhere CloudFormation
+│   ├── roles-anywhere-hub.yaml  ← Hub 账号（Trust Anchor + Profile + Hub Role）
+│   ├── roles-anywhere-spoke.yaml← Spoke 账号（ReadOnly Role）
+│   └── generate-certs.sh        ← 一键生成 CA + client 证书
 ├── deploy/
-│   ├── Dockerfile               ← AWS MCP 镜像
-│   └── Dockerfile.aliyun        ← 阿里云 MCP 镜像
+│   ├── Dockerfile               ← AWS MCP 镜像（AK/SK 模式）
+│   ├── Dockerfile.ra            ← AWS MCP 镜像（Roles Anywhere 模式）
+│   ├── Dockerfile.aliyun        ← 阿里云 MCP 镜像
+│   ├── credential-helper.sh     ← cert → Hub 凭证 → AssumeRole → Spoke 凭证
+│   └── entrypoint-ra.sh         ← RA 容器启动器（证书写盘 + 凭证刷新）
 ├── terraform-ecs/               ← ⭐ ECS Fargate 方案（推荐）
 │   ├── main.tf                  ← Provider
-│   ├── variables.tf             ← accounts map（多账号 + 跨云）
+│   ├── variables.tf             ← accounts map（auth_mode: ak_sk | roles_anywhere）
 │   ├── network.tf               ← IGW + NAT Gateway + 路由表
 │   ├── alb.tf                   ← Internal ALB + HTTPS listener
 │   ├── ecs.tf                   ← ECS Cluster + for_each Services
 │   ├── iam.tf                   ← Execution Role + Task Role
+│   ├── secrets.tf               ← 按 auth_mode 条件创建 secret
 │   ├── outputs.tf               ← ALB DNS name + DNS 操作提示
-│   └── terraform.tfvars.example ← 配置模板
+│   └── terraform.tfvars.example ← 配置模板（含两种认证模式示例）
 ├── terraform/                   ← EKS 方案基础设施
 │   └── main.tf                  ← VPC + EKS + IRSA
 ├── chart/                       ← EKS 方案 Helm chart（AWS）
@@ -213,16 +238,32 @@ Agent Space → Capabilities → MCP Servers → Add
 
 ## 凭证传入方式
 
-**AWS 全球区 / 中国区**：环境变量注入 → boto3 读取
+### 模式 A：AK/SK（默认）
+
+环境变量注入 → boto3 读取：
 
 ```yaml
 env:
-  - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }           # 切区靠这个
+  - { name: AWS_DEFAULT_REGION,    value: "cn-north-1" }
   - { name: AWS_ACCESS_KEY_ID,     valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_AK } } }
   - { name: AWS_SECRET_ACCESS_KEY, valueFrom: { secretKeyRef: { name: mcp-creds, key: AWS_CN_SK } } }
 ```
 
 ⚠️ **AWS 中国区是独立 partition**，全球区凭证在中国区会 AuthFailure。需要在 [amazonaws.cn](https://amazonaws.cn) 开账号单独拿 AK/SK。
+
+### 模式 B：IAM Roles Anywhere（企业级推荐）
+
+X.509 证书 → Roles Anywhere 临时凭证 → Hub AssumeRole → Spoke 临时凭证：
+
+```
+容器启动 → 写证书到文件 → aws_signing_helper → Hub 临时凭证
+         → sts:AssumeRole → Spoke 临时凭证 → 注入环境变量
+         → 后台每 55 分钟自动刷新
+```
+
+- 无长期密钥，证书泄露可 CRL 秒级吊销
+- 一张证书管所有账号（Hub-Spoke 扇出）
+- 详细配置步骤：**[DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md)**
 
 ---
 
@@ -259,10 +300,12 @@ kubectl -n mcp rollout restart deploy/mcp-aws-cn
 
 ## 进一步阅读
 
+- **[DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md)** —— 🔐 IAM Roles Anywhere 零密钥认证部署指南
 - **[blog/04 - ECS Fargate 轻量化方案](./blog/04-ecs-fargate-lightweight.md)** —— 推荐的部署方式，含完整配置指南
 - **[blog/01 - 单账号桥接](./blog/01-single-account-bridge.md)** —— 为什么要建桥 + EKS 单账号
 - **[blog/02 - 多账号扩展](./blog/02-multi-account-extension.md)** —— EKS 多账号 + 跨云 + 凭证轮换
 - **[blog/03 - Skills 实战](./blog/03-skills-in-action.md)** —— 8 个 Skill 让 Agent 理解多账号场景
+- **[blog/05 - Roles Anywhere 零密钥](./blog/05-roles-anywhere-zero-aksk.md)** —— 消灭 AK/SK 的完整方案
 - **[SETUP.md](./SETUP.md)** —— EKS 方案从零到运行的完整步骤
 - **[BLOG.md](./BLOG.md)** —— 7 个大坑的故事版排查
 - **[MCP 协议规范](https://modelcontextprotocol.io)**
