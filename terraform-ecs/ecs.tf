@@ -2,10 +2,16 @@
 # ECS Cluster + per-account Fargate Services
 #
 # Adding a new MCP account:
-#   1. Add entry to var.accounts in terraform.tfvars
-#   2. Create Secrets Manager secret with {"AK":"...","SK":"..."}
-#   3. Add DNS CNAME pointing host → ALB DNS name
-#   4. terraform apply
+#   auth_mode = "ak_sk":
+#     1. Add entry to var.accounts with access_key/secret_key
+#     2. Add DNS CNAME pointing host → ALB DNS name
+#     3. terraform apply
+#
+#   auth_mode = "roles_anywhere":
+#     1. Deploy cfn/roles-anywhere-spoke.yaml in the target account
+#     2. Add entry to var.accounts with spoke_role_arn
+#     3. Add DNS CNAME pointing host → ALB DNS name
+#     4. terraform apply
 # -----------------------------------------------------------------------------
 
 resource "aws_ecs_cluster" "mcp" {
@@ -81,9 +87,11 @@ resource "aws_ecs_task_definition" "mcp" {
            "--host", "0.0.0.0",
            "--port", "8000",
            "--env", each.value.aliyun_env]
-        : each.value.use_entrypoint
-          ? ["python", "/app/entrypoint.py"]
-          : ["python", "-m", "awslabs.aws_api_mcp_server.server"]
+        : each.value.auth_mode == "roles_anywhere"
+          ? ["/app/entrypoint-ra.sh"]
+          : each.value.use_entrypoint
+            ? ["python", "/app/entrypoint.py"]
+            : ["python", "-m", "awslabs.aws_api_mcp_server.server"]
     )
 
     environment = (
@@ -103,6 +111,16 @@ resource "aws_ecs_task_definition" "mcp" {
           each.value.use_entrypoint ? [
             { name = "EKS_CLUSTER_NAME", value = each.value.eks_cluster },
             { name = "EKS_REGION", value = each.value.eks_region },
+          ] : [],
+          each.value.auth_mode == "roles_anywhere" ? [
+            { name = "RA_CERT_PATH", value = "/app/certs/client.crt" },
+            { name = "RA_KEY_PATH", value = "/app/certs/client.key" },
+            { name = "RA_TRUST_ANCHOR_ARN", value = var.roles_anywhere.trust_anchor_arn },
+            { name = "RA_PROFILE_ARN", value = var.roles_anywhere.profile_arn },
+            { name = "RA_HUB_ROLE_ARN", value = var.roles_anywhere.hub_role_arn },
+            { name = "RA_SPOKE_ROLE_ARN", value = each.value.spoke_role_arn },
+            { name = "RA_REGION", value = var.roles_anywhere.region },
+            { name = "RA_EXTERNAL_ID", value = var.roles_anywhere.external_id },
           ] : []
         )
     )
@@ -113,10 +131,15 @@ resource "aws_ecs_task_definition" "mcp" {
           { name = "ALIBABA_CLOUD_ACCESS_KEY_ID", valueFrom = "${local.secret_arns[each.key]}:AK::" },
           { name = "ALIBABA_CLOUD_ACCESS_KEY_SECRET", valueFrom = "${local.secret_arns[each.key]}:SK::" },
         ]
-      : [
-          { name = "AWS_ACCESS_KEY_ID", valueFrom = "${local.secret_arns[each.key]}:AK::" },
-          { name = "AWS_SECRET_ACCESS_KEY", valueFrom = "${local.secret_arns[each.key]}:SK::" },
-        ]
+      : each.value.auth_mode == "roles_anywhere"
+        ? [
+            { name = "RA_CERT_PEM", valueFrom = var.roles_anywhere.cert_secret_arn },
+            { name = "RA_KEY_PEM", valueFrom = var.roles_anywhere.key_secret_arn },
+          ]
+        : [
+            { name = "AWS_ACCESS_KEY_ID", valueFrom = "${local.secret_arns[each.key]}:AK::" },
+            { name = "AWS_SECRET_ACCESS_KEY", valueFrom = "${local.secret_arns[each.key]}:SK::" },
+          ]
     )
 
     portMappings = [{ containerPort = 8000, protocol = "tcp" }]

@@ -17,28 +17,61 @@ region = "us-east-1"
 # --- TLS certificate (must be ACM public cert, wildcard recommended) ---
 certificate_arn = "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/CERT_ID"
 
+# =============================================================================
+# AUTH MODE: Roles Anywhere (recommended for enterprise)
+#
+# Eliminates long-lived AK/SK. Uses X.509 certificate to obtain temporary
+# credentials via IAM Roles Anywhere, then AssumeRole to each spoke account.
+#
+# Prerequisites:
+#   1. Generate CA + client cert (see cfn/README.md)
+#   2. Deploy cfn/roles-anywhere-hub.yaml in the hub China account
+#   3. Deploy cfn/roles-anywhere-spoke.yaml in each target account
+#   4. Store cert + key in Secrets Manager (plain PEM, not JSON):
+#      aws secretsmanager create-secret --name /mcp/ra-cert --secret-string file://client.crt
+#      aws secretsmanager create-secret --name /mcp/ra-key  --secret-string file://client.key
+# =============================================================================
+
+# roles_anywhere = {
+#   cert_secret_arn  = "arn:aws:secretsmanager:us-east-1:ACCOUNT:secret:/mcp/ra-cert-AbCdEf"
+#   key_secret_arn   = "arn:aws:secretsmanager:us-east-1:ACCOUNT:secret:/mcp/ra-key-GhIjKl"
+#   trust_anchor_arn = "arn:aws-cn:rolesanywhere:cn-northwest-1:HUB_ACCOUNT:trust-anchor/ANCHOR_ID"
+#   profile_arn      = "arn:aws-cn:rolesanywhere:cn-northwest-1:HUB_ACCOUNT:profile/PROFILE_ID"
+#   hub_role_arn     = "arn:aws-cn:iam::HUB_ACCOUNT:role/mcp-roles-anywhere-hub"
+#   region           = "cn-northwest-1"
+# }
+
 # --- MCP accounts to deploy ---
 accounts = {
-  # AWS China (Ningxia)
-  aws-cn = {
-    host       = "aws-cn.example.com"
-    aws_region = "cn-northwest-1"
-    access_key = "AKIA..."
-    secret_key = "wJalrXUtnF..."
-  }
+  # === Example: Roles Anywhere mode (no AK/SK needed) ===
+  # aws-cn = {
+  #   host           = "aws-cn.example.com"
+  #   aws_region     = "cn-northwest-1"
+  #   auth_mode      = "roles_anywhere"
+  #   spoke_role_arn = "arn:aws-cn:iam::TARGET_ACCOUNT:role/mcp-spoke-readonly"
+  # }
 
-  # AWS China (Beijing) with kubectl support
+  # === Example: Roles Anywhere + kubectl ===
   # aws-cn-2 = {
   #   host           = "aws-cn-2.example.com"
   #   aws_region     = "cn-north-1"
-  #   access_key     = "AKIA..."
-  #   secret_key     = "..."
+  #   auth_mode      = "roles_anywhere"
+  #   spoke_role_arn = "arn:aws-cn:iam::TARGET_ACCOUNT:role/mcp-spoke-readonly"
   #   use_entrypoint = true
   #   eks_cluster    = "my-cluster"
   #   eks_region     = "cn-north-1"
   # }
 
-  # Aliyun (domestic)
+  # === Example: Traditional AK/SK mode (backwards compatible) ===
+  aws-cn = {
+    host       = "aws-cn.example.com"
+    aws_region = "cn-northwest-1"
+    auth_mode  = "ak_sk"
+    access_key = "AKIA..."
+    secret_key = "wJalrXUtnF..."
+  }
+
+  # === Aliyun (always uses AK/SK) ===
   # aliyun-prod = {
   #   provider   = "aliyun"
   #   host       = "aliyun-prod.example.com"

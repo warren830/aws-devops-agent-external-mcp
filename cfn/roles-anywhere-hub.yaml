@@ -1,0 +1,83 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  IAM Roles Anywhere Hub — deploy in the central China account.
+  Creates Trust Anchor (from your CA cert), Profile, and Hub Role
+  that can AssumeRole into spoke accounts.
+
+Parameters:
+  CACertificateBody:
+    Type: String
+    Description: PEM-encoded CA certificate (the one that signs client certs)
+  SpokeRoleArns:
+    Type: CommaDelimitedList
+    Description: >
+      ARNs of spoke account roles this hub role can assume.
+      Example: arn:aws-cn:iam::222222222222:role/mcp-spoke-readonly,arn:aws-cn:iam::333333333333:role/mcp-spoke-readonly
+  SessionDurationSeconds:
+    Type: Number
+    Default: 3600
+    MinValue: 900
+    MaxValue: 43200
+    Description: Duration of temporary credentials issued by Roles Anywhere
+
+Resources:
+  TrustAnchor:
+    Type: AWS::RolesAnywhere::TrustAnchor
+    Properties:
+      Name: mcp-bridge-ca
+      Enabled: true
+      Source:
+        SourceType: CERTIFICATE_BUNDLE
+        SourceData:
+          X509CertificateData: !Ref CACertificateBody
+
+  HubRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: mcp-roles-anywhere-hub
+      Description: Hub role assumed via Roles Anywhere, can AssumeRole to spoke accounts
+      MaxSessionDuration: !Ref SessionDurationSeconds
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: rolesanywhere.amazonaws.com
+            Action:
+              - sts:AssumeRole
+              - sts:TagSession
+              - sts:SetSourceIdentity
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !GetAtt TrustAnchor.TrustAnchorArn
+      Policies:
+        - PolicyName: assume-spoke-roles
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: sts:AssumeRole
+                Resource: !Ref SpokeRoleArns
+
+  Profile:
+    Type: AWS::RolesAnywhere::Profile
+    Properties:
+      Name: mcp-bridge-profile
+      Enabled: true
+      RoleArns:
+        - !GetAtt HubRole.Arn
+      DurationSeconds: !Ref SessionDurationSeconds
+
+Outputs:
+  TrustAnchorArn:
+    Value: !GetAtt TrustAnchor.TrustAnchorArn
+    Export:
+      Name: !Sub "${AWS::StackName}-TrustAnchorArn"
+  ProfileArn:
+    Value: !GetAtt Profile.ProfileArn
+    Export:
+      Name: !Sub "${AWS::StackName}-ProfileArn"
+  HubRoleArn:
+    Value: !GetAtt HubRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-HubRoleArn"

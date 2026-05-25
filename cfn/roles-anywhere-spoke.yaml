@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  IAM Roles Anywhere Spoke — deploy in each target China account.
+  Creates a ReadOnly role that trusts the Hub Role from the central account.
+
+Parameters:
+  HubRoleArn:
+    Type: String
+    Description: ARN of the hub role (from the hub account stack output)
+  RoleName:
+    Type: String
+    Default: mcp-spoke-readonly
+    Description: Name for the spoke role
+  PermissionsBoundary:
+    Type: String
+    Default: ""
+    Description: Optional permissions boundary ARN (for enterprise guardrails)
+
+Conditions:
+  HasPermissionsBoundary: !Not [!Equals [!Ref PermissionsBoundary, ""]]
+
+Resources:
+  SpokeRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      Description: Spoke role assumed by MCP Hub for read-only operations
+      MaxSessionDuration: 3600
+      PermissionsBoundary: !If
+        - HasPermissionsBoundary
+        - !Ref PermissionsBoundary
+        - !Ref "AWS::NoValue"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              AWS: !Ref HubRoleArn
+            Action: sts:AssumeRole
+            Condition:
+              StringEquals:
+                sts:ExternalId: mcp-bridge
+      ManagedPolicyArns:
+        - arn:aws-cn:iam::aws:policy/ReadOnlyAccess
+
+Outputs:
+  SpokeRoleArn:
+    Value: !GetAtt SpokeRole.Arn
+    Description: Add this ARN to the hub stack's SpokeRoleArns parameter

@@ -27,7 +27,13 @@ resource "aws_iam_policy" "read_secrets" {
     Statement = [{
       Effect   = "Allow"
       Action   = ["secretsmanager:GetSecretValue"]
-      Resource = [for k, v in local.secret_arns : v]
+      Resource = concat(
+        [for k, v in local.secret_arns : v],
+        var.roles_anywhere != null ? [
+          var.roles_anywhere.cert_secret_arn,
+          var.roles_anywhere.key_secret_arn,
+        ] : []
+      )
     }]
   })
 }
