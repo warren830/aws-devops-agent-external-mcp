@@ -49,9 +49,8 @@ aws-docs/
 # PPT / presentation projects
 projects/
 
-# Skill zip packages and extracted directories
+# Skill zip packages (extracted directories are committed for sharing)
 skills/*.zip
-skills/*/
 
 # Binary office documents
 *.docx
