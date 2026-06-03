@@ -57,3 +57,7 @@ skills/*.zip
 
 # Personal notes (Chinese-named markdown files at root)
 中国区*.md
+
+# Demo content (large video/case artifacts, not for GitHub)
+demo/
+demo-cases/
