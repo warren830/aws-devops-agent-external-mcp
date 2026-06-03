@@ -118,7 +118,7 @@ CloudWatch 图表：p99 从 ~330ms → ~1.0s。
 > agent 在 thinking 里直接说："The China accounts aren't directly in the enabled associations."
 >
 > 本项目用：
-> 1. us-east-1 EKS 上跑 MCP server (`aws-cn-2.yingchu.cloud`)
+> 1. us-east-1 EKS 上跑 MCP server (`aws-cn-2.example.cloud`)
 > 2. cn 账号本地 bridge Lambda 把 SNS alarm 转成 DevOps Agent webhook
 > 3. 9 个自定义 skill（含 routing skill 引导 agent 调用对应 MCP）
 >

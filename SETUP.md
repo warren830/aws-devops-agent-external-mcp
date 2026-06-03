@@ -18,8 +18,8 @@
                            └─────────────────┘       │ routing        │       └───────┘
                                                      └────────────────┘
                                                             │
-                                                            ├─ aws-global.yingchu.cloud ─→ aws-global Service
-                                                            └─ aws-cn.yingchu.cloud     ─→ aws-cn Service
+                                                            ├─ aws-global.example.cloud ─→ aws-global Service
+                                                            └─ aws-cn.example.cloud     ─→ aws-cn Service
 ```
 
 **为什么这么设计**
@@ -34,14 +34,14 @@
 | AWS Account | `<ACCOUNT_ID>` |
 | Region | `us-east-1` |
 | EKS Cluster | `mcp-test` |
-| VPC | `vpc-033d9e9955afde81f` |
-| Public Subnets | `subnet-0ef7eec49e08c070c` (us-east-1a), `subnet-0ae59bc0fd7d71af4` (us-east-1b) |
+| VPC | `<VPC_ID>` |
+| Public Subnets | `<SUBNET_ID>` (us-east-1a), `<SUBNET_ID>` (us-east-1b) |
 | ALB DNS（公网可查，返回私有 IP） | `internal-k8s-mcp-mcp-6334395754-126597647.us-east-1.elb.amazonaws.com` |
-| ALB SG | `sg-06a4ed260d90bd259` (k8s-mcp-mcp-79298410f1) |
-| ACM 公共通配符证书 | `arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a` |
-| Route53 私有 Zone | `Z09231282I798DJM5YYUW` (`yingchu.cloud`) |
+| ALB SG | `<SG_ID>` (k8s-mcp-mcp-79298410f1) |
+| ACM 公共通配符证书 | `arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/<CERT_ID>` |
+| Route53 私有 Zone | `<HOSTED_ZONE_ID>` (`example.cloud`) |
 | ECR 仓库 | `<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/aws-devops-agent-external-mcp` |
-| MCP Endpoints | `https://aws-cn.yingchu.cloud/mcp`, `https://aws-global.yingchu.cloud/mcp` |
+| MCP Endpoints | `https://aws-cn.example.cloud/mcp`, `https://aws-global.example.cloud/mcp` |
 
 ---
 
@@ -102,7 +102,7 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
 
 ### 4.1 证书：用公共 ACM 证书（强烈推荐）
 
-前提：你在 Route53 或其他权威 DNS 管理过一个公网域名（比如 `yingchu.cloud`），并已签发 ACM 公共通配符证书。
+前提：你在 Route53 或其他权威 DNS 管理过一个公网域名（比如 `example.cloud`），并已签发 ACM 公共通配符证书。
 
 ```bash
 # 确认证书 ARN、SANs、状态
@@ -115,14 +115,14 @@ aws acm describe-certificate --region us-east-1 \
 
 ### 4.2 Route53 私有 Hosted Zone
 
-做 split-horizon DNS：公网 `yingchu.cloud` 继续由 Tencent DNSPod 等托管，私网由 Route53 专门为 VPC 服务。
+做 split-horizon DNS：公网 `example.cloud` 继续由 Tencent DNSPod 等托管，私网由 Route53 专门为 VPC 服务。
 
 ```bash
 # 创建私有 zone，关联到 EKS 所在 VPC
 aws route53 create-hosted-zone \
-  --name yingchu.cloud \
+  --name example.cloud \
   --caller-reference "mcp-$(date +%s)" \
-  --vpc VPCRegion=us-east-1,VPCId=vpc-033d9e9955afde81f \
+  --vpc VPCRegion=us-east-1,VPCId=<VPC_ID> \
   --hosted-zone-config PrivateZone=true,Comment="MCP private zone"
 # 记下返回的 HostedZoneId
 ```
@@ -131,14 +131,14 @@ aws route53 create-hosted-zone \
 
 ```bash
 ALB=internal-k8s-mcp-mcp-6334395754-126597647.us-east-1.elb.amazonaws.com
-ZONE_ID=Z09231282I798DJM5YYUW    # 上一步的输出
+ZONE_ID=<HOSTED_ZONE_ID>    # 上一步的输出
 
 for host in aws-global aws-cn; do
   aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
     \"Changes\": [{
       \"Action\": \"UPSERT\",
       \"ResourceRecordSet\": {
-        \"Name\": \"${host}.yingchu.cloud\",
+        \"Name\": \"${host}.example.cloud\",
         \"Type\": \"CNAME\",
         \"TTL\": 60,
         \"ResourceRecords\": [{\"Value\": \"$ALB\"}]
@@ -218,8 +218,8 @@ env:
   - { name: AWS_API_MCP_HOST,      value: "0.0.0.0" }
   - { name: AWS_API_MCP_PORT,      value: "8000" }
   - { name: AUTH_TYPE,             value: "no-auth" }
-  - { name: AWS_API_MCP_ALLOWED_HOSTS,   value: "aws-cn.yingchu.cloud" }    # 防 Host header 伪造
-  - { name: AWS_API_MCP_ALLOWED_ORIGINS, value: "aws-cn.yingchu.cloud" }
+  - { name: AWS_API_MCP_ALLOWED_HOSTS,   value: "aws-cn.example.cloud" }    # 防 Host header 伪造
+  - { name: AWS_API_MCP_ALLOWED_ORIGINS, value: "aws-cn.example.cloud" }
 
 readinessProbe:
   tcpSocket: { port: 8000 }    # MCP Server 没 /healthz 端点，用 TCP probe
@@ -229,7 +229,7 @@ readinessProbe:
 # Ingress
 annotations:
   alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
-  alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/74d2cea3-a33c-4841-920b-1d878a629c3a
+  alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/<CERT_ID>
 
   # ⚠️ ALB 健康检查配置（坑点之一）
   alb.ingress.kubernetes.io/healthcheck-path: "/mcp"
@@ -237,13 +237,13 @@ annotations:
                                                             # 没这行会被 ALB 判定不健康
 spec:
   rules:
-    - host: aws-global.yingchu.cloud    # host-based 路由
+    - host: aws-global.example.cloud    # host-based 路由
       http:
         paths:
           - path: /
             pathType: Prefix
             backend: { service: { name: aws-global, port: { number: 8000 } } }
-    - host: aws-cn.yingchu.cloud
+    - host: aws-cn.example.cloud
       http:
         paths:
           - path: /
@@ -272,7 +272,7 @@ done
 
 # 端到端握手测试（从集群内，用公共证书）
 kubectl -n mcp run curl-verify --rm -i --image=curlimages/curl --restart=Never -q -- sh -c '
-curl -sS -m 10 -X POST https://aws-cn.yingchu.cloud/mcp \
+curl -sS -m 10 -X POST https://aws-cn.example.cloud/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \
   -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"v\",\"version\":\"0\"}}}" \
@@ -296,12 +296,12 @@ Console → DevOps Agent → Capability Providers → Private connections → **
 | 字段 | 值 | 说明 |
 |---|---|---|
 | Name | `mcp-alb` | 随意 |
-| VPC | `vpc-033d9e9955afde81f` | EKS 所在 VPC |
+| VPC | `<VPC_ID>` | EKS 所在 VPC |
 | Subnets | 两个都选 | 每 AZ 一个 ENI，HA |
 | IP address type | IPv4 | |
-| Security groups | `sg-06a4ed260d90bd259` | ALB 的 SG（允许 443 入）|
+| Security groups | `<SG_ID>` | ALB 的 SG（允许 443 入）|
 | TCP port ranges | 留空 | 默认所有端口 |
-| **Host address** ⭐ | **ALB 的 AWS DNS 名**：`internal-k8s-mcp-mcp-*.us-east-1.elb.amazonaws.com` | **不能填 `yingchu.cloud` 的域名 —— 这个字段是给 Lattice 做 DNS 解析用的，必须公网可查**（AWS 的 ELB DNS 在公网查得到，返回私有 IP） |
+| **Host address** ⭐ | **ALB 的 AWS DNS 名**：`internal-k8s-mcp-mcp-*.us-east-1.elb.amazonaws.com` | **不能填 `example.cloud` 的域名 —— 这个字段是给 Lattice 做 DNS 解析用的，必须公网可查**（AWS 的 ELB DNS 在公网查得到，返回私有 IP） |
 | Certificate public key | 留空 | 因为用的是 ACM 公共证书，Lattice 默认信任 |
 
 点 Create → 状态 `Create in progress` → 等 ~10 分钟变 `Completed`。
@@ -315,7 +315,7 @@ Console → DevOps Agent → Capability Providers → MCP Server → **Register*
 | 字段 | 值 |
 |---|---|
 | Name | `aws-cn-mcp` |
-| Endpoint URL | `https://aws-cn.yingchu.cloud/mcp` |
+| Endpoint URL | `https://aws-cn.example.cloud/mcp` |
 | Enable Dynamic Client Registration | ❌ 不勾（没配 OAuth 发现端点）|
 | Connect to endpoint using a private connection | ✅ 勾 |
 | Use an existing private connection | 选刚才的 `mcp-alb` |
@@ -328,7 +328,7 @@ Console → DevOps Agent → Capability Providers → MCP Server → **Register*
 > - Host address（Private Connection）：给 **Lattice 解析 DNS** 用，必须公网可查
 > - Endpoint URL（MCP Server）：只用作 **HTTP `Host:` header 和 TLS SNI**，不做 DNS 解析。所以可以是私有 zone 里的域名
 
-再注册 `aws-global-mcp`，**复用同一条 `mcp-alb` Private Connection**，URL 改成 `https://aws-global.yingchu.cloud/mcp`。
+再注册 `aws-global-mcp`，**复用同一条 `mcp-alb` Private Connection**，URL 改成 `https://aws-global.example.cloud/mcp`。
 
 ### 6.3 在 Agent Space 里 Add MCP（⚠️ 别漏这步）
 
@@ -505,9 +505,9 @@ kubectl delete -f deploy/k8s-2svc.yaml
 cd terraform && terraform destroy
 
 # Route53 私有 zone
-aws route53 list-resource-record-sets --hosted-zone-id Z09231282I798DJM5YYUW
+aws route53 list-resource-record-sets --hosted-zone-id <HOSTED_ZONE_ID>
 # 先删所有非 NS/SOA 记录，然后：
-aws route53 delete-hosted-zone --id Z09231282I798DJM5YYUW
+aws route53 delete-hosted-zone --id <HOSTED_ZONE_ID>
 
 # ECR
 aws ecr delete-repository --region us-east-1 --repository-name aws-devops-agent-external-mcp --force

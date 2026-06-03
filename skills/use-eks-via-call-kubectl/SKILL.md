@@ -16,7 +16,7 @@ description: Use when any task involves inspecting EKS pod status, pod events,
 
 `use_kubectl` is a platform-level tool with a hardcoded account allowlist
 limited to the global (`aws`) partition. The cluster `bjs-web` lives in
-account `107422471498`, `cn-north-1` (`aws-cn` partition). Token-based EKS
+account `<CN_N_ACCOUNT_ID>`, `cn-north-1` (`aws-cn` partition). Token-based EKS
 authentication cannot cross partition boundaries.
 
 **Do not retry `use_kubectl` with any account ID. It will never work.**

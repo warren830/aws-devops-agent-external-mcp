@@ -110,7 +110,7 @@ kubectl -n mcp create secret generic gcp-sa-key --from-file=key.json=./gcp-sa-ke
 ```yaml
 # 推荐：自定义只读 ClusterRole，而非 system:masters
 mapUsers: |
-  - userarn: arn:aws-cn:iam::107422471498:user/<cn-mcp-user>
+  - userarn: arn:aws-cn:iam::<CN_N_ACCOUNT_ID>:user/<cn-mcp-user>
     username: cn-mcp-user
     groups:
       - mcp-readonly   # 绑定只有 get/list/watch 的 ClusterRole

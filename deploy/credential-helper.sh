@@ -27,6 +27,13 @@ set -euo pipefail
 : "${RA_REGION:?Required}"
 RA_EXTERNAL_ID="${RA_EXTERNAL_ID:-mcp-bridge}"
 
+# Recursion guard: when invoked as the SDK's credential_process, this script
+# inherits AWS_PROFILE/AWS_CONFIG_FILE from the MCP server. The inner `aws
+# sts assume-role` below would re-resolve that profile → re-invoke this script
+# → infinite loop. Unset them so the inner aws only sees the explicit Hub
+# credentials we export from aws_signing_helper.
+unset AWS_PROFILE AWS_CONFIG_FILE
+
 HUB_CREDS=$(aws_signing_helper credential-process \
   --certificate "$RA_CERT_PATH" \
   --private-key "$RA_KEY_PATH" \

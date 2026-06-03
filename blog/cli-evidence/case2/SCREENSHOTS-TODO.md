@@ -23,7 +23,7 @@
 
 ### ★ case-2-04-cloudwatch-p99.png — p99 曲线 OK→ALARM 跳变
 
-CloudWatch console (cn-north-1, profile ychchen-bjs1)
+CloudWatch console (cn-north-1, profile cn-n-profile)
 URL: https://console.amazonaws.cn/cloudwatch/home?region=cn-north-1#alarmsV2:alarm/bjs-web-p99-latency-high
 
 要看到：
@@ -41,7 +41,7 @@ URL: https://console.amazonaws.cn/cloudwatch/home?region=cn-north-1#alarmsV2:ala
 
 ```bash
 unset AWS_PROFILE AWS_REGION
-CTX="arn:aws:eks:us-east-1:034362076319:cluster/mcp-test"
+CTX="arn:aws:eks:us-east-1:<GLOBAL_ACCOUNT_ID>:cluster/mcp-test"
 
 # 漂亮的输出格式给观众看
 kubectl --context "$CTX" -n mcp logs deployment/mcp-aws-cn-2 --since=24h | \

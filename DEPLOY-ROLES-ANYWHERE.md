@@ -151,7 +151,13 @@ docker push <ECR_URL>:latest
 `Dockerfile.ra` 相对于原始 `Dockerfile` 额外包含：
 - `aws_signing_helper` — Roles Anywhere 官方 credential helper
 - `awscli` + `jq` — 用于 AssumeRole 和 JSON 解析
-- `credential-helper.sh` + `entrypoint-ra.sh` — 凭证获取和刷新逻辑
+- `credential-helper.sh` + `entrypoint-ra.sh` — 凭证获取逻辑
+
+**凭证刷新机制**：`entrypoint-ra.sh` 把 `credential-helper.sh` 注册为 AWS SDK 的
+`credential_process`（写入 `AWS_CONFIG_FILE`，`AWS_PROFILE=ra`）。botocore 在每次
+API 调用前检查缓存凭证的 `Expiration`，临近过期自动重新调用 helper —— 惰性刷新，
+无后台线程。`credential-helper.sh` 内部会 `unset AWS_PROFILE AWS_CONFIG_FILE` 防止
+`aws sts assume-role` 递归解析回同一 profile。
 
 ---
 
@@ -162,8 +168,8 @@ docker push <ECR_URL>:latest
 ```hcl
 # ===== 新增：Roles Anywhere 全局配置 =====
 roles_anywhere = {
-  cert_secret_arn  = "arn:aws:secretsmanager:us-east-1:034362076319:secret:/mcp/ra-cert-AbCdEf"
-  key_secret_arn   = "arn:aws:secretsmanager:us-east-1:034362076319:secret:/mcp/ra-key-GhIjKl"
+  cert_secret_arn  = "arn:aws:secretsmanager:us-east-1:<GLOBAL_ACCOUNT_ID>:secret:/mcp/ra-cert-XXXXXX"
+  key_secret_arn   = "arn:aws:secretsmanager:us-east-1:<GLOBAL_ACCOUNT_ID>:secret:/mcp/ra-key-XXXXXX"
   trust_anchor_arn = "arn:aws-cn:rolesanywhere:cn-northwest-1:HUB_ACCOUNT:trust-anchor/xxx"
   profile_arn      = "arn:aws-cn:rolesanywhere:cn-northwest-1:HUB_ACCOUNT:profile/yyy"
   hub_role_arn     = "arn:aws-cn:iam::HUB_ACCOUNT:role/mcp-roles-anywhere-hub"
@@ -173,7 +179,7 @@ roles_anywhere = {
 # ===== 修改：accounts 切换 auth_mode =====
 accounts = {
   aws-cn = {
-    host           = "aws-cn.yingchu.cloud"
+    host           = "aws-cn.example.cloud"
     aws_region     = "cn-northwest-1"
     auth_mode      = "roles_anywhere"            # 改这里
     spoke_role_arn = "arn:aws-cn:iam::SPOKE_A:role/mcp-spoke-readonly"
@@ -181,7 +187,7 @@ accounts = {
   }
 
   aws-cn-2 = {
-    host           = "aws-cn-2.yingchu.cloud"
+    host           = "aws-cn-2.example.cloud"
     aws_region     = "cn-north-1"
     auth_mode      = "roles_anywhere"            # 改这里
     spoke_role_arn = "arn:aws-cn:iam::SPOKE_B:role/mcp-spoke-readonly"
@@ -216,9 +222,11 @@ Terraform 会：
 aws ecs describe-services --cluster mcp --services mcp-aws-cn --region us-east-1 \
   --query 'services[0].{status:status,running:runningCount,desired:desiredCount}'
 
-# 2. 查看容器日志确认凭证获取成功
+# 2. 查看容器日志确认凭证链路就绪
 aws logs tail /ecs/mcp-aws-cn --region us-east-1 --since 5m | grep "entrypoint-ra"
-# 应该看到: [entrypoint-ra] Credentials acquired, expires: 2026-...
+# 应该看到:
+#   [entrypoint-ra] credential_process configured (profile=ra); SDK will fetch + auto-refresh.
+#   [entrypoint-ra] Initial credential fetch OK.
 
 # 3. 通过 Agent 验证端到端
 # 在 Operator Web App 里发: "查一下 aws-cn 的 VPC 列表"
@@ -304,4 +312,4 @@ accounts = {
 | `access denied` on AssumeRole | Spoke Role trust policy 不信任 Hub Role | 检查 Spoke CFN 的 `HubRoleArn` 参数 |
 | `invalid external id` | ExternalId 不匹配 | 确认 terraform.tfvars 里的 `external_id` 与 Spoke trust policy 一致（默认 `mcp-bridge`） |
 | `connect to endpoint failed` | ECS 容器无法访问中国区 endpoint | 确认 NAT Gateway 正常、安全组出站规则允许 443 |
-| 凭证 1 小时后过期 | 后台刷新未生效 | 查日志确认 refresh loop 在运行；考虑配置 ECS 每小时滚动更新 |
+| `RequestExpired`（运行 1 小时后） | 旧版用 env 注入 + 后台 refresh loop，但运行中进程的环境变量无法被修改，server 一直用首个 1h token | 已修复：改用 SDK 原生 `credential_process`（`entrypoint-ra.sh` 写 `AWS_CONFIG_FILE` + `credential_process=credential-helper.sh`），botocore 按 `Expiration` 惰性自动刷新。确保镜像是新版（含 `credential_process configured` 日志） |

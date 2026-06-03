@@ -79,8 +79,8 @@ aws secretsmanager create-secret \
 
 ```hcl
 roles_anywhere = {
-  cert_secret_arn  = "arn:aws:secretsmanager:us-east-1:034362076319:secret:/mcp/ra-cert-AbCdEf"
-  key_secret_arn   = "arn:aws:secretsmanager:us-east-1:034362076319:secret:/mcp/ra-key-GhIjKl"
+  cert_secret_arn  = "arn:aws:secretsmanager:us-east-1:<GLOBAL_ACCOUNT_ID>:secret:/mcp/ra-cert-XXXXXX"
+  key_secret_arn   = "arn:aws:secretsmanager:us-east-1:<GLOBAL_ACCOUNT_ID>:secret:/mcp/ra-key-XXXXXX"
   trust_anchor_arn = "arn:aws-cn:rolesanywhere:cn-northwest-1:111:trust-anchor/..."
   profile_arn      = "arn:aws-cn:rolesanywhere:cn-northwest-1:111:profile/..."
   hub_role_arn     = "arn:aws-cn:iam::111:role/mcp-roles-anywhere-hub"
@@ -89,7 +89,7 @@ roles_anywhere = {
 
 accounts = {
   aws-cn = {
-    host           = "aws-cn.yingchu.cloud"
+    host           = "aws-cn.example.cloud"
     aws_region     = "cn-northwest-1"
     auth_mode      = "roles_anywhere"
     spoke_role_arn = "arn:aws-cn:iam::111:role/mcp-spoke-readonly"

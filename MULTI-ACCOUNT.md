@@ -36,8 +36,8 @@
                             │
                             ▼
                    host-based routing:
-                   aws-global.yingchu.cloud → Service mcp-aws-global
-                   aws-cn.yingchu.cloud     → Service mcp-aws-cn
+                   aws-global.example.cloud → Service mcp-aws-global
+                   aws-cn.example.cloud     → Service mcp-aws-cn
 ```
 
 **关键：** IngressGroup annotation `alb.ingress.kubernetes.io/group.name: mcp` 让所有 account 的 Ingress 合并到一个 ALB。加账号时新建 Ingress 自动并入，**不会产生新 ALB，不需要动 DevOps Agent Private Connection**。
@@ -63,10 +63,10 @@ aws secretsmanager create-secret --region us-east-1 \
 ### 2. DNS
 ```bash
 ALB=internal-k8s-mcp-mcp-6334395754-126597647.us-east-1.elb.amazonaws.com
-ZONE_ID=Z09231282I798DJM5YYUW
+ZONE_ID=<HOSTED_ZONE_ID>
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
   \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
-    \"Name\":\"aws-cn-prod.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
+    \"Name\":\"aws-cn-prod.example.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
     \"ResourceRecords\":[{\"Value\":\"$ALB\"}]}}]}"
 ```
 
@@ -77,7 +77,7 @@ aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch
 account:
   name: aws-cn-prod
   awsRegion: cn-north-1
-  host: aws-cn-prod.yingchu.cloud
+  host: aws-cn-prod.example.cloud
   # Mode A
   existingSecret: mcp-creds
   secretKeys:
@@ -95,7 +95,7 @@ helm upgrade --install aws-cn-prod ./chart -f chart/values-aws-cn-prod.yaml --wa
 ### 5. DevOps Agent 注册
 - Console → Capability Providers → MCP Server → Register
 - Name: `aws-cn-prod-mcp`
-- Endpoint URL: `https://aws-cn-prod.yingchu.cloud/mcp`
+- Endpoint URL: `https://aws-cn-prod.example.cloud/mcp`
 - Private connection: **复用现有的 `mcp-alb`**
 - Agent Space → Capabilities → MCP Servers → Add → 勾选新的
 
@@ -234,11 +234,11 @@ NEW_ALB=$(kubectl -n mcp get ingress mcp-aws-global -o jsonpath='{.status.loadBa
 echo "NEW ALB: $NEW_ALB"
 
 # 5. 更新 Route53 CNAME（两个 host 都指向新 ALB）
-ZONE_ID=Z09231282I798DJM5YYUW
+ZONE_ID=<HOSTED_ZONE_ID>
 for host in aws-global aws-cn; do
   aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
     \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
-      \"Name\":\"${host}.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
+      \"Name\":\"${host}.example.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
       \"ResourceRecords\":[{\"Value\":\"$NEW_ALB\"}]}}]}"
 done
 

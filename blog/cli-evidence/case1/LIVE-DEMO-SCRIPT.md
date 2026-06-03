@@ -10,8 +10,8 @@
 | 标签页 | URL | 用途 |
 |---|---|---|
 | 1 | DevOps Agent Operator Web App → Agent Space `test-external` → Backlog tasks | agent 调查实时画面 |
-| 2 | Slack workspace `AWS` → channel `#test-devops-agent-ychchen` (`C0B39LP1TPZ`) | agent 自主投递通知 |
-| 3 | CloudWatch console（cn-north-1, profile ychchen-bjs1）→ Alarms → `bjs-web-pod-not-ready` | 告警状态翻转 |
+| 2 | Slack workspace `AWS` → channel `#test-devops-agent-<USER>` (`C0B39LP1TPZ`) | agent 自主投递通知 |
+| 3 | CloudWatch console（cn-north-1, profile cn-n-profile）→ Alarms → `bjs-web-pod-not-ready` | 告警状态翻转 |
 | 4 | 终端，已 `unset AWS_PROFILE AWS_REGION`，目录 `aws-devops-agent-external-mcp/` | 跑命令 |
 
 ## 5 步演示
@@ -106,7 +106,7 @@ kubectl --context bjs1 -n bjs-web rollout undo deployment/todo-api
 
 # 或者明确 set image:
 # kubectl --context bjs1 -n bjs-web set image deployment/todo-api \
-#     todo-api=107422471498.dkr.ecr.cn-north-1.amazonaws.com.cn/bjs-todo-api:v1.2.3
+#     todo-api=<CN_N_ACCOUNT_ID>.dkr.ecr.cn-north-1.amazonaws.com.cn/bjs-todo-api:v1.2.3
 
 # Post-validate（agent 第三阶段）
 kubectl --context bjs1 -n bjs-web rollout status deployment/todo-api
@@ -149,8 +149,8 @@ kubectl --context bjs1 -n bjs-web get pods
 ```bash
 # 0. 确认两个账号凭证有效
 unset AWS_PROFILE AWS_REGION
-aws --profile ychchen-bjs1 sts get-caller-identity
-aws --profile ychchen-china sts get-caller-identity
+aws --profile cn-n-profile sts get-caller-identity
+aws --profile cn-nw-profile sts get-caller-identity
 
 # 1. 确认 EKS 健康
 kubectl --context bjs1 -n bjs-web get pods
@@ -159,7 +159,7 @@ kubectl --context bjs1 -n bjs-web get pods
 kubectl --context bjs1 -n amazon-cloudwatch get pods
 
 # 3. 确认 alarm 在 OK 状态
-aws --profile ychchen-bjs1 cloudwatch describe-alarms \
+aws --profile cn-n-profile cloudwatch describe-alarms \
     --alarm-names bjs-web-pod-not-ready \
     --query 'MetricAlarms[0].StateValue' --output text
 # 期望: OK

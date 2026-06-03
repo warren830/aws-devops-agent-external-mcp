@@ -26,7 +26,7 @@ helm upgrade --install aliyun-prod ./chart-aliyun -f chart-aliyun/values-aliyun-
 ## 加一个新阿里云账号
 
 1. **凭证**：写进 K8s Secret 或 Secrets Manager（同 AWS chart 的流程）
-2. **DNS**：Route53 私有 zone 加 CNAME `<name>.yingchu.cloud → ALB`
+2. **DNS**：Route53 私有 zone 加 CNAME `<name>.example.cloud → ALB`
 3. **values 文件**：复制 `values-aliyun-prod.yaml`，改 4 个字段（`name / host / secretKeys` 或 `secretsManagerKey` / `aliyunEnv`）
 4. **部署**：`helm upgrade --install <name> ./chart-aliyun -f chart-aliyun/values-<name>.yaml --wait`
 5. **DevOps Agent 注册**：跟 AWS 一样，复用现有 `mcp-alb` Private Connection
@@ -36,7 +36,7 @@ helm upgrade --install aliyun-prod ./chart-aliyun -f chart-aliyun/values-aliyun-
 | 字段 | 必填 | 示例 | 说明 |
 |---|---|---|---|
 | `account.name` | ✅ | `aliyun-prod` | 资源命名前缀（`mcp-aliyun-prod`）|
-| `account.host` | ✅ | `aliyun-prod.yingchu.cloud` | Ingress host 匹配 |
+| `account.host` | ✅ | `aliyun-prod.example.cloud` | Ingress host 匹配 |
 | `account.existingSecret` | Mode A ✅ | `mcp-creds` | 复用的 K8s Secret 名 |
 | `account.secretKeys.ALIBABA_CLOUD_ACCESS_KEY_ID` | Mode A ✅ | `ALIYUN_PROD_AK` | Secret 里对应 key 名 |
 | `account.secretsManagerKey` | Mode B ✅ | `/mcp/aliyun-prod` | Secrets Manager key |

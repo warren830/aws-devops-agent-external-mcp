@@ -1,6 +1,6 @@
 # 中国区 AWS DevOps Agent 10 Case 设计文档
 
-> **目标**：在 `ychchen-bjs1`（北京 cn-north-1） + `ychchen-china`（宁夏 cn-northwest-1）两个真实账号上，
+> **目标**：在 `cn-n-profile`（北京 cn-north-1） + `cn-nw-profile`（宁夏 cn-northwest-1）两个真实账号上，
 > 部署一对**异构 demo 应用**（EKS web app + ECS Fargate data service），
 > 设计 10 个能展示 **AWS DevOps Agent 原生招牌能力 + 自定义 Skills/MCP 价值** 的端到端 case。
 >
@@ -19,7 +19,7 @@
 仓库 `aws-devops-agent-external-mcp` 已经实现：
 - us-east-1 EKS 上 2 副本 MCP server（aws-api-mcp-server，stateless mode）
 - VPC Lattice Private Connection（私网接入 DevOps Agent）
-- 内部 ALB + ACM 公共通配符证书 `*.yingchu.cloud`
+- 内部 ALB + ACM 公共通配符证书 `*.example.cloud`
 - 多账号 Helm chart（每个 AWS 账号一个 release：aws-cn / aws-cn-2）
 - 8 个自定义 Skills（1 foundation + 3 分析层 + 4 incident pipeline）
 
@@ -46,7 +46,7 @@
 
 两个账号部署完全不同的 stack——展示 agent 在异构架构下的处理能力。
 
-### 1.1 ychchen-bjs1（北京 cn-north-1）— EKS Web App Stack
+### 1.1 cn-n-profile（北京 cn-north-1）— EKS Web App Stack
 
 ```
                           ┌─────────────────────┐
@@ -76,7 +76,7 @@
 | CloudWatch Logs | 30 天保留 | ¥10 |
 | Webhook Bridge Lambda | 单函数 | ¥1 |
 
-### 1.2 ychchen-china（宁夏 cn-northwest-1）— ECS Fargate Data Service Stack
+### 1.2 cn-nw-profile（宁夏 cn-northwest-1）— ECS Fargate Data Service Stack
 
 ```
    EventBridge schedule (daily 0:00)
@@ -216,7 +216,7 @@ kubectl --context bjs1 -n bjs-web set image deployment/todo-api \
 # T-0:    部署完成
 # T+45s:  开始压一些 search 流量（用 hey）
 hey -z 5m -q 50 -m POST -d '{"email":"x@y.com"}' \
-  https://bjs-web.yingchu.cloud/api/users/search
+  https://bjs-web.example.cloud/api/users/search
 
 # T+3min: p99 alarm 触发
 ```
@@ -259,7 +259,7 @@ hey -z 5m -q 50 -m POST -d '{"email":"x@y.com"}' \
 **注入步骤**：
 ```bash
 # 1. 把 etl-state 切换到 provisioned billing mode，5 WCU
-aws --profile ychchen-china dynamodb update-table \
+aws --profile cn-nw-profile dynamodb update-table \
   --table-name etl-state --billing-mode PROVISIONED \
   --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 \
   --region cn-northwest-1
@@ -309,7 +309,7 @@ aws lambda invoke --function-name etl-trigger ...
 ```bash
 # 在 bjs1 注入: ALB 健康检查间隔从 30s 改成 240s（4 分钟）
 # 当 pod 不健康时，ALB 4 分钟才把它踢出去 → 长尾延迟
-aws --profile ychchen-bjs1 elbv2 modify-target-group \
+aws --profile cn-n-profile elbv2 modify-target-group \
   --target-group-arn ${BJS1_TG_ARN} \
   --health-check-interval-seconds 240 \
   --region cn-north-1
@@ -618,7 +618,7 @@ kubectl --context bjs1 -n bjs-web delete pod $(kubectl ... | head -1)
 
 | 风险 | 缓解方案 |
 |---|---|
-| 凭证过期 | 开始 demo 前先 `aws sso login --profile ychchen-bjs1` 等刷新 |
+| 凭证过期 | 开始 demo 前先 `aws sso login --profile cn-n-profile` 等刷新 |
 | Agent 不识别中国区资源 | 走我们已有的 us-east-1 EKS MCP bridge |
 | Webhook bridge Lambda 故障 | 部署阶段 dry-run 验证 |
 | Cost Explorer 数据延迟 | 至少提前 48h 部署基础设施 |

@@ -13,7 +13,7 @@ helm upgrade --install aws-cn     ./chart -f chart/values-aws-cn.yaml     --wait
 ## 加一个新账号
 
 1. **凭证**：把新 AK/SK 写进 K8s Secret `mcp-creds`（或开 ESO 后写进 Secrets Manager `/mcp/<name>`）
-2. **DNS**：Route53 私有 zone 加 CNAME `<name>.yingchu.cloud → ALB`
+2. **DNS**：Route53 私有 zone 加 CNAME `<name>.example.cloud → ALB`
 3. **values 文件**：复制 `chart/values-aws-cn.yaml`，改 4 个字段 —— `name / awsRegion / host / secretKeys` 或 `secretsManagerKey`
 4. **部署**：`helm upgrade --install <name> ./chart -f chart/values-<name>.yaml --wait`
 5. **注册**：DevOps Agent 控制台 Register MCP Server + Agent Space Add
@@ -24,7 +24,7 @@ helm upgrade --install aws-cn     ./chart -f chart/values-aws-cn.yaml     --wait
 |---|---|---|---|
 | `account.name` | ✅ | `aws-cn-prod` | 资源命名前缀 |
 | `account.awsRegion` | ✅ | `cn-north-1` | boto3 默认区域 |
-| `account.host` | ✅ | `aws-cn-prod.yingchu.cloud` | Ingress host 匹配值 + MCP 的 allowed-hosts |
+| `account.host` | ✅ | `aws-cn-prod.example.cloud` | Ingress host 匹配值 + MCP 的 allowed-hosts |
 | `account.existingSecret` | Mode A ✅ | `mcp-creds` | 复用的 K8s Secret 名 |
 | `account.secretKeys.AWS_ACCESS_KEY_ID` | Mode A ✅ | `AWS_CN_PROD_AK` | Secret 里对应 key 名 |
 | `account.secretsManagerKey` | Mode B ✅ | `/mcp/aws-cn-prod` | Secrets Manager key path |

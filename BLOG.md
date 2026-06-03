@@ -199,10 +199,10 @@ annotations:
 
 所有网络层调试都正常：
 
-- 集群内 curl `https://aws-cn.yingchu.cloud/mcp` 返回 200 + 正确 MCP initialize 响应，`cert_verify=0`（证书链完整）
+- 集群内 curl `https://aws-cn.example.cloud/mcp` 返回 200 + 正确 MCP initialize 响应，`cert_verify=0`（证书链完整）
 - ALB target group 全 healthy
 - VPC Lattice Resource Gateway 状态 ACTIVE
-- 证书切换成公共 ACM 证书 `*.yingchu.cloud`，免去自签信任问题
+- 证书切换成公共 ACM 证书 `*.example.cloud`，免去自签信任问题
 - Private Connection 名字正确、SG 正确、Subnet 正确
 
 但**只要一点 Register MCP Server，就立刻返回 ValidationException**：
@@ -228,7 +228,7 @@ annotations:
 | Private Connection 的 **Host address** | 给 Lattice 做 **DNS 解析**找目标 IP | **必须公网可查**（就算最终解析到私有 IP） |
 | MCP Server 的 **Endpoint URL** | 塞进 **Host header + TLS SNI** | 完全不做 DNS 解析，可以是私网 zone 里的名字 |
 
-我之前把 Host address 填成了 `aws-cn.yingchu.cloud` —— 这个名字在 Route53 **私有 zone** 里才能解析，公网查是 NXDOMAIN。Lattice 从公网 DNS 查不到，整条请求根本发不出去。
+我之前把 Host address 填成了 `aws-cn.example.cloud` —— 这个名字在 Route53 **私有 zone** 里才能解析，公网查是 NXDOMAIN。Lattice 从公网 DNS 查不到，整条请求根本发不出去。
 
 ### 修复
 
@@ -246,7 +246,7 @@ $ dig +short @8.8.8.8 internal-k8s-mcp-mcp-6334395754-126597647.us-east-1.elb.am
 10.42.7.200
 ```
 
-之后 Register MCP Server 时 Endpoint URL 填什么都行（`aws-cn.yingchu.cloud` 作为 Host header / SNI，ALB 靠它做 host-based routing）。
+之后 Register MCP Server 时 Endpoint URL 填什么都行（`aws-cn.example.cloud` 作为 Host header / SNI，ALB 靠它做 host-based routing）。
 
 ### 关键推论：**一条 Private Connection 能服务多个 MCP**
 

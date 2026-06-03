@@ -23,7 +23,7 @@
                           └─────────────────┘      │ routing       │   ├──→│ aws-cn-2 (Fargate/Pod)  │
                                                    └───────────────┘   │   └─────────────────────────┘
                                                           ↑            │   ┌─────────────────────────┐
-                                            ACM *.yingchu.cloud        └──→│ aliyun-prod (Fargate)   │
+                                            ACM *.example.cloud        └──→│ aliyun-prod (Fargate)   │
                                                                            └─────────────────────────┘
 ```
 
@@ -36,7 +36,7 @@
 | **原生 Streamable HTTP（不用 supergateway）** | 去掉协议桥，少一层故障面。supergateway stateless 模式还有 crash bug |
 | **`AWS_API_MCP_STATELESS_HTTP=true` + 2 副本** | MCP 默认 stateful session 在多副本时会 "Session not found"。开 stateless 让任意 pod 能处理任意请求 |
 | **Private Connection 的 Host address 填 ALB 的 AWS DNS 名** | 这个字段要**公网可解析**（Lattice 用它做 DNS lookup）。填私有域名会 NXDOMAIN |
-| **DNS split-horizon** | `yingchu.cloud` 公网在 Tencent DNSPod，私网在 Route53 私有 zone，各管各的 |
+| **DNS split-horizon** | `example.cloud` 公网在 Tencent DNSPod，私网在 Route53 私有 zone，各管各的 |
 
 ---
 
@@ -89,7 +89,7 @@
 │   ├── Dockerfile.ra            ← AWS MCP 镜像（Roles Anywhere 模式）
 │   ├── Dockerfile.aliyun        ← 阿里云 MCP 镜像
 │   ├── credential-helper.sh     ← cert → Hub 凭证 → AssumeRole → Spoke 凭证
-│   └── entrypoint-ra.sh         ← RA 容器启动器（证书写盘 + 凭证刷新）
+│   └── entrypoint-ra.sh         ← RA 容器启动器（证书写盘 + 注册 credential_process）
 ├── terraform-ecs/               ← ⭐ ECS Fargate 方案（推荐）
 │   ├── main.tf                  ← Provider
 │   ├── variables.tf             ← accounts map（auth_mode: ak_sk | roles_anywhere）
@@ -229,7 +229,7 @@ Agent Space → Capabilities → MCP Servers → Add
 | 要求 | 本方案如何满足 |
 |---|---|
 | Streamable HTTP transport | `AWS_API_MCP_TRANSPORT=streamable-http`（aws-api-mcp-server 原生支持）|
-| HTTPS endpoint | 内部 ALB + ACM 公共通配符证书 `*.yingchu.cloud` |
+| HTTPS endpoint | 内部 ALB + ACM 公共通配符证书 `*.example.cloud` |
 | 私网可达（无公网暴露）| Private Connection (VPC Lattice Resource Gateway) |
 | 支持 HA（多副本）| `AWS_API_MCP_STATELESS_HTTP=true` + replicas=2 |
 | 健康检查 | Ingress 加 `success-codes: "200,404,406"` 适配 MCP Server 对 GET 返 406 |
@@ -256,9 +256,10 @@ env:
 X.509 证书 → Roles Anywhere 临时凭证 → Hub AssumeRole → Spoke 临时凭证：
 
 ```
-容器启动 → 写证书到文件 → aws_signing_helper → Hub 临时凭证
-         → sts:AssumeRole → Spoke 临时凭证 → 注入环境变量
-         → 后台每 55 分钟自动刷新
+容器启动 → 写证书到文件 → 注册 credential_process（AWS_CONFIG_FILE）
+SDK 按需调用 credential-helper.sh：
+  aws_signing_helper → Hub 临时凭证 → sts:AssumeRole → Spoke 临时凭证
+botocore 读 Expiration，临近过期自动重新调用 helper（惰性刷新，无后台线程）
 ```
 
 - 无长期密钥，证书泄露可 CRL 秒级吊销

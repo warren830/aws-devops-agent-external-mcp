@@ -79,7 +79,7 @@ Two-level grouping: **urgency first, then account within urgency**.
 ## 🔴 IMMEDIATE (< 14 days)
 
 ### aws-cn (Ningxia)
-- [acm-expiry] Certificate `prod.yingchu.cloud` expires in 7 days (2026-05-18)
+- [acm-expiry] Certificate `prod.example.cloud` expires in 7 days (2026-05-18)
   → Trigger renewal; DNS validation CNAME already present
 
 ## 🟠 SOON (14–30 days)

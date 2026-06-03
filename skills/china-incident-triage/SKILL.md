@@ -60,7 +60,7 @@ From the signal, extract account attribution in this order (first match wins):
    account ID segment
 2. **Region in signal** — `cn-northwest-1` → aws-cn, `cn-north-1` → aws-cn-2
 3. **Resource tag** (if the signal includes tags like `Account=aws-cn`)
-4. **Host / endpoint hostname** — `aws-cn.yingchu.cloud` vs `aws-cn-2.yingchu.cloud`
+4. **Host / endpoint hostname** — `aws-cn.example.cloud` vs `aws-cn-2.example.cloud`
 5. **Ask the user** if none of the above resolves
 
 ### Step 2 — Classify the incident

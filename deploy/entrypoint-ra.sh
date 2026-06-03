@@ -1,9 +1,11 @@
 #!/bin/bash
 # entrypoint-ra.sh — Container entrypoint for Roles Anywhere auth mode.
 #
-# If RA_SPOKE_ROLE_ARN is set, uses credential-helper.sh to obtain
-# temporary credentials before starting the MCP server.
-# Otherwise falls back to ambient credentials (AK/SK from env/secrets).
+# Wires credential-helper.sh into the AWS SDK as a credential_process so the
+# SDK auto-refreshes spoke credentials on expiry (reads the "Expiration" field
+# and re-invokes the helper). No env-var injection, no manual refresh loop —
+# a running process can't have its env vars mutated, so the old approach left
+# the MCP server pinned to the first 1h token (→ RequestExpired after expiry).
 set -euo pipefail
 
 if [[ -n "${RA_SPOKE_ROLE_ARN:-}" ]]; then
@@ -16,27 +18,25 @@ if [[ -n "${RA_SPOKE_ROLE_ARN:-}" ]]; then
     unset RA_CERT_PEM RA_KEY_PEM
   fi
 
-  echo "[entrypoint-ra] Fetching credentials via Roles Anywhere..."
-  CREDS=$(/app/credential-helper.sh)
+  # Register credential-helper.sh as a credential_process. botocore invokes it
+  # on demand and re-invokes automatically when the cached creds near expiry.
+  export AWS_CONFIG_FILE=/app/certs/aws-config
+  export AWS_PROFILE=ra
+  cat > "$AWS_CONFIG_FILE" <<EOF
+[profile ra]
+credential_process = /app/credential-helper.sh
+EOF
 
-  export AWS_ACCESS_KEY_ID=$(echo "$CREDS" | jq -r '.AccessKeyId')
-  export AWS_SECRET_ACCESS_KEY=$(echo "$CREDS" | jq -r '.SecretAccessKey')
-  export AWS_SESSION_TOKEN=$(echo "$CREDS" | jq -r '.SessionToken')
+  echo "[entrypoint-ra] credential_process configured (profile=ra); SDK will fetch + auto-refresh."
 
-  EXPIRATION=$(echo "$CREDS" | jq -r '.Expiration')
-  echo "[entrypoint-ra] Credentials acquired, expires: $EXPIRATION"
-
-  # Start background refresh loop (renew 5 min before expiry)
-  (
-    while true; do
-      sleep 3300  # 55 minutes
-      echo "[entrypoint-ra] Refreshing credentials..."
-      NEW_CREDS=$(/app/credential-helper.sh 2>/dev/null) || continue
-      # Write refreshed creds to a shared file the SDK can pick up
-      echo "$NEW_CREDS" > /tmp/ra-credentials.json
-      echo "[entrypoint-ra] Credentials refreshed at $(date -u +%FT%TZ)"
-    done
-  ) &
+  # Fail fast: prove the helper works before starting the server.
+  if /app/credential-helper.sh > /dev/null 2>&1; then
+    echo "[entrypoint-ra] Initial credential fetch OK."
+  else
+    echo "[entrypoint-ra] FATAL: credential-helper.sh failed. Check cert/trust-anchor/spoke-role config." >&2
+    /app/credential-helper.sh || true   # re-run to surface the error in logs
+    exit 1
+  fi
 fi
 
 # Determine which server to start

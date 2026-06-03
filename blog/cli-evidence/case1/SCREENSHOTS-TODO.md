@@ -1,6 +1,6 @@
 # C1 截图清单（你去截）
 
-DevOps Agent 在 us-east-1，Account 034362076319 (`ychchen-demo-hub` profile)。
+DevOps Agent 在 us-east-1，Account <GLOBAL_ACCOUNT_ID> (`<USER>-demo-hub` profile)。
 Agent Space: `test-external` (id: a68c0cba-9a71-46f6-8228-88e8fc733990)
 
 ---
@@ -68,7 +68,7 @@ Slack workspace `AWS`, channel `C0B39LP1TPZ`（应该是 `#bjs-web-incidents` �
 
 ## 6. CloudWatch alarm 状态变化图
 
-URL：CloudWatch console (cn-north-1, profile ychchen-bjs1) → Alarms → `bjs-web-pod-not-ready`
+URL：CloudWatch console (cn-north-1, profile cn-n-profile) → Alarms → `bjs-web-pod-not-ready`
 
 要截：图表显示 OK → ALARM 跳变（最近 1 小时）
 

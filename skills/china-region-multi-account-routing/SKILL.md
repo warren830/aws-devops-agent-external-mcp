@@ -19,8 +19,8 @@ one cannot see resources in the other.
 
 | MCP endpoint host         | Account (logical) | Region           |
 |---------------------------|-------------------|------------------|
-| `aws-cn.yingchu.cloud`    | aws-cn            | `cn-northwest-1` |
-| `aws-cn-2.yingchu.cloud`  | aws-cn-2          | `cn-north-1`     |
+| `aws-cn.example.cloud`    | aws-cn            | `cn-northwest-1` |
+| `aws-cn-2.example.cloud`  | aws-cn-2          | `cn-north-1`     |
 
 Account IDs are intentionally not documented here. Users refer to accounts
 by the logical names `aws-cn` / `aws-cn-2` or by region; the agent picks

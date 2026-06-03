@@ -40,7 +40,7 @@ Created: 2026-05-14 07:46:07 UTC = 15:46:07 BJ
 
 ### 4. case-3-04-cloudwatch-throttle.png — DDB throttle 曲线
 
-CloudWatch console (cn-northwest-1, profile ychchen-china) → Alarms
+CloudWatch console (cn-northwest-1, profile cn-nw-profile) → Alarms
 → `dynamodb-etl-state-throttle`
 
 要看到 WriteThrottleEvents 曲线 + 告警状态翻转 这个就不要了吧
@@ -49,10 +49,10 @@ CloudWatch console (cn-northwest-1, profile ychchen-china) → Alarms
 
 ```bash
 unset AWS_PROFILE AWS_REGION
-CTX="arn:aws:eks:us-east-1:034362076319:cluster/mcp-test"
+CTX="arn:aws:eks:us-east-1:<GLOBAL_ACCOUNT_ID>:cluster/mcp-test"
 
 # 直接 cat 已生成的格式化文件给观众看
-cat /Users/ychchen/warren_ws/aws-devops-agent-external-mcp/blog/cli-evidence/case3/12-screenshot-ready-mcp-summary.txt
+cat ~/warren_ws/aws-devops-agent-external-mcp/blog/cli-evidence/case3/12-screenshot-ready-mcp-summary.txt
 ```
 
 预期输出：

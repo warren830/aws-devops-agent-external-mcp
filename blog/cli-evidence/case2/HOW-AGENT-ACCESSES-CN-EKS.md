@@ -73,7 +73,7 @@ C2 调查窗口（**05:20-05:35 UTC**）的 MCP server access log（保存在 `1
 `aws cloudtrail lookup-events` 的返回数据。
 
 这个跨账号 CloudTrail 查询走的是 MCP，
-访问的是 `arn:aws-cn:cloudtrail:cn-north-1:107422471498:trail/...`。
+访问的是 `arn:aws-cn:cloudtrail:cn-north-1:<CN_N_ACCOUNT_ID>:trail/...`。
 
 ### 6️⃣ 5 个 sub-agent 的实际工作分工（推断）
 

@@ -8,7 +8,7 @@
 
 ## 前置决策（已确认）
 
-- ✅ **保留** ACM 通配符证书 `*.yingchu.cloud`（ARN 在 CLAUDE.md 里）
+- ✅ **保留** ACM 通配符证书 `*.example.cloud`（ARN 在 CLAUDE.md 里）
 - ✅ **保留** ECR 仓库 `aws-devops-agent-external-mcp` 和 `mcp-aliyun`（如果有）
 - ✅ **直接 Mode B**（ESO + Secrets Manager）
 - ✅ **先跑通 aws-cn，再补 aws-global**（中国区是独立 partition，上次踩坑最多，优先验证这条链路；全球区确定性更高，作为第二批快速复制）
@@ -30,12 +30,12 @@
 | 类型 | 标识 |
 |---|---|
 | EKS Cluster | `mcp-test` |
-| VPC | `vpc-033d9e9955afde81f` |
+| VPC | `<VPC_ID>` |
 | ALB | `internal-k8s-mcp-mcp-6334395754-126597647.us-east-1.elb.amazonaws.com` |
-| Route53 私有 Zone | `yingchu.cloud` (Z09231282I798DJM5YYUW)，`mcp.internal` (Z0836957CF7T4CZOXX3K) |
+| Route53 私有 Zone | `example.cloud` (`<HOSTED_ZONE_ID>`)，`mcp.internal` (`<HOSTED_ZONE_ID_2>`) |
 | K8s namespace `mcp` | Deployments aws-global / aws-cn；Secret mcp-creds |
-| DevOps Agent | Private Connection `mcp-alb`（也许还有 `test-devops-agent`、`mcp-eks`、`mcp-yingchu` 等失败尝试的残留），2 个 MCP Server 注册 |
-| ACM 证书 | `*.yingchu.cloud`（**保留**），`*.mcp.internal` 自签（可删）|
+| DevOps Agent | Private Connection `mcp-alb`（也许还有 `test-devops-agent`、`mcp-eks`、`mcp-example` 等失败尝试的残留），2 个 MCP Server 注册 |
+| ACM 证书 | `*.example.cloud`（**保留**），`*.mcp.internal` 自签（可删）|
 
 ---
 
@@ -50,7 +50,7 @@
 1. **Agent Space** → Capabilities → MCP Servers → 找 `aws-cn-mcp` 和 `aws-global-mcp`（或你命名的）→ Remove / 取消勾选
 2. **Capability Providers** → MCP Server → 每个注册项都 Delete
 3. **Capability Providers** → Private connections → 逐个 Delete
-   - `mcp-alb` / `mcp-eks` / `mcp-yingchu` / `mcp-test-no-cert` / `test-devops-agent` 全删
+   - `mcp-alb` / `mcp-eks` / `mcp-example` / `mcp-test-no-cert` / `test-devops-agent` 全删
    - 每条 Private Connection deletion 约 2-5 分钟（等 VPC Lattice Resource Gateway 清理）
 
 ⚠️ **关键**：Private Connection 必须在 `terraform destroy` 之前删完！否则 VPC Lattice Resource Gateway 会卡住 VPC 删除流程。
@@ -59,7 +59,7 @@
 
 ```bash
 export AWS_PROFILE=default
-cd /Users/ychchen/warren_ws/aws-devops-agent-external-mcp
+cd ~/warren_ws/aws-devops-agent-external-mcp
 
 # 删 k8s 层资源（现有运行的是 k8s-2svc.yaml 版本）
 kubectl delete -f deploy/k8s-2svc.yaml
@@ -76,8 +76,8 @@ helm uninstall external-secrets -n external-secrets 2>/dev/null || echo "ESO not
 ### Step 1.3 Route53 私有 zone
 
 ```bash
-# yingchu.cloud 私有 zone：删所有非 NS/SOA 记录 → 再删 zone
-ZONE=Z09231282I798DJM5YYUW
+# example.cloud 私有 zone：删所有非 NS/SOA 记录 → 再删 zone
+ZONE=<HOSTED_ZONE_ID>
 aws route53 list-resource-record-sets --hosted-zone-id $ZONE \
   --query 'ResourceRecordSets[?Type!=`NS` && Type!=`SOA`]' > /tmp/records.json
 
@@ -92,7 +92,7 @@ aws route53 change-resource-record-sets --hosted-zone-id $ZONE --change-batch fi
 aws route53 delete-hosted-zone --id $ZONE
 
 # 同理 mcp.internal（如果还在）
-ZONE=Z0836957CF7T4CZOXX3K
+ZONE=<HOSTED_ZONE_ID_2>
 # 重复上面的过程
 ```
 
@@ -138,9 +138,9 @@ rm terraform.tfstate terraform.tfstate.backup
 ```bash
 # 老的自签证书（*.mcp.internal）
 aws acm delete-certificate --region us-east-1 \
-  --certificate-arn arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/fa6453c0-f48a-4b60-b31d-aa72ed596e0e 2>/dev/null || true
+  --certificate-arn arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/<CERT_ID> 2>/dev/null || true
 aws acm delete-certificate --region us-east-1 \
-  --certificate-arn arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/596d8627-7826-4c4f-b160-2c857688eea4 2>/dev/null || true
+  --certificate-arn arn:aws:acm:us-east-1:<ACCOUNT_ID>:certificate/<CERT_ID> 2>/dev/null || true
 ```
 
 ### Step 1.7 验证清场
@@ -152,7 +152,7 @@ aws eks list-clusters --region us-east-1
 aws ec2 describe-vpcs --region us-east-1 --filters "Name=tag:Name,Values=mcp-test" --query 'Vpcs[].VpcId' --output text
 # 期望：空
 
-aws route53 list-hosted-zones --query 'HostedZones[?contains(Name, `mcp.internal`) || contains(Name, `yingchu.cloud`) && Config.PrivateZone==`true`].Name' --output text
+aws route53 list-hosted-zones --query 'HostedZones[?contains(Name, `mcp.internal`) || contains(Name, `example.cloud`) && Config.PrivateZone==`true`].Name' --output text
 # 期望：空
 
 aws secretsmanager list-secrets --region us-east-1 --query 'SecretList[?starts_with(Name, `/mcp/`)].Name' --output text
@@ -279,7 +279,7 @@ aws secretsmanager get-secret-value --region us-east-1 --secret-id /mcp/aws-cn \
 VPC_ID=$(terraform -chdir=terraform output -raw vpc_id)
 
 ZONE_RESP=$(aws route53 create-hosted-zone \
-  --name yingchu.cloud \
+  --name example.cloud \
   --caller-reference "mcp-$(date +%s)" \
   --vpc VPCRegion=us-east-1,VPCId=$VPC_ID \
   --hosted-zone-config PrivateZone=true,Comment="MCP on EKS private zone")
@@ -335,7 +335,7 @@ dig +short @8.8.8.8 $ALB
 # 只加 aws-cn 的 CNAME（第一批）
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
   \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
-    \"Name\":\"aws-cn.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
+    \"Name\":\"aws-cn.example.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
     \"ResourceRecords\":[{\"Value\":\"$ALB\"}]}}]}"
 ```
 
@@ -354,7 +354,7 @@ done
 
 # 从 pod 里 curl aws-cn endpoint
 kubectl -n mcp run curl-verify --rm -i --image=curlimages/curl --restart=Never -q -- sh -c \
-'curl -sS -m 10 -X POST https://aws-cn.yingchu.cloud/mcp \
+'curl -sS -m 10 -X POST https://aws-cn.example.cloud/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \
   -d "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"v\",\"version\":\"0\"}}}" \
@@ -371,13 +371,13 @@ Console 手工：
    - VPC: 新 VPC ID（terraform output 里的）
    - Subnets: 两个 private subnet（terraform output 里的）
    - Security groups: ALB 的 SG（AWS Console 查新 ALB，或 `kubectl -n mcp get ingress mcp-aws-cn -o yaml | grep -A2 securityGroups`）
-   - **Host address**: `$ALB`（Step 2.8 那个值，ALB 的 AWS DNS 名，**不是 yingchu.cloud 域名**）
+   - **Host address**: `$ALB`（Step 2.8 那个值，ALB 的 AWS DNS 名，**不是 example.cloud 域名**）
    - **Certificate public key**: **留空**（ACM 公共证书，默认信任）
    - 点 Create，等 ~10 分钟 `Completed`
 
 2. **MCP Server → Register**（第一批只注册 aws-cn）：
    - Name: `aws-cn-mcp`
-   - Endpoint URL: `https://aws-cn.yingchu.cloud/mcp`
+   - Endpoint URL: `https://aws-cn.example.cloud/mcp`
    - Private connection: `mcp-alb`
    - Authorization: API Key + dummy 值
 
@@ -415,7 +415,7 @@ helm upgrade --install aws-global ./chart -f chart/values-aws-global.yaml --wait
 # 3. 加 Route53 CNAME
 aws route53 change-resource-record-sets --hosted-zone-id $ZONE_ID --change-batch "{
   \"Changes\":[{\"Action\":\"UPSERT\",\"ResourceRecordSet\":{
-    \"Name\":\"aws-global.yingchu.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
+    \"Name\":\"aws-global.example.cloud\",\"Type\":\"CNAME\",\"TTL\":60,
     \"ResourceRecords\":[{\"Value\":\"$ALB\"}]}}]}"
 
 # 4. pod 日志观察
@@ -423,7 +423,7 @@ kubectl -n mcp logs deploy/mcp-aws-global -f | grep -v "GET /mcp"
 ```
 
 DevOps Agent Console：
-- MCP Server → Register `aws-global-mcp` / URL `https://aws-global.yingchu.cloud/mcp` / **复用 `mcp-alb`**
+- MCP Server → Register `aws-global-mcp` / URL `https://aws-global.example.cloud/mcp` / **复用 `mcp-alb`**
 - Agent Space → Capabilities → MCP Servers → Add `aws-global-mcp`
 
 验证：
@@ -446,8 +446,8 @@ List EC2 instances in us-east-1
 | Step 2.3 ESO pod 起不来 | `kubectl -n external-secrets describe pod` 看 events，基本是 IRSA annotation 写错 |
 | Step 2.4 ClusterSecretStore not Valid | IAM policy 范围（在 `terraform/main.tf` 里确认 `/mcp/*`） |
 | Step 2.7 ExternalSecret 状态 ERROR | `kubectl -n mcp describe externalsecret mcp-aws-global` 看 events |
-| Step 2.8 CNAME 公网不可解析 | 别惊慌，是 ALB 的 AWS DNS 名（不是你的 yingchu 域），本来就公网可查。你查的是 `aws-cn.yingchu.cloud` 吗？这个只有**私网**能查 |
-| Step 2.10 DevOps Agent 注册 ValidationException | 100% 是 Host address 填错了 —— 要填 **ALB 的 AWS DNS 名**，不是 yingchu.cloud 域名。参考 BLOG.md 坑 #5 |
+| Step 2.8 CNAME 公网不可解析 | 别惊慌，是 ALB 的 AWS DNS 名（不是你的 example 域），本来就公网可查。你查的是 `aws-cn.example.cloud` 吗？这个只有**私网**能查 |
+| Step 2.10 DevOps Agent 注册 ValidationException | 100% 是 Host address 填错了 —— 要填 **ALB 的 AWS DNS 名**，不是 example.cloud 域名。参考 BLOG.md 坑 #5 |
 
 终极回滚：已经走到 2.x 但想放弃 → 整个 `helm uninstall aws-global aws-cn external-secrets aws-load-balancer-controller` + `terraform destroy` 回到 Part 1 的起点。
 
