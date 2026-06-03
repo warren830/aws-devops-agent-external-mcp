@@ -71,8 +71,8 @@ skills/deploy-mcp-bridge/SKILL.md
 ```
 
 同时把以下文件作为命令参考（按需读取，不要一次全读）：
-- `DEPLOY-RA-RECORD.md` — 完整真实部署日志，精确命令
-- `DEPLOY-ROLES-ANYWHERE.md` — Roles Anywhere 步骤指南 + Troubleshooting 表
+- `docs/deploy/DEPLOY-RA-RECORD.md` — 完整真实部署日志，精确命令
+- `docs/deploy/DEPLOY-ROLES-ANYWHERE.md` — Roles Anywhere 步骤指南 + Troubleshooting 表
 - `terraform-ecs/terraform.tfvars.example` — tfvars 配置模板
 
 ---

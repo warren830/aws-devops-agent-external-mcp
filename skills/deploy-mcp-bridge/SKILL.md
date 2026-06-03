@@ -76,7 +76,7 @@ Ask the user (or detect) and record:
 
 ## Deployment phases
 
-Follow `DEPLOY-RA-RECORD.md` and `DEPLOY-ROLES-ANYWHERE.md` for exact commands.
+Follow `docs/deploy/DEPLOY-RA-RECORD.md` and `docs/deploy/DEPLOY-ROLES-ANYWHERE.md` for exact commands.
 This skill is the decision spine; those docs are the command reference.
 
 ### Phase 0 — Decide auth mode & topology
@@ -169,9 +169,9 @@ This skill is the decision spine; those docs are the command reference.
 
 ## Reference files in this repo
 
-- `DEPLOY-RA-RECORD.md` — full real deployment log with exact commands
-- `DEPLOY-ROLES-ANYWHERE.md` — Roles Anywhere deployment guide + troubleshooting
-- `REBUILD.md` — teardown + rebuild runbook
+- `docs/deploy/DEPLOY-RA-RECORD.md` — full real deployment log with exact commands
+- `docs/deploy/DEPLOY-ROLES-ANYWHERE.md` — Roles Anywhere deployment guide + troubleshooting
+- `docs/deploy/REBUILD.md` — teardown + rebuild runbook
 - `cfn/` — `generate-certs.sh`, `roles-anywhere-hub.yaml`, `roles-anywhere-spoke.yaml`
 - `terraform-ecs/` — ECS Fargate IaC (auth_mode-driven)
 - `deploy/Dockerfile.ra`, `entrypoint-ra.sh`, `credential-helper.sh`

@@ -117,7 +117,7 @@ module "lb_controller_irsa" {
 #     eks.amazonaws.com/role-arn=$(terraform output -raw eso_irsa_role_arn)
 #   kubectl -n external-secrets rollout restart deploy external-secrets
 #
-# See MULTI-ACCOUNT.md "Phase 2" section for full runbook.
+# See docs/legacy-eks/MULTI-ACCOUNT.md "Phase 2" section for full runbook.
 # -----------------------------------------------------------------------------
 resource "aws_iam_policy" "eso_secrets" {
   name = "${local.name}-eso-secrets"

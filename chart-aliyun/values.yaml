@@ -16,7 +16,7 @@ image:
 
 # ⚠️ alibaba-cloud-ops-mcp-server doesn't expose a stateless HTTP switch (as of
 # 0.9.27). Keep replicas=1 until upstream support lands, otherwise multi-replica
-# triggers "Session not found" like the AWS case did. See BLOG.md pitfall #6.
+# triggers "Session not found" like the AWS case did. See docs/blog/BLOG.md pitfall #6.
 replicaCount: 1
 
 resources:

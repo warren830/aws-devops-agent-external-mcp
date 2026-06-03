@@ -3,7 +3,7 @@
 # awslabs.aws-api-mcp-server's fastmcp range.
 #
 # Base image uses AWS public ECR mirror of Docker Hub (国内网络更稳定, see
-# BLOG.md pitfall #2).
+# docs/blog/BLOG.md pitfall #2).
 
 FROM public.ecr.aws/docker/library/python:3.12-slim
 

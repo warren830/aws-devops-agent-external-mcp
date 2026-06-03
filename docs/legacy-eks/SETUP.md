@@ -1,8 +1,12 @@
 # AWS DevOps Agent × 私网 MCP Server 完整配置指南
 
+> ⚠️ **旧版 EKS 方案** —— 本文档描述基于 EKS 的部署，保留供已有 EKS 集群的团队参考。
+> **新部署强烈推荐 ECS Fargate + IAM Roles Anywhere**：一个 `terraform apply` 即可，无需 K8s、无需长期 AK/SK。
+> 见 [docs/deploy/DEPLOY-ROLES-ANYWHERE.md](../deploy/DEPLOY-ROLES-ANYWHERE.md) 与根目录 [README 快速开始](../../README.md#快速开始)。
+
 > 实战记录 —— 从零把 AWS DevOps Agent 接到部署在 EKS 上的自建 MCP Server，覆盖架构、部署、排错。
 >
-> 本文档是**工程参考**，侧重"每一步做什么、填什么值、报错怎么处理"。想看故事版请读 [BLOG.md](./BLOG.md)。
+> 本文档是**工程参考**，侧重"每一步做什么、填什么值、报错怎么处理"。想看故事版请读 [BLOG.md](../blog/BLOG.md)。
 
 ---
 
@@ -306,7 +310,7 @@ Console → DevOps Agent → Capability Providers → Private connections → **
 
 点 Create → 状态 `Create in progress` → 等 ~10 分钟变 `Completed`。
 
-> **⚠️ 最大的坑就在 Host address**。血泪教训详见 [BLOG.md 第 5 节](./BLOG.md#坑5)。
+> **⚠️ 最大的坑就在 Host address**。血泪教训详见 [BLOG.md 第 5 节](../blog/BLOG.md)。
 
 ### 6.2 注册 MCP Server
 

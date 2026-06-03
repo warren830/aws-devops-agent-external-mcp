@@ -4,12 +4,13 @@
 
 **零业务代码** —— 所有 MCP Server 用官方包（`awslabs.aws-api-mcp-server`、`alibaba-cloud-ops-mcp-server` 等），本项目只做容器化、编排、AWS 网络接线。
 
-> 🚀 **ECS Fargate 方案（推荐）**：一个 `terraform apply` 搞定全部，无需 K8s → [blog/04-ecs-fargate-lightweight.md](./blog/04-ecs-fargate-lightweight.md)
-> 🔐 **IAM Roles Anywhere（企业级）**：消灭 AK/SK，证书 + 临时凭证 + Hub-Spoke 多账号 → [DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md)
-> 📖 **EKS 方案完整部署步骤**：[SETUP.md](./SETUP.md)
-> 🐛 **踩坑故事版博客（7 个层面的故障定位）**：[BLOG.md](./BLOG.md)
-> 🏗️ **多账号扩展运维指南**（Helm chart + ESO）：[MULTI-ACCOUNT.md](./MULTI-ACCOUNT.md)
-> 🔥 **从零重建 runbook**（destroy 现有 + 按最新代码 Mode B 重部）：[REBUILD.md](./REBUILD.md)
+> 🚀 **ECS Fargate 方案（推荐）**：一个 `terraform apply` 搞定全部，无需 K8s（见下方快速开始）
+> 🔐 **IAM Roles Anywhere（企业级）**：消灭 AK/SK，证书 + 临时凭证 + Hub-Spoke 多账号 → [docs/deploy/DEPLOY-ROLES-ANYWHERE.md](./docs/deploy/DEPLOY-ROLES-ANYWHERE.md)
+> 📖 **EKS 方案完整部署步骤**：[docs/legacy-eks/SETUP.md](./docs/legacy-eks/SETUP.md)
+> 🐛 **踩坑故事版博客（7 个层面的故障定位）**：[docs/blog/BLOG.md](./docs/blog/BLOG.md)
+> 🏗️ **多账号扩展运维指南**（Helm chart + ESO）：[docs/legacy-eks/MULTI-ACCOUNT.md](./docs/legacy-eks/MULTI-ACCOUNT.md)
+> 🔥 **从零重建 runbook**（destroy 现有 + 按最新代码 Mode B 重部）：[docs/deploy/REBUILD.md](./docs/deploy/REBUILD.md)
+> 📚 **完整文档索引** → [docs/README.md](./docs/README.md)
 
 ---
 
@@ -52,7 +53,7 @@
 | 凭证管理 | Secrets Manager 直读（原生） | ESO + IRSA + ClusterSecretStore |
 | 适合 | 大多数场景、没有 K8s 的团队 | 已有 EKS、需要跑十几个微服务的场景 |
 | 目录 | `terraform-ecs/` | `terraform/` + `chart/` + `chart-aliyun/` |
-| 博客 | [04-ecs-fargate-lightweight.md](./blog/04-ecs-fargate-lightweight.md) | [01](./blog/01-single-account-bridge.md) / [02](./blog/02-multi-account-extension.md) / [03](./blog/03-skills-in-action.md) |
+| 博客 | 04 - ECS Fargate 轻量化 | 01 单账号 / 02 多账号 / 03 Skills 实战 |
 
 ### 认证模式
 
@@ -63,7 +64,7 @@
 | 多账号凭证数 | N 对 AK/SK | 1 张证书（Hub AssumeRole 扇出） |
 | 加账号 | 创建 IAM User + 存 AK/SK | 部署 Spoke CFN（1 个 Role） |
 | 适合 | 快速验证、开发环境 | 生产、合规要求高的企业 |
-| 配置指南 | 下方快速开始 | [DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md) |
+| 配置指南 | 下方快速开始 | [docs/deploy/DEPLOY-ROLES-ANYWHERE.md](./docs/deploy/DEPLOY-ROLES-ANYWHERE.md) |
 
 两种认证模式可以**在同一个 `accounts` map 里混用**（`auth_mode` 字段切换）。
 
@@ -74,11 +75,17 @@
 ```
 .
 ├── README.md                    ← 你在这
-├── DEPLOY-ROLES-ANYWHERE.md     ← 🔐 IAM Roles Anywhere 部署指南
-├── SETUP.md                     ← EKS 方案完整配置指南
-├── BLOG.md                      ← 故事版踩坑博客
-├── MULTI-ACCOUNT.md             ← EKS 多账号扩展运维
-├── blog/                        ← 系列博客（01-05）
+├── docs/                        ← 📚 文档（见 docs/README.md 索引）
+│   ├── README.md                ← 文档索引
+│   ├── deploy/                  ← 🔐 当前推荐部署文档
+│   │   ├── DEPLOY-ROLES-ANYWHERE.md  ← IAM Roles Anywhere 部署指南
+│   │   ├── DEPLOY-RA-RECORD.md       ← 真实部署日志（精确命令）
+│   │   └── REBUILD.md                ← 从零重建 runbook
+│   ├── legacy-eks/              ← ⚠️ 旧版 EKS 方案（推荐改用 ECS）
+│   │   ├── SETUP.md                  ← EKS 方案完整配置指南
+│   │   └── MULTI-ACCOUNT.md          ← EKS 多账号扩展运维（Helm + ESO）
+│   └── blog/
+│       └── BLOG.md                   ← 7 层故障面故事版踩坑博客
 ├── docker-compose.yml           ← 本地冒烟测试
 ├── cfn/                         ← 🔐 IAM Roles Anywhere CloudFormation
 │   ├── roles-anywhere-hub.yaml  ← Hub 账号（Trust Anchor + Profile + Hub Role）
@@ -173,11 +180,11 @@ aws ecs update-service --cluster mcp --service mcp-aws-cn --force-new-deployment
 
 > 后续加账号 = 在 `terraform.tfvars` 加一个 entry + `terraform apply`，不需要再推镜像。
 
-详见 [blog/04-ecs-fargate-lightweight.md](./blog/04-ecs-fargate-lightweight.md)。
+详见下方快速开始与 [docs/deploy/DEPLOY-ROLES-ANYWHERE.md](./docs/deploy/DEPLOY-ROLES-ANYWHERE.md)。
 
 ### 2️⃣-B 部署到 AWS — EKS 方案
 
-适合已有 EKS 集群的团队。详见 [SETUP.md](./SETUP.md)。
+适合已有 EKS 集群的团队。详见 [docs/legacy-eks/SETUP.md](./docs/legacy-eks/SETUP.md)。
 
 ```bash
 cd terraform && terraform apply
@@ -264,7 +271,7 @@ botocore 读 Expiration，临近过期自动重新调用 helper（惰性刷新�
 
 - 无长期密钥，证书泄露可 CRL 秒级吊销
 - 一张证书管所有账号（Hub-Spoke 扇出）
-- 详细配置步骤：**[DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md)**
+- 详细配置步骤：**[docs/deploy/DEPLOY-ROLES-ANYWHERE.md](./docs/deploy/DEPLOY-ROLES-ANYWHERE.md)**
 
 ---
 
@@ -301,12 +308,10 @@ kubectl -n mcp rollout restart deploy/mcp-aws-cn
 
 ## 进一步阅读
 
-- **[DEPLOY-ROLES-ANYWHERE.md](./DEPLOY-ROLES-ANYWHERE.md)** —— 🔐 IAM Roles Anywhere 零密钥认证部署指南
-- **[blog/04 - ECS Fargate 轻量化方案](./blog/04-ecs-fargate-lightweight.md)** —— 推荐的部署方式，含完整配置指南
-- **[blog/01 - 单账号桥接](./blog/01-single-account-bridge.md)** —— 为什么要建桥 + EKS 单账号
-- **[blog/02 - 多账号扩展](./blog/02-multi-account-extension.md)** —— EKS 多账号 + 跨云 + 凭证轮换
-- **[blog/03 - Skills 实战](./blog/03-skills-in-action.md)** —— 8 个 Skill 让 Agent 理解多账号场景
-- **[blog/05 - Roles Anywhere 零密钥](./blog/05-roles-anywhere-zero-aksk.md)** —— 消灭 AK/SK 的完整方案
-- **[SETUP.md](./SETUP.md)** —— EKS 方案从零到运行的完整步骤
-- **[BLOG.md](./BLOG.md)** —— 7 个大坑的故事版排查
+- **[docs/deploy/DEPLOY-ROLES-ANYWHERE.md](./docs/deploy/DEPLOY-ROLES-ANYWHERE.md)** —— 🔐 IAM Roles Anywhere 零密钥认证部署指南
+- **[docs/deploy/DEPLOY-RA-RECORD.md](./docs/deploy/DEPLOY-RA-RECORD.md)** —— 真实部署日志（含精确命令，可复制执行）
+- **[docs/deploy/REBUILD.md](./docs/deploy/REBUILD.md)** —— 销毁现有资源 + 按最新代码重建的 runbook
+- **[docs/legacy-eks/SETUP.md](./docs/legacy-eks/SETUP.md)** —— ⚠️ 旧版 EKS 方案从零到运行的完整步骤
+- **[docs/legacy-eks/MULTI-ACCOUNT.md](./docs/legacy-eks/MULTI-ACCOUNT.md)** —— ⚠️ 旧版 EKS 多账号扩展运维
+- **[docs/blog/BLOG.md](./docs/blog/BLOG.md)** —— 7 个大坑的故事版排查
 - **[MCP 协议规范](https://modelcontextprotocol.io)**

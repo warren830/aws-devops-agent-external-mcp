@@ -4,7 +4,7 @@
 
 ## 前置条件
 
-- ECS Fargate 方案已部署（[README 快速开始](./README.md#快速开始)）
+- ECS Fargate 方案已部署（[README 快速开始](../../README.md#快速开始)）
 - 至少一个中国区 AWS 账号
 - 本地已安装 `openssl`、`aws` CLI
 

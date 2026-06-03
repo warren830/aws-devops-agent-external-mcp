@@ -396,4 +396,4 @@ Agent Space → 选你的 agent → Capabilities → MCP Servers → Add → 勾
 - 官方 blog：[Securely connect AWS DevOps Agent to private services in your VPCs](https://aws.amazon.com/blogs/devops/securely-connect-aws-devops-agent-to-private-services-in-your-vpcs/) —— 如果开始做之前读了这篇，能省 3 个坑
 - MCP 协议：[Model Context Protocol spec](https://modelcontextprotocol.io)
 - FastMCP：[gofastmcp.com](https://gofastmcp.com) —— Python MCP Server 主流框架
-- 完整配置参考：本仓库 [SETUP.md](./SETUP.md)
+- 完整配置参考：本仓库 [SETUP.md](../legacy-eks/SETUP.md)

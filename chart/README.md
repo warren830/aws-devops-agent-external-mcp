@@ -34,7 +34,7 @@ helm upgrade --install aws-cn     ./chart -f chart/values-aws-cn.yaml     --wait
 ## Mode A vs Mode B
 
 - **Mode A**（`externalSecrets.enabled=false`，默认）：你手动管 K8s Secret。简单，适合起步。
-- **Mode B**（`externalSecrets.enabled=true`）：Chart 渲染 ExternalSecret，ESO 从 Secrets Manager 同步。需要先装 ESO + 配 ClusterSecretStore。详见 [../SETUP.md](../SETUP.md) "ESO" 章节。
+- **Mode B**（`externalSecrets.enabled=true`）：Chart 渲染 ExternalSecret，ESO 从 Secrets Manager 同步。需要先装 ESO + 配 ClusterSecretStore。详见 [../docs/legacy-eks/SETUP.md](../docs/legacy-eks/SETUP.md) "ESO" 章节。
 
 ## 验证
 

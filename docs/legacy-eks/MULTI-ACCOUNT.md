@@ -1,11 +1,15 @@
 # 多账号运维指南
 
+> ⚠️ **旧版 EKS 方案** —— 本文的多账号运维基于 EKS + Helm + External Secrets Operator。
+> **新部署推荐 ECS Fargate + IAM Roles Anywhere**：加账号只需改 `terraform.tfvars` 加一个 entry 再 `terraform apply`，无需 Helm/ESO。
+> 见 [docs/deploy/DEPLOY-ROLES-ANYWHERE.md](../deploy/DEPLOY-ROLES-ANYWHERE.md)。
+
 本文档描述**如何在这个项目里管理多个 AWS / 阿里云账号**。分两部分：
 
 - **Phase 1（现在可用）**：Helm chart 模板化，每账号一个 release。加账号成本从 ~70 行改动降到 "1 个 values 文件 + 1 条 DNS + 1 个 secret key"。
 - **Phase 2（按需启用）**：External Secrets Operator 对接 AWS Secrets Manager，集中管理 + 自动轮换凭证。
 
-架构设计为什么是这样、为什么不是"一个 pod 多账号"、为什么不用 AssumeRole chain —— 参考 [BLOG.md](./BLOG.md) 的"多账号演进思考"章节（TODO）或直接看下面的 FAQ。
+架构设计为什么是这样、为什么不是"一个 pod 多账号"、为什么不用 AssumeRole chain —— 参考 [BLOG.md](../blog/BLOG.md) 的"多账号演进思考"章节（TODO）或直接看下面的 FAQ。
 
 ---
 
@@ -304,7 +308,7 @@ docker push $ECR:latest
 helm upgrade --install aliyun-prod ./chart-aliyun -f chart-aliyun/values-aliyun-prod.yaml --wait
 ```
 
-详见 [chart-aliyun/README.md](./chart-aliyun/README.md)。
+详见 [chart-aliyun/README.md](../../chart-aliyun/README.md)。
 
 **关键差异**（为什么分家）：
 - 底层包不同（`alibaba-cloud-ops-mcp-server` vs `awslabs.aws-api-mcp-server`），`fastmcp` 版本冲突
@@ -324,13 +328,13 @@ externalSecrets:
 
 ### 新账号加完了 DevOps Agent 那边忘了 Add 会怎样？
 
-参考 [BLOG.md 坑 7](./BLOG.md) —— Agent 会 fallback 到内置 `use_aws` 工具，用控制台登录态凭证调用，pod 日志里完全看不到流量。现象隐蔽但可以通过 `kubectl logs` 有没有 `POST /mcp 200` 来判断是否真的用上你的 MCP。
+参考 [BLOG.md 坑 7](../blog/BLOG.md) —— Agent 会 fallback 到内置 `use_aws` 工具，用控制台登录态凭证调用，pod 日志里完全看不到流量。现象隐蔽但可以通过 `kubectl logs` 有没有 `POST /mcp 200` 来判断是否真的用上你的 MCP。
 
 ---
 
 ## 相关文档
 
-- [README.md](./README.md) —— 项目总览
+- [README.md](../../README.md) —— 项目总览
 - [SETUP.md](./SETUP.md) —— 从零部署步骤
-- [BLOG.md](./BLOG.md) —— 踩坑记录
-- [chart/README.md](./chart/README.md) —— Helm chart 用法
+- [BLOG.md](../blog/BLOG.md) —— 踩坑记录
+- [chart/README.md](../../chart/README.md) —— Helm chart 用法
