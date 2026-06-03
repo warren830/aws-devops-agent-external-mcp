@@ -43,8 +43,9 @@ gcp-sa-key.json
 blog/
 aws-docs/
 
-# Claude Code local settings
-.claude/
+# Claude Code local settings (ignore personal config, but share team agents)
+.claude/*
+!.claude/agents/
 
 # PPT / presentation projects
 projects/
