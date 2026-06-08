@@ -16,7 +16,14 @@ spec:
         - name: mcp
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if eq .Values.auth.mode "roles_anywhere" }}
+          # entrypoint-ra.sh registers credential-helper.sh as the SDK's
+          # credential_process (cert → Hub creds → AssumeRole → spoke creds),
+          # then exec's the MCP server. Overriding command here would bypass it.
+          command: ["/app/entrypoint-ra.sh"]
+          {{- else }}
           command: {{ .Values.mcpServer.command | toJson }}
+          {{- end }}
           env:
             - name: AWS_API_MCP_TRANSPORT
               value: streamable-http
@@ -32,8 +39,30 @@ spec:
               value: {{ .Values.account.host | quote }}
             - name: AWS_API_MCP_ALLOWED_ORIGINS
               value: {{ .Values.account.host | quote }}
+            # SPOKE region — where the MCP Server actually calls AWS APIs.
             - name: AWS_DEFAULT_REGION
               value: {{ .Values.account.awsRegion | quote }}
+            {{- if eq .Values.auth.mode "roles_anywhere" }}
+            # ---- Roles Anywhere: no long-lived keys; cert mounted as a volume ----
+            - name: RA_TRUST_ANCHOR_ARN
+              value: {{ required "rolesAnywhere.trustAnchorArn required when auth.mode=roles_anywhere" .Values.rolesAnywhere.trustAnchorArn | quote }}
+            - name: RA_PROFILE_ARN
+              value: {{ required "rolesAnywhere.profileArn required" .Values.rolesAnywhere.profileArn | quote }}
+            - name: RA_HUB_ROLE_ARN
+              value: {{ required "rolesAnywhere.hubRoleArn required" .Values.rolesAnywhere.hubRoleArn | quote }}
+            - name: RA_SPOKE_ROLE_ARN
+              value: {{ required "rolesAnywhere.spokeRoleArn required" .Values.rolesAnywhere.spokeRoleArn | quote }}
+            # HUB region — Roles Anywhere endpoint + AssumeRole call.
+            - name: RA_REGION
+              value: {{ required "rolesAnywhere.region required" .Values.rolesAnywhere.region | quote }}
+            - name: RA_EXTERNAL_ID
+              value: {{ .Values.rolesAnywhere.externalId | quote }}
+            - name: RA_CERT_PATH
+              value: {{ printf "%s/client.crt" .Values.rolesAnywhere.certMountPath | quote }}
+            - name: RA_KEY_PATH
+              value: {{ printf "%s/client.key" .Values.rolesAnywhere.certMountPath | quote }}
+            {{- else }}
+            # ---- AK/SK: long-lived credentials from a K8s Secret ----
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -44,11 +73,21 @@ spec:
                 secretKeyRef:
                   name: {{ include "mcp.secretName" . }}
                   key: {{ include "mcp.skSecretKey" . }}
+            {{- end }}
             {{- with .Values.account.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           ports:
             - containerPort: {{ .Values.mcpServer.port }}
+          {{- if eq .Values.auth.mode "roles_anywhere" }}
+          volumeMounts:
+            # ESO syncs the cert bundle into a Secret whose keys (client.crt,
+            # client.key) surface here as files — exactly what RA_CERT_PATH /
+            # RA_KEY_PATH point at. Cert never touches an env var.
+            - name: ra-certs
+              mountPath: {{ .Values.rolesAnywhere.certMountPath | quote }}
+              readOnly: true
+          {{- end }}
           readinessProbe:
             tcpSocket:
               port: {{ .Values.mcpServer.port }}
@@ -56,3 +95,13 @@ spec:
             periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if eq .Values.auth.mode "roles_anywhere" }}
+      volumes:
+        - name: ra-certs
+          secret:
+            secretName: {{ include "mcp.fullname" . }}-ra-certs
+            # 0444: readable by the non-root `app` user. Secret volumes are
+            # in-memory (tmpfs) and pod-scoped, so world-readable here is fine;
+            # aws_signing_helper does not enforce strict key-file permissions.
+            defaultMode: 0444
+      {{- end }}

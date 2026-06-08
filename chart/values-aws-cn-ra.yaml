@@ -1,0 +1,32 @@
+# aws-cn (Roles Anywhere variant): AWS 中国区 MCP Server，零长期密钥
+#
+# 跟 values-aws-cn.yaml 的区别：不再用 AK/SK，改用 X.509 证书 → Hub 临时凭证
+# → AssumeRole 进 Spoke。运行在全球区 EKS 集群上，靠 Roles Anywhere 跨分区够到
+# 中国区。完整原理见 docs/deploy/DEPLOY-ROLES-ANYWHERE.md。
+#
+# 前置：
+#   1. cfn/roles-anywhere-hub.yaml 已在 Hub 账号部署（产出 TrustAnchor/Profile/HubRole ARN）
+#   2. cfn/roles-anywhere-spoke.yaml 已在本 Spoke 账号部署
+#   3. Secrets Manager 里有一个证书 bundle key，JSON 格式：{"cert": "<PEM>", "key": "<PEM>"}
+#   4. ESO + ClusterSecretStore 已就绪（deploy/cluster-secret-store.yaml）
+
+account:
+  name: aws-cn
+  awsRegion: cn-northwest-1        # SPOKE 区域（MCP Server 实际调 API 的区域）
+  host: aws-cn.yingchu.cloud
+
+auth:
+  mode: roles_anywhere
+
+rolesAnywhere:
+  trustAnchorArn: arn:aws-cn:rolesanywhere:cn-northwest-1:HUB_ACCOUNT:trust-anchor/xxxxxxxx
+  profileArn: arn:aws-cn:rolesanywhere:cn-northwest-1:HUB_ACCOUNT:profile/yyyyyyyy
+  hubRoleArn: arn:aws-cn:iam::HUB_ACCOUNT:role/mcp-roles-anywhere-hub
+  spokeRoleArn: arn:aws-cn:iam::SPOKE_ACCOUNT:role/mcp-spoke-readonly
+  region: cn-northwest-1           # HUB 区域（Roles Anywhere endpoint + AssumeRole）
+  externalId: mcp-bridge
+  certSecretsManagerKey: /mcp/ra-cert-bundle
+
+externalSecrets:
+  enabled: true
+  secretStoreName: aws-secrets-manager

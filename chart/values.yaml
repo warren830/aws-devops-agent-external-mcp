@@ -39,6 +39,42 @@ mcpServer:
   authType: no-auth
 
 # ----------------------------------------------------------------------------
+# Auth mode — how the MCP Server obtains AWS credentials for its target account
+# ----------------------------------------------------------------------------
+#   ak_sk          — long-lived AccessKey/SecretKey (default; fine for the
+#                    global-partition account itself, or aliyun).
+#   roles_anywhere — X.509 client cert → Hub temp creds → sts:AssumeRole into a
+#                    spoke account. Zero long-lived keys. This is the ONLY way a
+#                    cluster running in the `aws` (global) partition can reach
+#                    `aws-cn` accounts, because the cluster's own IRSA identity
+#                    can't AssumeRole across partitions.
+#                    See docs/deploy/DEPLOY-ROLES-ANYWHERE.md.
+auth:
+  mode: ak_sk        # ak_sk | roles_anywhere
+
+# Only consumed when auth.mode = roles_anywhere. The cert+key are delivered as a
+# volume-mounted Secret (NOT env vars), so they never appear in the pod spec.
+rolesAnywhere:
+  # Hub-account Roles Anywhere endpoints + role (all in the cn partition).
+  trustAnchorArn: ""    # arn:aws-cn:rolesanywhere:cn-northwest-1:HUB:trust-anchor/...
+  profileArn: ""        # arn:aws-cn:rolesanywhere:cn-northwest-1:HUB:profile/...
+  hubRoleArn: ""        # arn:aws-cn:iam::HUB:role/mcp-roles-anywhere-hub
+  # Spoke role to AssumeRole into — the account whose APIs we actually call.
+  spokeRoleArn: ""      # arn:aws-cn:iam::SPOKE:role/mcp-spoke-readonly
+  # Region of the Roles Anywhere endpoint + AssumeRole call (the HUB region).
+  # Distinct from account.awsRegion, which is the SPOKE's API region.
+  region: ""            # e.g. cn-northwest-1
+  externalId: mcp-bridge
+  # Read-only mount point for the cert/key files. credential-helper.sh reads:
+  #   <certMountPath>/client.crt  and  <certMountPath>/client.key
+  # MUST differ from /app/certs — entrypoint-ra.sh writes the SDK config there
+  # (writable Dockerfile dir); a read-only mount over it would break the write.
+  certMountPath: /app/ra-certs
+  # ESO source: a Secrets Manager key holding JSON {"cert": "<PEM>", "key": "<PEM>"}.
+  # Requires externalSecrets.enabled=true.
+  certSecretsManagerKey: ""   # e.g. /mcp/ra-cert-bundle
+
+# ----------------------------------------------------------------------------
 # External Secrets Operator integration (Phase 2)
 # ----------------------------------------------------------------------------
 # When enabled=true, chart renders an ExternalSecret that ESO reconciles into
