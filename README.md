@@ -1,5 +1,7 @@
 # aws-devops-agent-external-mcp
 
+**中文** | [English](./README.en.md)
+
 把 **AWS DevOps Agent** 连接到自建 MCP Server，通过 VPC Lattice Private Connection 在私网完成端到端调用。支持 **ECS Fargate**（推荐）和 **EKS** 两种部署方式。
 
 **零业务代码** —— 所有 MCP Server 用官方包（`awslabs.aws-api-mcp-server`、`alibaba-cloud-ops-mcp-server` 等），本项目只做容器化、编排、AWS 网络接线。
