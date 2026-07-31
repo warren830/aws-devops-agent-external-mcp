@@ -39,9 +39,14 @@ EOF
   fi
 fi
 
-# Determine which server to start
-if [[ -n "${EKS_CLUSTER_NAME:-}" ]]; then
-  exec python /app/entrypoint.py
-else
-  exec python -m awslabs.aws_api_mcp_server.server
-fi
+# Always start through entrypoint.py. It imports the upstream server and adds
+# our extra tools, so this is a superset of running the upstream module
+# directly. entrypoint.py registers call_kubectl only when EKS_CLUSTER_NAME and
+# EKS_REGION are set, so accounts without an EKS cluster simply do not get that
+# tool -- while still getting the account-agnostic ones such as
+# cn_list_inventory.
+#
+# Previously this branched on EKS_CLUSTER_NAME, which tied every custom tool to
+# whether the account happened to run EKS. That excluded the account with the
+# most resources from the inventory tool for no reason.
+exec python /app/entrypoint.py

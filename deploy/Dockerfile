@@ -11,6 +11,7 @@ urllib.request.urlretrieve(url, '/usr/local/bin/kubectl'); \
 os.chmod('/usr/local/bin/kubectl', 0o755)"
 
 COPY src/entrypoint.py /app/entrypoint.py
+COPY src/cn_inventory.py /app/cn_inventory.py
 
 RUN useradd --create-home --shell /bin/bash app
 USER app

@@ -1,9 +1,9 @@
 """
-AWS API MCP Server entrypoint with kubectl extension.
+AWS API MCP Server entrypoint with kubectl and inventory extensions.
 
-Imports the upstream FastMCP server instance and registers an additional
-call_kubectl tool before calling main(). This keeps the aws-cn-2 MCP
-endpoint at a single port with a single Agent Space connection.
+Imports the upstream FastMCP server instance and registers additional
+call_kubectl and cn_list_inventory tools before calling main(). This keeps the
+aws-cn-2 MCP endpoint at a single port with a single Agent Space connection.
 
 kubectl authentication: on startup we run `aws eks update-kubeconfig`
 using the ambient AWS credentials (same AK/SK used by call_aws). The
@@ -19,6 +19,13 @@ import re
 import subprocess
 import logging
 
+# Without an explicit level the root logger defaults to WARNING, so the
+# registration messages below never reach CloudWatch -- which makes it
+# impossible to confirm from logs which tools a container actually registered.
+logging.basicConfig(
+    level=os.environ.get("LOG_LEVEL", "INFO").upper(),
+    format="[%(levelname)s] %(name)s: %(message)s",
+)
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -64,9 +71,7 @@ _ALLOWED_VERBS = frozenset([
 _COMMAND_RE = re.compile(r"^kubectl\s+(\S+)")
 
 
-@server.tool(
-    name="call_kubectl",
-    description="""Execute read-only kubectl commands against the configured EKS cluster.
+_KUBECTL_DESCRIPTION = """Execute read-only kubectl commands against the configured EKS cluster.
 
 Only the following verbs are permitted: get, describe, logs, top, explain,
 version, cluster-info, api-resources, api-versions.
@@ -81,8 +86,9 @@ Examples:
   call_kubectl("kubectl logs <pod> -n bjs-web --since=1h")
   call_kubectl("kubectl get events -n bjs-web --sort-by=.lastTimestamp")
   call_kubectl("kubectl get deployments -n bjs-web")
-""",
-)
+"""
+
+
 async def call_kubectl(
     command: Annotated[str, Field(description="A complete kubectl command starting with 'kubectl'")],
 ) -> str:
@@ -115,6 +121,94 @@ async def call_kubectl(
         return "Error: kubectl command timed out after 30s"
     except Exception as e:
         return f"Error: {e}"
+
+
+# Register call_kubectl only for accounts that actually have an EKS cluster.
+# Advertising a tool that can only ever return "cluster unreachable" wastes the
+# agent's tool budget and invites it down a dead end.
+if _EKS_CLUSTER_NAME and _EKS_REGION:
+    server.tool(name="call_kubectl", description=_KUBECTL_DESCRIPTION)(call_kubectl)
+    logger.info("call_kubectl registered for cluster %s", _EKS_CLUSTER_NAME)
+else:
+    logger.info("EKS not configured — call_kubectl not registered")
+
+
+# ---------------------------------------------------------------------------
+# Register cn_list_inventory on the upstream server instance
+# ---------------------------------------------------------------------------
+import json  # noqa: E402
+
+import cn_inventory  # noqa: E402
+
+
+@server.tool(
+    name="cn_list_inventory",
+    description="""Batch inventory of this AWS China (aws-cn) account's resources in ONE call.
+
+Use this FIRST when you need to know what exists in this China account — before
+running individual describe/list calls with call_aws. It merges AWS Resource
+Explorer and the Resource Groups Tagging API, because measurement shows neither
+API alone is complete: on a real cn account Resource Explorer saw 128 resources,
+the Tagging API saw 176, and only 27 overlapped. Resource Explorer finds
+untagged resources (CloudWatch log groups, KMS keys, ECR repos); the Tagging API
+finds tagged resources Resource Explorer misses (SageMaker, S3, ECS) and returns
+the aws:cloudformation:stack-name tags that give deployment lineage.
+
+When to use:
+  - "What resources exist in this China account?" / inventory / stocktake
+  - Building or refreshing a topology view of the China environment
+  - "Which CloudFormation stacks are deployed here?" (see cloudformation_stacks)
+  - "Where are the EKS/RDS/ECS resources?" (filter by service)
+  - Cross-region questions: an AGGREGATOR index covers all regions in one call
+
+When NOT to use:
+  - Full configuration of one known resource → use call_aws describe-*
+  - Pod logs or Kubernetes state → use call_kubectl
+  - Relationship edges between resources (which SG is on which ENI) → not
+    available here; only AWS Config exposes those, and it must be enabled first
+
+Modes (start with summary, it is bounded regardless of estate size):
+  "summary" (default) — counts by service / resource type / region, plus
+                        CloudFormation stack names and tag keys. ~1k tokens.
+  "list"              — one line per resource. ALWAYS pass a filter, or this
+                        can be very large (~300 bytes per resource).
+  "detail"            — full records including all tags.
+
+ALWAYS read the "coverage" and "completeness" fields before answering the user.
+The payload reports its own blind spots — a LOCAL (non-aggregator) index covers
+only one region, and a still-building index returns partial data. Report the
+scope you actually saw; do not present a partial result as the full estate.
+
+Examples:
+  cn_list_inventory()
+  cn_list_inventory(mode="summary", region="cn-north-1")
+  cn_list_inventory(mode="list", service="eks")
+  cn_list_inventory(mode="list", resource_type="ec2:vpc")
+  cn_list_inventory(mode="list", tag_key="aws:cloudformation:stack-name", limit=100)
+""",
+)
+async def cn_list_inventory(
+    mode: Annotated[str, Field(default="summary", description="summary | list | detail")] = "summary",
+    service: Annotated[str, Field(default="", description="Filter by AWS service, e.g. 'ec2', 'eks', 's3'")] = "",
+    resource_type: Annotated[str, Field(default="", description="Filter by resource type substring, e.g. 'ec2:vpc'")] = "",
+    region: Annotated[str, Field(default="", description="Filter results to one region, e.g. 'cn-north-1'")] = "",
+    tag_key: Annotated[str, Field(default="", description="Only resources carrying this tag key")] = "",
+    limit: Annotated[int, Field(default=200, description="Max resources for list/detail mode")] = 200,
+) -> str:
+    try:
+        result = cn_inventory.collect_inventory(
+            mode=mode,
+            service=service or None,
+            resource_type=resource_type or None,
+            region_filter=region or None,
+            tag_key=tag_key or None,
+            limit=limit,
+            query_region=os.environ.get("AWS_DEFAULT_REGION") or None,
+        )
+        return json.dumps(result, ensure_ascii=False, indent=2, default=str)
+    except Exception as e:  # surface the failure to the agent instead of crashing the tool
+        logger.exception("cn_list_inventory failed")
+        return json.dumps({"error": f"{type(e).__name__}: {e}"}, ensure_ascii=False)
 
 
 # ---------------------------------------------------------------------------

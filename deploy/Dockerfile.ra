@@ -20,6 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY src/entrypoint.py /app/entrypoint.py
+COPY src/cn_inventory.py /app/cn_inventory.py
 COPY deploy/credential-helper.sh /app/credential-helper.sh
 COPY deploy/entrypoint-ra.sh /app/entrypoint-ra.sh
 
