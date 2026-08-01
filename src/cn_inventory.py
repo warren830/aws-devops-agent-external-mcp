@@ -49,6 +49,11 @@ _CFN_STACK_TAG = "aws:cloudformation:stack-name"
 # Tag keys commonly used as a human-readable name.
 _NAME_TAG_KEYS = ("Name", "name")
 
+# Services whose ARN resource segment is the bare name, with no "type/" prefix.
+# For these, a separator inside the segment is part of the name (an S3 key, an
+# SNS/SQS name), so it must not be split off as a resource type.
+_TYPELESS_SERVICES = frozenset({"s3", "sns", "sqs"})
+
 
 def _parse_arn(arn: str) -> dict[str, str]:
     """Split an ARN into its parts, tolerating both resource-ARN layouts.
@@ -74,14 +79,25 @@ def _parse_arn(arn: str) -> dict[str, str]:
 
     _, partition, service, region, account, resource = parts
 
-    # Resource segment is "type<sep>name" or a bare name; split at the earliest
-    # separator so the remainder (which may contain the other one) stays in name.
-    positions = [resource.find(sep) for sep in (":", "/")]
-    cut = min((p for p in positions if p != -1), default=-1)
-    if cut == -1:
+    if service in _TYPELESS_SERVICES:
+        # These services put the resource name straight into the segment with no
+        # type prefix, so any separator inside it belongs to the name. Splitting
+        # would turn a bucket name into a resource type ("s3:my-bucket").
         rtype, name = service, resource
     else:
-        rtype, name = resource[:cut], resource[cut + 1:]
+        # Resource segment is "type<sep>name" or a bare name; split at the
+        # earliest separator so the remainder (which may contain the other one)
+        # stays in the name.
+        positions = [resource.find(sep) for sep in (":", "/")]
+        cut = min((p for p in positions if p != -1), default=-1)
+        if cut <= 0:
+            # cut == -1: no separator at all.
+            # cut == 0: the segment *starts* with a separator, e.g. API Gateway's
+            # ":/restapis/abc". There is no type prefix to extract, so fall back
+            # to the service. Splitting here would yield type "apigateway:".
+            rtype, name = service, resource.lstrip(":/")
+        else:
+            rtype, name = resource[:cut], resource[cut + 1:]
 
     return {
         "partition": partition,
@@ -106,6 +122,18 @@ def _probe_coverage(session: boto3.Session, region: str) -> dict:
 
     So we ask the index what it covers and state the blind spots explicitly,
     rather than inferring health from the absence of an error.
+
+    Two distinct kinds of limitation, kept in separate fields on purpose:
+
+    - blind_spots: something is wrong and fixable (LOCAL index that should be an
+      AGGREGATOR, an index still building, a view without tags). These make the
+      result genuinely degraded, so they drive the PARTIAL verdict.
+    - caveats: inherent to the architecture and not fixable here (the Tagging API
+      is per-region, so with a cross-region aggregator the other regions' tags
+      are always thin). Treating these as degradation made every run in the
+      intended production setup report PARTIAL -- a verdict that never varies
+      carries no information, and it trains the agent to caveat every answer
+      identically whether coverage is fine or not.
     """
     coverage: dict[str, Any] = {
         "index_type": None,
@@ -113,6 +141,7 @@ def _probe_coverage(session: boto3.Session, region: str) -> dict:
         "regions_covered": [],
         "tags_from_resource_explorer": False,
         "blind_spots": [],
+        "caveats": [],
     }
 
     try:
@@ -172,6 +201,8 @@ def _collect_resource_explorer(session: boto3.Session, region: str) -> tuple[lis
 
     out: list[dict] = []
     token: str | None = None
+    truncated = False
+    skipped = 0
     try:
         while True:
             kwargs: dict[str, Any] = {"QueryString": "", "MaxResults": 100}
@@ -179,24 +210,36 @@ def _collect_resource_explorer(session: boto3.Session, region: str) -> tuple[lis
                 kwargs["NextToken"] = token
             page = client.search(**kwargs)
 
+            # An empty QueryString is capped at 1,000 total results. Count tells
+            # us whether we saw everything; ignoring it means silently returning
+            # a short inventory while claiming success.
+            count = page.get("Count") or {}
+            if count.get("Complete") is False:
+                truncated = True
+
             for item in page.get("Resources", []):
-                tags: dict[str, str] = {}
-                for prop in item.get("Properties", []):
-                    if prop.get("Name") == "tags":
-                        for tag in prop.get("Data", []):
-                            tags[tag["Key"]] = tag["Value"]
-                out.append(
-                    {
-                        "arn": item["Arn"],
-                        "service": item.get("Service", ""),
-                        "type": item.get("ResourceType", ""),
-                        "region": item.get("Region", ""),
-                        "account": item.get("OwningAccountId", ""),
-                        "tags": tags,
-                        "last_reported": str(item.get("LastReportedAt", "")),
-                        "sources": ["resource_explorer"],
-                    }
-                )
+                try:
+                    tags: dict[str, str] = {}
+                    for prop in item.get("Properties", []):
+                        if prop.get("Name") == "tags":
+                            for tag in prop.get("Data", []):
+                                tags[tag["Key"]] = tag["Value"]
+                    out.append(
+                        {
+                            "arn": item["Arn"],
+                            "service": item.get("Service", ""),
+                            "type": item.get("ResourceType", ""),
+                            "region": item.get("Region", ""),
+                            "account": item.get("OwningAccountId", ""),
+                            "tags": tags,
+                            "last_reported": str(item.get("LastReportedAt", "")),
+                            "sources": ["resource_explorer"],
+                        }
+                    )
+                except (KeyError, TypeError, AttributeError):
+                    # One malformed item must not lose the whole sweep, nor the
+                    # other source's rows, nor the coverage report.
+                    skipped += 1
 
             token = page.get("NextToken")
             if not token:
@@ -209,9 +252,21 @@ def _collect_resource_explorer(session: boto3.Session, region: str) -> tuple[lis
                 "or missing permissions. Resources that carry no tags "
                 "(CloudWatch log groups, KMS keys, ECR repos) will be MISSING from this result."
             )
-        return out, f"Resource Explorer failed: {exc}"
+        return out, (
+            f"Resource Explorer failed after collecting {len(out)} resources: {exc}. "
+            "Pagination aborted, so this is a PARTIAL sweep."
+        )
 
-    return out, None
+    notes = []
+    if truncated:
+        notes.append(
+            f"Resource Explorer returned {count.get('TotalResources')} matching resources but "
+            "caps an unfiltered query at 1,000. This inventory is TRUNCATED -- re-run with a "
+            "service/resource_type/region filter to enumerate the rest."
+        )
+    if skipped:
+        notes.append(f"{skipped} Resource Explorer item(s) were malformed and skipped.")
+    return out, (" ".join(notes) if notes else None)
 
 
 def _collect_tagging(session: boto3.Session, region: str) -> tuple[list[dict], str | None]:
@@ -223,6 +278,7 @@ def _collect_tagging(session: boto3.Session, region: str) -> tuple[list[dict], s
 
     out: list[dict] = []
     token: str | None = None
+    skipped = 0
     try:
         while True:
             kwargs: dict[str, Any] = {"ResourcesPerPage": 100}
@@ -231,28 +287,34 @@ def _collect_tagging(session: boto3.Session, region: str) -> tuple[list[dict], s
             page = client.get_resources(**kwargs)
 
             for item in page.get("ResourceTagMappingList", []):
-                arn = item["ResourceARN"]
-                meta = _parse_arn(arn)
-                out.append(
-                    {
-                        "arn": arn,
-                        "service": meta["service"],
-                        "type": meta["type"],
-                        "region": meta["region"],
-                        "account": meta["account"],
-                        "tags": {t["Key"]: t["Value"] for t in item.get("Tags", [])},
-                        "last_reported": "",
-                        "sources": ["tagging"],
-                    }
-                )
+                try:
+                    arn = item["ResourceARN"]
+                    meta = _parse_arn(arn)
+                    out.append(
+                        {
+                            "arn": arn,
+                            "service": meta["service"],
+                            "type": meta["type"],
+                            "region": meta["region"],
+                            "account": meta["account"],
+                            "tags": {t["Key"]: t["Value"] for t in item.get("Tags", [])},
+                            "last_reported": "",
+                            "sources": ["tagging"],
+                        }
+                    )
+                except (KeyError, TypeError, AttributeError):
+                    skipped += 1
 
             token = page.get("PaginationToken") or None
             if not token:
                 break
     except (ClientError, BotoCoreError) as exc:
-        return out, f"Tagging API failed: {exc}"
+        return out, (
+            f"Tagging API failed after collecting {len(out)} resources: {exc}. "
+            "Pagination aborted, so this is a PARTIAL sweep."
+        )
 
-    return out, None
+    return out, (f"{skipped} Tagging API item(s) were malformed and skipped." if skipped else None)
 
 
 def _merge(*batches: list[dict]) -> list[dict]:
@@ -276,14 +338,22 @@ def _merge(*batches: list[dict]) -> list[dict]:
         for res in batch:
             existing = merged.get(res["arn"])
             if existing is None:
-                merged[res["arn"]] = dict(res)
+                # Copy the mutable members too. A shallow dict() would alias the
+                # caller's own list/dict, and the appends below would then edit
+                # the input rows in place -- which also leaked state between
+                # assertions in the test suite.
+                merged[res["arn"]] = {
+                    **res,
+                    "tags": dict(res.get("tags", {})),
+                    "sources": list(res.get("sources", [])),
+                }
                 continue
 
             for key in ("type", "service", "region", "account", "last_reported"):
                 if not existing.get(key) and res.get(key):
                     existing[key] = res[key]
-            existing["tags"] = {**res.get("tags", {}), **existing.get("tags", {})}
-            for src in res["sources"]:
+            existing["tags"] = {**res.get("tags", {}), **existing["tags"]}
+            for src in res.get("sources", []):
                 if src not in existing["sources"]:
                     existing["sources"].append(src)
 
@@ -297,6 +367,24 @@ def _display_name(res: dict) -> str:
     return _parse_arn(res["arn"])["name"]
 
 
+# Every breakdown is capped. The module exists to bound the payload, and an
+# uncapped dimension breaks that: an account with a few hundred CloudFormation
+# stacks used to return all of them, so "summary is bounded regardless of estate
+# size" was not actually true.
+_MAX_BREAKDOWN = 40
+
+
+def _capped(counter: collections.Counter, limit: int = _MAX_BREAKDOWN) -> dict:
+    """Top-N of a counter, plus an explicit marker when entries were dropped."""
+    out = dict(counter.most_common(limit))
+    dropped = len(counter) - len(out)
+    if dropped:
+        out[f"...{dropped} more (truncated)"] = sum(
+            n for _, n in counter.most_common()[limit:]
+        )
+    return out
+
+
 def _summarize(resources: list[dict]) -> dict:
     """Counts-only skeleton. This is what keeps the payload inside a context budget."""
     by_service = collections.Counter(r["service"] for r in resources)
@@ -304,8 +392,8 @@ def _summarize(resources: list[dict]) -> dict:
     by_region = collections.Counter(r["region"] for r in resources)
     by_source = collections.Counter(tuple(sorted(r["sources"])) for r in resources)
 
-    tag_keys = collections.Counter()
-    cfn_stacks = collections.Counter()
+    tag_keys: collections.Counter = collections.Counter()
+    cfn_stacks: collections.Counter = collections.Counter()
     for res in resources:
         for key, value in res["tags"].items():
             tag_keys[key] += 1
@@ -314,11 +402,11 @@ def _summarize(resources: list[dict]) -> dict:
 
     return {
         "total_resources": len(resources),
-        "by_region": dict(by_region.most_common()),
-        "by_service": dict(by_service.most_common()),
-        "by_resource_type": dict(by_type.most_common(40)),
-        "cloudformation_stacks": dict(cfn_stacks.most_common()),
-        "tag_keys": dict(tag_keys.most_common(30)),
+        "by_region": _capped(by_region),
+        "by_service": _capped(by_service),
+        "by_resource_type": _capped(by_type),
+        "cloudformation_stacks": _capped(cfn_stacks),
+        "tag_keys": _capped(tag_keys, 30),
         "source_overlap": {"+".join(k): v for k, v in by_source.most_common()},
     }
 
@@ -327,8 +415,16 @@ def _matches(res: dict, service: str | None, resource_type: str | None,
              region: str | None, tag_key: str | None) -> bool:
     if service and res["service"] != service:
         return False
-    if resource_type and resource_type not in res["type"]:
-        return False
+    if resource_type:
+        # Exact by default. A substring test made resource_type="ec2:vpc" also
+        # select ec2:vpc-endpoint, ec2:vpc-peering-connection and
+        # ec2:vpc-flow-log, so a reported "VPC count" silently included them.
+        # A trailing "*" opts into prefix matching explicitly.
+        if resource_type.endswith("*"):
+            if not res["type"].startswith(resource_type[:-1]):
+                return False
+        elif res["type"] != resource_type:
+            return False
     if region and res["region"] != region:
         return False
     if tag_key and tag_key not in res["tags"]:
@@ -359,6 +455,13 @@ def collect_inventory(
     query_region: region whose Resource Explorer index to query. If that index
       is an AGGREGATOR, results span every region in the account.
     """
+    # Validate before touching AWS. An unknown mode used to be rejected only
+    # after both full paginated sweeps had already run.
+    if mode not in ("summary", "list", "detail"):
+        return {"error": f"unknown mode {mode!r}; expected summary, list or detail"}
+    if not isinstance(limit, int) or limit < 1:
+        return {"error": f"limit must be a positive integer, got {limit!r}"}
+
     session = session or boto3.Session()
     query_region = query_region or session.region_name or "cn-northwest-1"
 
@@ -377,13 +480,15 @@ def collect_inventory(
     # The Tagging API is per-region by design, so anything the aggregator index
     # pulled in from another region has no Tagging counterpart and will be
     # untagged. Say so, rather than letting the agent read absent tags as
-    # "resource has no tags".
+    # "resource has no tags" -- but as a caveat, not a blind spot: it is inherent
+    # to using a cross-region aggregator, not something wrong with this run.
     other_regions = [r for r in coverage["regions_covered"] if r != query_region]
     if other_regions:
-        coverage["blind_spots"].append(
-            f"tags for resources in {', '.join(other_regions)} are incomplete: the Tagging API "
-            f"was only queried in {query_region}. Re-run with query_region set to those regions "
-            "if tag coverage matters."
+        coverage["caveats"].append(
+            f"tags for resources in {', '.join(other_regions)} are thin: the Tagging API is "
+            f"per-region and was only queried in {query_region}. Resource identity and type are "
+            "complete for those regions; only tags are affected. Re-run with query_region set to "
+            "those regions if tag coverage matters."
         )
 
     resources = _merge(re_rows, tag_rows)
@@ -411,18 +516,23 @@ def collect_inventory(
     if warnings:
         payload["warnings"] = warnings
 
+    # PARTIAL is driven only by real degradation, so that the verdict actually
+    # varies. Structural caveats are reported separately and do not demote it.
     if warnings or coverage["blind_spots"]:
         payload["completeness"] = (
-            "PARTIAL — this is not a complete inventory. See coverage.blind_spots. "
-            "When answering the user, state which regions and tag data are covered; "
-            "do not present this as the full estate."
+            "PARTIAL — this is not a complete inventory. See coverage.blind_spots and warnings. "
+            "When answering the user, state what is missing; do not present this as the "
+            "full estate."
         )
     else:
-        payload["completeness"] = (
-            f"Both sources succeeded across {', '.join(coverage['regions_covered'])}. "
+        note = (
+            f"OK — both sources succeeded across {', '.join(coverage['regions_covered'])}. "
             "No single AWS API returns a complete cn inventory, so this is a merge of "
             "Resource Explorer and the Tagging API; see source_counts for the overlap."
         )
+        if coverage["caveats"]:
+            note += " See coverage.caveats for known limits that are inherent, not failures."
+        payload["completeness"] = note
 
     if mode == "summary":
         payload["summary"] = _summarize(filtered)

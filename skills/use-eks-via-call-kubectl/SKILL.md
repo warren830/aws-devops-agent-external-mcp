@@ -1,13 +1,15 @@
 ---
 name: use-eks-via-call-kubectl
-description: Use when any task involves inspecting EKS pod status, pod events,
-  deployment state, or container logs on the China-region cluster bjs-web
-  (cn-north-1, account aws-cn-2). Triggers on phrases like "kubectl get pods",
-  "pod not ready", "ImagePullBackOff", "CrashLoopBackOff", "pod pending",
-  "pod status", "check deployment", "pod logs", "container logs", "查pod",
-  "pod状态", or any task description involving kubectl commands against bjs-web.
-  CRITICAL: use_kubectl does NOT work for China-region EKS. Always use the
-  call_kubectl tool from the aws-cn-2 MCP server instead.
+description: >-
+  Use when any task involves inspecting EKS pod status, pod events, deployment
+  state, or container logs on the China-region cluster bjs-web (cn-north-1,
+  account 107422471498, served by the ecs-cn-mcp-2 MCP server). Triggers on
+  phrases like "kubectl get pods", "pod not ready", "ImagePullBackOff",
+  "CrashLoopBackOff", "pod pending", "pod status", "check deployment",
+  "pod logs", "container logs", "查pod", "pod状态", or any task description
+  involving kubectl commands against bjs-web. IMPORTANT - use_kubectl does NOT
+  work for China-region EKS; use the fully qualified tool name
+  ecs-cn-mcp-2_call_kubectl instead.
 ---
 
 # EKS Inspection via call_kubectl (China Region)

@@ -187,7 +187,13 @@ Examples:
   cn_list_inventory(mode="list", tag_key="aws:cloudformation:stack-name", limit=100)
 """,
 )
-async def cn_list_inventory(
+# Declared sync, not async. The body is blocking (up to four sequential paginated
+# boto3 calls), and FastMCP awaits a coroutine directly instead of handing it to a
+# threadpool -- so as an `async def` one inventory sweep stalls the whole server,
+# including the ALB health check on /mcp. With a 30s interval and 3 unhealthy
+# checks, a slow sweep gets the task deregistered mid-call. A plain `def` is
+# dispatched to a worker thread instead.
+def cn_list_inventory(  # sync on purpose -- see note below
     mode: Annotated[str, Field(default="summary", description="summary | list | detail")] = "summary",
     service: Annotated[str, Field(default="", description="Filter by AWS service, e.g. 'ec2', 'eks', 's3'")] = "",
     resource_type: Annotated[str, Field(default="", description="Filter by resource type substring, e.g. 'ec2:vpc'")] = "",
